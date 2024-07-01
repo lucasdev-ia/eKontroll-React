@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  overscroll-behavior-x: auto;
+  position: relative;
+  z-index: 1;
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  font-family: Satoshi, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
+}

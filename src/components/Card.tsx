@@ -20,16 +20,19 @@ const Card: React.FC<CardDataStatsProps> = ({ title, value, dataCadastro,Cardimg
       <img className="h-22 w-22" src={Cardimg}/>
         <div>
           <div className="h-24 w-40">
-            <div className="flex items-end justify-between">
-              <h4 className="flex-auto text-xl	font-semibold text-black dark:text-white ml-7.5 mt-3">
+            
+              <h4 className="text-xl	font-semibold text-black dark:text-white ml-7.5 mt-3">
                 {value}
               </h4>
-              <div className="flex-auto">
-              <BolinhaPiscando Bolinha={online}/>
-              </div>
-            </div>
+             
+            
             <div className="mt-2 ml-8 w-39 h-18">
-              <span className="text-sm font-medium">{title}</span>
+              <div className="flex items-end justify-between">
+                <span className="flex-auto text-sm font-medium">{title}</span>
+                <div className="flex-auto">
+              <BolinhaPiscando Bolinha={online}/>
+                </div>
+              </div>
             </div>
             <h5 className="mt-2 text-title-sm font-medium text-black dark:text-white">
               {dataCadastro}

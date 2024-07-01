@@ -3,7 +3,7 @@ import api from "../services/api.jsx";
 // import Chart from "../components/Chart.jsx";
 import "../css/Dashboard.css";
 import Card from "../components/Card.js";
-import Card4_5 from "../components/Card4-5.js";
+import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
 import { compareAsc, differenceInDays, format, parse } from "date-fns";
 /*IMAGENS*/
@@ -13,7 +13,9 @@ import ImgFidelidade from "../images/fidelidade.png";
 import BolinhaPiscando from "../components/GreenCircle.tsx";
 import ImgImposto from "../images/imposto.png";
 // import * as XLSX from "xlsx";
-
+import myChart from "../components/Graphpizza.tsx";
+import ctx from "../components/Graphpizza.tsx";
+import PieChart from "../components/Graphpizza.tsx";
 const Dashboard: React.FC = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -116,25 +118,24 @@ const Dashboard: React.FC = () => {
         <Card value={"TOTAL: " + "100.000.000,00"} title="Impostos Arrecadados" Cardimg = {ImgImposto} dataCadastro="" online={false} />
         <Card value="Teste:" title="Teste" Cardimg = {logopadrao} dataCadastro="" online={false} />
       </div>
-      <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
-          char 1
-        </div>
-        <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
-          char 2
-        </div>
-        {/* <Chart data={data} /> */}
-      </div>
+      
 
       <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
-        <Card4_5
+        <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
+        
+        <Card2
+          informacao="START INDUSTRIA E COMERCIO DE CONFECCAO DO VESTUARIO LTDA"
+          title="10 Proximos clientes a completar ano de parceria"
+          />
+          <div><PieChart></PieChart></div>
+        </div>
+        <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
+
+        <Card2
           informacao="START INDUSTRIA E COMERCIO DE CONFECCAO DO VESTUARIO LTDA"
           title="10 Proximos clientes a completar ano de parceria"
         />
-        <Card4_5
-          informacao="START INDUSTRIA E COMERCIO DE CONFECCAO DO VESTUARIO LTDA"
-          title="10 Proximos clientes a completar ano de parceria"
-        />
+        </div>
         {/* <button onClick={exportToExcel}>Exportar para Excel</button> */}
       </div>
     </DefaultLayout>

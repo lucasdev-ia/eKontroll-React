@@ -6,6 +6,12 @@ import Card from "../components/Card.js";
 import Card4_5 from "../components/Card4-5.js";
 import DefaultLayout from "../layout/DefautLayout.js";
 import { compareAsc, differenceInDays, format, parse } from "date-fns";
+/*IMAGENS*/
+import ImgCliente from "../images/cliente.png";
+import logopadrao from "../images/logo_padrao.png";
+import ImgFidelidade from "../images/fidelidade.png";
+import BolinhaPiscando from "../components/GreenCircle.js";
+
 // import * as XLSX from "xlsx";
 
 const Dashboard: React.FC = () => {
@@ -96,15 +102,18 @@ const Dashboard: React.FC = () => {
 
   return (
     <DefaultLayout>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+        
+        <Card value={resultados.length} title="Total de clientes" Cardimg = {ImgCliente} dataCadastro=""/>
         <Card
-          value={": "}
+          value={"START INDUSTRIA E COMER"}
           dataCadastro={" - FALTAM " + " DIAS"}
-          title="Próximo cliente a completar ano de parceria"
+          title="Ano de parceria"
+          Cardimg = {ImgFidelidade}
         />
-        <Card value="ORLANDO" title="Cliente mais antigo" />
-        <Card value={"TOTAL: " + resultados.length} title="Clientes ativos" />
-        <Card value="Teste:" title="Teste"/>
+        
+        <Card value={"TOTAL: " + resultados.length} title="Clientes ativos" Cardimg = {ImgCliente} dataCadastro=""/>
+        <Card value="Teste:" title="Teste" Cardimg = {logopadrao} dataCadastro=""/>
       </div>
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">

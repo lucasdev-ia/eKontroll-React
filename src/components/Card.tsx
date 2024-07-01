@@ -9,7 +9,7 @@ interface CardDataStatsProps {
 
 const Card: React.FC<CardDataStatsProps> = ({ title, value, dataCadastro }) => {
   return (
-    <div className="h-card rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className="h-cardnew w-cardnew rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex items-end justify-between">
         <div>
           <div className="h-24">

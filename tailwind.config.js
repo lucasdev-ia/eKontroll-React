@@ -249,12 +249,14 @@ module.exports = {
         "spin-3": "spin 3s linear infinite",
       },
       height: {
+        cardnew: "170px",
         card: "180px",
         "card4-5": "180px",
         graf1: "385px",
         graf2: "385px",
       },
       width: {
+        cardnew: "300px",
         card: "403.33px",
         "card4-5": "713px",
         graf1: "963px",

@@ -14,6 +14,9 @@ import BolinhaPiscando from "../components/GreenCircle.tsx";
 import ImgImposto from "../images/imposto.png";
 // import * as XLSX from "xlsx";
 import MyChart from "../components/Graphpizza.tsx";
+import ComboChart from "../components/GraphCol.tsx";
+
+
 
 const Dashboard: React.FC = () => {
   const [data, setData] = useState([]);
@@ -134,9 +137,14 @@ const Dashboard: React.FC = () => {
         <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
 
         <Card2
-          informacao="START INDUSTRIA E COMERCIO DE CONFECCAO DO VESTUARIO LTDA"
+          informacao="TESTE"
           title="10 Proximos clientes a completar ano de parceria"
         />
+          <div className="flex items-start">
+
+            <ComboChart/>
+
+          </div>
         </div>
         {/* <button onClick={exportToExcel}>Exportar para Excel</button> */}
       </div>

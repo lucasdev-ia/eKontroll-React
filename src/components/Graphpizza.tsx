@@ -2,6 +2,7 @@ import { title } from 'process';
 import React, { useEffect, useState } from 'react';
 import { Chart } from 'react-google-charts';
 import { text } from 'stream/consumers';
+import ValidarDarkMode from './ValidarDarkMode';
 
 interface MedidasDoPieChart{
   valoratual: number;
@@ -16,6 +17,8 @@ const MyChart: React.FC<MedidasDoPieChart> = ({ valoratual, valormaximo }) => {
     ['Remaining', valormaximo - valoratual],
     
   ]);
+  let teste = "dark"
+  
 
 useEffect(() => {
   setData([
@@ -27,7 +30,7 @@ useEffect(() => {
 
   const options = {
     pieHole: 0.3,
-    
+    backgroundColor: (teste == "dark" ? "" : "white"),
     legend: {
       position: 'none', 
       textStyle: {color: 'black', fontSize: 16},

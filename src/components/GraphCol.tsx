@@ -31,11 +31,22 @@ const ComboChart: React.FC = () => {
     
     const options = {
         title: '',
-        
-        hAxis: { title: 'Ano 2024' },
+        fontName: "Satoshi",
+        backgroundColor: "none",
+        hAxis: { 
+          title: 'Ano 2024',
+          titleTextStyle: {
+            color: '#AEB7C0'
+          }
+        },
         seriesType: 'bars',
         series: { 3: { type: 'line' } },
-        
+        animation: {
+          startup: true,  // Habilita a animação de inicialização
+          duration: 1000, // Duração da animação em milissegundos (opcional)
+          easing: 'out',  // Tipo de easing da animação (opcional)
+        },
+       
       };
       
     return (

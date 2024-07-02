@@ -1,6 +1,5 @@
 import React /* ReactNode */ from "react";
 import "../css/Card.css";
-import Cardimg from "../images/cliente.png";/*IMAGEM*/
 import BolinhaPiscando from "./GreenCircle.tsx";
 interface CardDataStatsProps {
   title: string;
@@ -13,7 +12,7 @@ interface CardDataStatsProps {
 const Card: React.FC<CardDataStatsProps> = ({ title, value, dataCadastro,Cardimg, online }) => {
   
   return (
-    <div className="h-cardnew w-cardnew rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className="h-cardnew w-310px rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
     
      
       <div className="flex items-end justify-between">

@@ -16,14 +16,6 @@ const Card2: React.FC<CardDataStatsProps> = ({ title, informacao }) => {
       <span className="text-sm font-medium">{title}</span>
       <div className="flex items-end justify-between">
         
-        <div>
-          <div>
-            
-          </div>
-         
-            
-          
-        </div>
       </div>
     </div>
   );

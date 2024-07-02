@@ -1,67 +1,64 @@
-import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js/auto';
+import { title } from 'process';
+import React, { useEffect, useState } from 'react';
+import { Chart } from 'react-google-charts';
+import { text } from 'stream/consumers';
 
-const PieChart = () => {
-  const chartContainer = useRef<HTMLCanvasElement | null>(null);
+interface MedidasDoPieChart{
+  valoratual: number;
+  valormaximo: number;
 
-  useEffect(() => {
-    if (chartContainer && chartContainer.current) {
-      const ctx = chartContainer.current.getContext('2d');
-      if (ctx) {
-        new Chart(ctx, {
-          type: 'pie',
-          data: {
-            labels: ['Produto A', 'Produto B', 'Produto C', 'Produto D', 'Produto E'],
-            datasets: [{
-              label: 'Vendas',
-              data: [12500, 10000, 3000, 5000, 8000],
-            }]
-          },
-          options: {
-            plugins: {
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    let label = context.dataset.label || '';
-                    if (label) {
-                      label += ': ';
-                    }
-                    if (context.parsed !== null) {
-                      label += ' R$ ' + context.parsed.toLocaleString('pt-BR', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                      });
-                    }
-                    return label;
-                  }
-                }
-              },
-              legend: {
-                position: 'left',
-                labels: {
-                  font: { size: 18 }
-                },
-              },
-              title: {
-                display: true,
-                text: 'Total de Vendas por Produto',
-                font: { size: 24 },
-                padding: { bottom: 30 }
-              }
-            },
-            responsive: false,
-            maintainAspectRatio: true
-          }
-        });
-      }
-    }
-  }, []);
+}
+
+const MyChart: React.FC<MedidasDoPieChart> = ({ valoratual, valormaximo }) => {
+  const [data, setData] = useState([
+    ['Task', 'Value'],
+    ['Completed', valoratual],
+    ['Remaining', valormaximo - valoratual],
+    
+  ]);
+
+useEffect(() => {
+  setData([
+    ['Task', 'Value'],
+    ['Gastos', valoratual],
+    ['Faltam', valormaximo - valoratual],
+  ]);
+}, [valoratual, valormaximo]);
+
+  const options = {
+    pieHole: 0.3,
+    
+    legend: {
+      position: 'none', 
+      textStyle: {color: 'black', fontSize: 16},
+      alignment: '',
+      
+    },
+    
+    slices: {
+      0: { color: 'red' },
+      1: { color: 'blue' },
+      
+    
+
+    },
+  };
 
   return (
     <div>
-      <canvas ref={chartContainer} id="myChart"></canvas>
+      <Chart
+        chartType="PieChart"
+        width="190px"
+        height="180px"
+        
+        data={data}
+        options={options}
+      />
+      <p className='text-center'>Nome da empresa</p>
     </div>
   );
 };
 
-export default PieChart;
+
+
+export default MyChart;

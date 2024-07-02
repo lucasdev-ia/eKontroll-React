@@ -13,9 +13,8 @@ import ImgFidelidade from "../images/fidelidade.png";
 import BolinhaPiscando from "../components/GreenCircle.tsx";
 import ImgImposto from "../images/imposto.png";
 // import * as XLSX from "xlsx";
-import myChart from "../components/Graphpizza.tsx";
-import ctx from "../components/Graphpizza.tsx";
-import PieChart from "../components/Graphpizza.tsx";
+import MyChart from "../components/Graphpizza.tsx";
+
 const Dashboard: React.FC = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -121,13 +120,16 @@ const Dashboard: React.FC = () => {
       
 
       <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
-        
-        <Card2
-          informacao="START INDUSTRIA E COMERCIO DE CONFECCAO DO VESTUARIO LTDA"
-          title="10 Proximos clientes a completar ano de parceria"
-          />
-          <div><PieChart></PieChart></div>
+        <div className="rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
+          <Card2  title="Próximas empresas que entrarão no evento" informacao="EVENTO 379 E 380" />
+
+          <div className="flex items-start">
+
+            <MyChart valoratual={10} valormaximo={500}/>
+            <MyChart valoratual={1678} valormaximo={5000}/>
+            <MyChart valoratual={347} valormaximo={2000}/>
+
+          </div>
         </div>
         <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
 

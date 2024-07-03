@@ -1,65 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { Chart } from 'react-google-charts';
+import React from 'react';
+import ReactApexChart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
 
-interface MedidasDoPieChart{
-  valoratual: number;
-  valormaximo: number;
-
-}
-
-const MyChart: React.FC<MedidasDoPieChart> = ({ valoratual, valormaximo }) => {
-  const [data, setData] = useState([
-    ['Task', 'Value'],
-    ['Completed', valoratual],
-    ['Remaining', valormaximo - valoratual],
+const RadialChart: React.FC = () => {
+  const chartOptions: ApexOptions = {
     
-  ]);
-  
-  
-
-useEffect(() => {
-  setData([
-    ['Task', 'Value'],
-    ['Gastos', valoratual],
-    ['Faltam', valormaximo - valoratual],
-  ]);
-}, [valoratual, valormaximo]);
-
-  const options = {
-    pieHole: 0.3,
-    backgroundColor: "none",
-    legend: {
-      position: 'none', 
-      textStyle: {color: 'black', fontSize: 16},
-      alignment: '',
-      
-    },
-    
-    
-    slices: {
-      0: { color: 'red' },
-      1: { color: 'blue' },
-      
-    
-
-    },
-  };
+          
+            series: [44, 55],
+            chart: {
+              height: 350,
+              type: 'radialBar',
+            },
+            plotOptions: {
+              radialBar: {
+                dataLabels: {
+                  name: {
+                    fontSize: '22px',
+                  },
+                  value: {
+                    fontSize: '16px',
+                  },
+                  total: {
+                    show: true,
+                    label: 'Eventos',
+                    formatter: function (w) {
+                      // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                      return ""
+                    },
+                  },
+                },
+              },
+            },
+            labels: ['EVENTO 379', 'EVENTO 380'],
+          };
 
   return (
-    <div>
-      <Chart
-        chartType="PieChart"
-        width="190px"
-        height="180px"
-        
-        data={data}
-        options={options}
-      />
-      <p className='text-center'>Nome da empresa</p>
+    <div className="radial-chart">
+       <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Empresa fulano de tal</h2>
+      <ReactApexChart options={chartOptions} series={chartOptions.series} type="radialBar" height={350} />
     </div>
   );
 };
 
-
-
-export default MyChart;
+export default RadialChart;

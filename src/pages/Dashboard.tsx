@@ -15,6 +15,10 @@ import ImgImposto from "../images/imposto.png";
 // import * as XLSX from "xlsx";
 import MyChart from "../components/Graphpizza.tsx";
 import ComboChart from "../components/GraphCol.tsx";
+import DonutChart from "../components/Graphpizza.tsx";
+import RadialChart from "../components/Graphpizza.tsx";
+import RadialChart3 from "../components/Graphpizza3.tsx";
+import RadialChart2 from "../components/Graphpizza2.tsx";
 
 
 
@@ -124,14 +128,14 @@ const Dashboard: React.FC = () => {
 
       <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
         <div className="rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
-          <Card2  title="Próximas empresas que entrarão no evento" informacao="EVENTO 379 E 380" />
+          <Card2  title="." informacao="EVENTO 379 E 380" />
 
-          <div className="flex items-start">
-
-            <MyChart valoratual={10} valormaximo={500}/>
-            <MyChart valoratual={1678} valormaximo={5000}/>
-            <MyChart valoratual={347} valormaximo={2000}/>
-
+          <div  className="grid grid-cols-3">
+            
+              <RadialChart/><RadialChart/><RadialChart/>
+              
+              
+            
           </div>
         </div>
         <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
@@ -142,7 +146,7 @@ const Dashboard: React.FC = () => {
         />
           <div className="flex items-start">
 
-            <ComboChart/>
+            /*ComboChart*//
 
           </div>
         </div>

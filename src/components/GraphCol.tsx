@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Chart } from 'react-google-charts';
-
+import '../css/satoshi.css'
+import useColorMode from "../hooks/useColorMode";
+import { useColorModeteste } from '../hooks/ColorModeContext';
 
 const ComboChart: React.FC = () => {
   useEffect(() => {
@@ -18,16 +20,11 @@ const ComboChart: React.FC = () => {
     ];
 
     
-    const media1 = (Number(data[1][1]) + Number(data[1][2]) + Number(data[1][3])) / 3;
-    const media2 = (Number(data[2][1]) + Number(data[2][2]) + Number(data[2][3])) / 3;
-    const media3 = (Number(data[3][1]) + Number(data[3][2]) + Number(data[3][3])) / 3;
-    const media4 = (Number(data[4][1]) + Number(data[4][2]) + Number(data[4][3])) / 3;
-    const media5 = (Number(data[5][1]) + Number(data[5][2]) + Number(data[5][3])) / 3;
-    data[1].push(media1)
-    data[2].push(media2)
-    data[3].push(media3)
-    data[4].push(media4)
-    data[5].push(media5)
+    for (let i = 1; i <= 5; i++) {
+      const media = (Number(data[i][1]) + Number(data[i][2]) + Number(data[i][3])) / 3;
+      data[i].push(media);
+    }
+    
     
     const options = {
         title: '',
@@ -35,9 +32,7 @@ const ComboChart: React.FC = () => {
         backgroundColor: "none",
         hAxis: { 
           title: 'Ano 2024',
-          titleTextStyle: {
-            color: '#AEB7C0'
-          }
+          
         },
         seriesType: 'bars',
         series: { 3: { type: 'line' } },

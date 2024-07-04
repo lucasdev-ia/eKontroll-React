@@ -5,7 +5,6 @@ import "../css/Dashboard.css";
 import Card from "../components/Card.js";
 import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
-import { compareAsc, differenceInDays, format, parse } from "date-fns";
 /*IMAGENS*/
 import ImgCliente from "../images/cliente.png";
 import logopadrao from "../images/logo_padrao.png";
@@ -13,13 +12,9 @@ import ImgFidelidade from "../images/fidelidade.png";
 import BolinhaPiscando from "../components/GreenCircle.tsx";
 import ImgImposto from "../images/imposto.png";
 // import * as XLSX from "xlsx";
-import MyChart from "../components/Graphpizza.tsx";
 import ComboChart from "../components/GraphCol.tsx";
-import DonutChart from "../components/Graphpizza.tsx";
 import RadialChart from "../components/Graphpizza.tsx";
-import RadialChart3 from "../components/Graphpizza3.tsx";
-import RadialChart2 from "../components/Graphpizza2.tsx";
-
+import Bolinha from "../components/bolinha.tsx";
 
 
 const Dashboard: React.FC = () => {
@@ -110,7 +105,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <DefaultLayout>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-1 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         
         <Card value={resultados.length} title="Total de clientes" Cardimg = {ImgCliente} dataCadastro="" online={true} />
         <Card
@@ -126,11 +121,17 @@ const Dashboard: React.FC = () => {
       </div>
       
 
-      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
+      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
         <div className="rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
-          <Card2  title="." informacao="EVENTO 379 E 380" />
+          <Card2  title="" informacao="EVENTO 379 E 380" />
+            <div className="flex items-center justify-center mt-4 font-bold">
+              <div className="w-5 h-5 bg-bluechart rounded-full mr-2"></div>
+              <h1 className="mr-20">EVENTO 379</h1>
+              <div className="w-5 h-5 bg-verdelimao rounded-full mr-2"></div>
+              <h2>EVENTO 380</h2>
+        </div>
 
-          <div  className="grid grid-cols-3">
+          <div  className="grid grid-cols-3 text-black-2 dark:text-white">
             
               <RadialChart/><RadialChart/><RadialChart/>
               

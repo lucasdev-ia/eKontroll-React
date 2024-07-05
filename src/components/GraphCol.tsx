@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-const ChartComponent: React.FC = () => {
-  const options = {
+const ComboChart: React.FC = () => {
+  const options: ApexCharts.ApexOptions = {
     chart: {
       height: 350,
       type: 'line',
@@ -13,7 +13,7 @@ const ChartComponent: React.FC = () => {
     },
     colors: ['#99C2A2', '#C5EDAC', '#66C7F4'],
     stroke: {
-      width: [4, 4, 4, 4],
+      width: [4, 4, 4],
     },
     plotOptions: {
       bar: {
@@ -80,7 +80,7 @@ const ChartComponent: React.FC = () => {
     },
     {
       name: 'Column C',
-      type: 'column',
+      type: 'line',
       data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6],
     },
   ];
@@ -92,4 +92,4 @@ const ChartComponent: React.FC = () => {
   );
 };
 
-export default ChartComponent;
+export default ComboChart;

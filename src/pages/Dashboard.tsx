@@ -12,9 +12,9 @@ import ImgFidelidade from "../images/fidelidade.png";
 import BolinhaPiscando from "../components/GreenCircle.tsx";
 import ImgImposto from "../images/imposto.png";
 // import * as XLSX from "xlsx";
-import ComboChart from "../components/GraphCol.tsx";
+import ComboChart from "../components/ComboChart.tsx";
 import RadialChart from "../components/Graphpizza.tsx";
-import Bolinha from "../components/bolinha.tsx";
+
 
 
 const Dashboard: React.FC = () => {

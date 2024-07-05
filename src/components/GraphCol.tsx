@@ -7,6 +7,7 @@ const ComboChart: React.FC = () => {
       height: 350,
       type: 'line',
       stacked: false,
+      
     },
     dataLabels: {
       enabled: false,

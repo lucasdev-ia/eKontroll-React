@@ -145,9 +145,9 @@ const Dashboard: React.FC = () => {
           informacao="TESTE"
           title="10 Proximos clientes a completar ano de parceria"
         />
-          <div className="flex items-start">
+          <div className="">
 
-            /*ComboChart*//
+            <ComboChart/>
 
           </div>
         </div>

@@ -1,5 +1,4 @@
 import React /* ReactNode */ from "react";
-import "../css/Card.css";
 import BolinhaPiscando from "./GreenCircle.tsx";
 interface CardDataStatsProps {
   title: string;

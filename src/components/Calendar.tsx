@@ -11,8 +11,8 @@ const CalendarComponent: React.FC<CalendarProps> = () => {
     const eventElement = arg.el;
     // Exemplo: ajustar posição ou estilo do evento
     eventElement.style.position = 'relative';
-    eventElement.style.left = '5px'; // Ajuste de posição horizontal
-    eventElement.style.top = '8px';
+    eventElement.style.left = '0px'; // Ajuste de posição horizontal
+    eventElement.style.top = '0px';
   };
 
   return (
@@ -37,24 +37,26 @@ const CalendarComponent: React.FC<CalendarProps> = () => {
       }}
       events={[
         {
-          title: 'EMPRESA DE TESTE',
+          title: 'SUPERDUPER',
           date: '2024-07-10',
           color: 'orange',
         },
         {
-          title: 'EMPRESA BELTRANO',
+          title: 'MCDONALDS',
           date: '2024-07-15',
           
           color: 'orange',
         },
         {
-          title: 'EMPRESA FULANO DE TAL',
+          title: 'SÃO LUIZ',
           date: '2024-07-08',
           
           color: 'orange',
         },
       ]}
       eventDidMount={handleEventMount}
+      listDayFormat={{ month: 'long', day: 'numeric' }} // Formato para exibir dia e mês na lista
+      allDayText="" // Altera o texto "all-day" para "Dia Inteiro"
     />
   );
 };

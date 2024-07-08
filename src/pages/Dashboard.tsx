@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../services/api.jsx";
 // import Chart from "../components/Chart.jsx";
-import "../css/Dashboard.css";
 import Card from "../components/Card.js";
 import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
@@ -166,7 +165,7 @@ const Dashboard: React.FC = () => {
               <div className="bg-white dark:bg-boxdark px-8 py-1">
                   <Card2  title="Próximas empresas a completar 1 ano de parceria." informacao="Tempo de parceria"/> 
               </div>
-              <div className="text-black-2 dark:text-white bg-white px-30   py-3 shadow-default dark:border-strokedark dark:bg-boxdark ">
+              <div className="text-black-2 dark:text-white bg-white px-10   py-3 shadow-default dark:border-strokedark dark:bg-boxdark ">
                 
                   <CalendarComponent/>
               </div>

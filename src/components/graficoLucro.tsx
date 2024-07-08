@@ -37,6 +37,8 @@ const LucroChart: React.FC = () => {
       }
     },
     legend: {
+    position: 'top',
+    fontSize: '15px',
       labels: {
         colors: ['#3F83F8'],  
         useSeriesColors:true 

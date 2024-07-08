@@ -154,8 +154,8 @@ const Dashboard: React.FC = () => {
           
         </div>
         
-        <div className="rounded-sm border border-stroke bg-white px-24   py-3 shadow-default dark:border-strokedark dark:bg-boxdark">  
-          <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>
+        <div className="rounded-sm border border-stroke bg-white px-30   py-3 shadow-default dark:border-strokedark dark:bg-boxdark">  
+          <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>  
           <LucroChart></LucroChart>
           
         </div>
@@ -169,4 +169,3 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
-  

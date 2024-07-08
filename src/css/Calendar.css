@@ -1,0 +1,93 @@
+/* Estilos do cabeçalho e botões */
+.fc .fc-toolbar {
+    background-color: #007BFF; /* Azul */
+    color: white;
+  }
+  
+  .fc .fc-button {
+    background-color: #0056b3; /* Laranja */
+    border-color: #0056b3;
+    color: white;
+  }
+  
+  .fc .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: #0056b3; /* Azul mais escuro */
+    border-color: #0056b3;
+    margin-right: 10px; /* Ajuste o valor conforme necessário */
+    border-radius: 5px;
+  }
+  .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child){
+    border-radius: 5px;
+    margin-right: 1px; /* Ajuste o valor conforme necessário */
+
+  }
+
+  
+  /* Estilos dos eventos */
+  .fc .fc-event {
+    background-color: #007BFF; /* Cor de fundo dos eventos */
+    border-color: #000000;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Adicionar sombra suave */
+    z-index: 5;
+  }
+  
+  .fc-event:hover {
+    color: #000000;
+    cursor: pointer;
+  }
+  
+  .fc .fc-daygrid-event-dot {
+    border-color: #FFA500; /* Cor do ponto do evento */
+  }
+  
+  /* Estilos dos dias na lista de eventos */
+  .fc .fc-list-day-cushion {
+    background-color: orange; /* Cor de fundo dos dias */
+    position: relative;
+    top: 0px; /* Ajuste a posição superior conforme necessário */
+    left: 0px; /* Ajuste a posição esquerda conforme necessário */
+  }
+  
+  .fc .fc-list-day-text {
+    color: #000000; /* Cor do texto dentro do elemento */
+  }
+  
+  .fc .fc-list-day-side-text {
+    color: #000000; /* Cor do texto lateral */
+  }
+  
+  /* Estilos gerais do calendário */
+  .fc {
+  }
+  
+  .fc .fc-daygrid-day {
+    border-top: none; /* Remover borda superior dos dias */
+  }
+  
+  .fc .fc-daygrid-day-frame {
+    border: none; /* Remover borda interna dos dias */
+  }
+  
+  .fc .fc-prev-button, .fc .fc-next-button {
+    font-size: 0.8em; /* Ajuste o tamanho das setas conforme necessário */
+    color: #FFFFFF; /* Cor do ícone das setas */
+}
+
+.fc .fc-prev-button:after, .fc .fc-next-button:after {
+    font-size: 0.8em; /* Ajuste o tamanho das setas conforme necessário */
+    color: #FFFFFF; /* Cor do ícone das setas */
+}
+  
+.fc .fc-icon {
+    font-size: 0.8em; /* Ajuste o tamanho das setas conforme necessário */
+    color: #FFFFFF; /* Cor do ícone das setas */
+}
+
+
+.fc .fc-toolbar.fc-header-toolbar{
+    margin: 0px;
+}
+.fc .fc-daygrid-day-top{
+    height: 8px;
+}

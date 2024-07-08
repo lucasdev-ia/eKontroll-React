@@ -1,5 +1,4 @@
 import React /* ReactNode */ from "react";
-import "../css/Card.css";
 
 interface CardDataStatsProps {
   title: string;

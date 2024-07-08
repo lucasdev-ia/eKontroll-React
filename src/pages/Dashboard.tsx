@@ -14,6 +14,7 @@ import ImgImposto from "../images/imposto.png";
 // import * as XLSX from "xlsx";
 import ComboChart from "../components/ComboChart.tsx";
 import RadialChart from "../components/Graphpizza.tsx";
+import LucroChart from "../components/graficoLucro.tsx";
 
 
 
@@ -105,7 +106,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <DefaultLayout>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-1 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-1 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         
         <Card value={resultados.length} title="Total de clientes" Cardimg = {ImgCliente} dataCadastro="" online={true} />
         <Card
@@ -150,9 +151,19 @@ const Dashboard: React.FC = () => {
             <ComboChart/>
 
           </div>
+          
         </div>
-        {/* <button onClick={exportToExcel}>Exportar para Excel</button> */}
+        
+        <div className="rounded-sm border border-stroke bg-white px-30   py-3 shadow-default dark:border-strokedark dark:bg-boxdark">  
+          <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>  
+          <LucroChart></LucroChart>
+          
+        </div>
+
+
       </div>
+      
+      
     </DefaultLayout>
   );
 };

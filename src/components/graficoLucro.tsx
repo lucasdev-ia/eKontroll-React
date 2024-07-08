@@ -28,8 +28,8 @@ const LucroChart: React.FC = () => {
           labels: {
             show: true,
             value: {
-              color: '#ffffff', 
-              fontSize: '14px',
+              color: '#3F83F8', 
+              fontSize: '20px',
               fontFamily: 'Arial, sans-serif',
             },
           }
@@ -38,7 +38,7 @@ const LucroChart: React.FC = () => {
     },
     legend: {
       labels: {
-        colors: ['#ffffff'],  
+        colors: ['#3F83F8'],  
         useSeriesColors:true 
       }
     }

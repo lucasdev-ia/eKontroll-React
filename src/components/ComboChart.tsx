@@ -8,7 +8,7 @@ const ComboChart: React.FC = () => {
   const usuario3 = [ 74, 74, 74, 74, 74];
   const usuario4 = [ 91,  20, 91, 20, 91];
   const usuario5 = [ 45,  45, 45, 45, 45];
-  
+  const maxValue = Math.max(...usuario1, ...usuario2, ...usuario3, ...usuario4, ...usuario5);
   const options: ApexCharts.ApexOptions = {
     chart: {
       height: 350,
@@ -33,7 +33,23 @@ const ComboChart: React.FC = () => {
     yaxis: [
       {
         title: {
-          text: 'Horas',
+          text: 'HORAS',
+        },
+        min: 0,
+        max: maxValue ,
+      },
+      {
+        opposite: true,
+        title: {
+          text: 'DIAS',
+          
+        },
+        min: 0,
+        max: (maxValue),
+        tickAmount: 4.3,
+        labels: {
+          
+          formatter: (value) => `${Math.round(value/24)}d`,
         },
       },
     ],
@@ -52,22 +68,22 @@ const ComboChart: React.FC = () => {
 
   const series = [
     {
-      name: 'Funcionário 1',
+      name: 'leticia',
       type: 'bar',
       data: usuario1,
     },
     {
-      name: 'Funcionário 2',
+      name: 'mateus',
       type: 'bar',
       data: usuario2,
     },
     {
-      name: 'Funcionário 3',
+      name: 'joao',
       type: 'bar',
       data: usuario3,
     },
     {
-      name: 'Funcionário 4',
+      name: 'teste',
       type: 'bar',
       data: usuario4,
     },
@@ -76,6 +92,7 @@ const ComboChart: React.FC = () => {
       type: 'bar',
       data: usuario5,
     },
+    
   ];
 
   return (

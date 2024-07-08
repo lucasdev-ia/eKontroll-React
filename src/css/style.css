@@ -227,3 +227,14 @@ span.flatpickr-weekday,
 .animate-piscar {
   animation: piscar 3s infinite;
 }
+
+.classecalendario{
+  background-color: #f0f0f0;
+  padding: 10px;
+}
+
+.eventocalendario{
+  background-color: #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}

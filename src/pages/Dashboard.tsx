@@ -15,6 +15,9 @@ import ImgImposto from "../images/imposto.png";
 import ComboChart from "../components/ComboChart.tsx";
 import RadialChart from "../components/Graphpizza.tsx";
 import LucroChart from "../components/graficoLucro.tsx";
+import EventCalendar from "../components/Calendar.tsx";
+import CalendarComponent from "../components/Calendar.tsx";
+
 
 
 
@@ -119,18 +122,18 @@ const Dashboard: React.FC = () => {
         
         <Card value={"TOTAL: " + "100.000.000,00"} title="Impostos Arrecadados" Cardimg = {ImgImposto} dataCadastro="" online={false} />
         <Card value="Teste:" title="Teste" Cardimg = {logopadrao} dataCadastro="" online={false} />
-      </div>
+    </div>
       
 
-      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
-          <Card2  title="" informacao="EVENTO 379 E 380" />
-            <div className="flex items-center justify-center mt-4 font-bold">
-              <div className="w-5 h-5 bg-bluechart rounded-full mr-2"></div>
+    <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
+      <div className="rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
+        <Card2  title="" informacao="EVENTO 379 E 380" />
+          <div className="flex items-center justify-center mt-4 font-bold">
+            <div className="w-5 h-5 bg-bluechart rounded-full mr-2"></div>
               <h1 className="mr-20">EVENTO 379</h1>
-              <div className="w-5 h-5 bg-verdelimao rounded-full mr-2"></div>
+                <div className="w-5 h-5 bg-verdelimao rounded-full mr-2"></div>
               <h2>EVENTO 380</h2>
-        </div>
+          </div>
 
           <div  className="grid grid-cols-3 text-black-2 dark:text-white">
             
@@ -139,29 +142,36 @@ const Dashboard: React.FC = () => {
               
             
           </div>
-        </div>
-        <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
-
-        <Card2
-          informacao="TESTE"
-          title="10 Proximos clientes a completar ano de parceria"
-        />
-          <div className="">
-
-            <ComboChart/>
-
-          </div>
-          
-        </div>
-        
-        <div className="rounded-sm border border-stroke bg-white px-30   py-3 shadow-default dark:border-strokedark dark:bg-boxdark">  
-          <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>  
-          <LucroChart></LucroChart>
-          
-        </div>
-
-
       </div>
+          <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">  
+
+            <Card2
+              informacao="Relação de horas trabalhadas"
+              title="Funcionários que mais trabalharam nos ultimos 5 meses"
+            />
+            <div className="">
+
+              <ComboChart/>
+
+            </div>
+          
+          </div>
+        
+          <div className="rounded-sm border border-stroke bg-white px-30   py-3 shadow-default dark:border-strokedark dark:bg-boxdark">  
+            <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>  
+            <LucroChart></LucroChart>
+          
+          </div>
+          <div>
+              <div className="bg-white dark:bg-boxdark px-8 py-1">
+                  <Card2  title="Próximas empresas a completar 1 ano de parceria." informacao="Tempo de parceria"/> 
+              </div>
+              <div className="text-black-2 dark:text-white bg-white px-30   py-3 shadow-default dark:border-strokedark dark:bg-boxdark ">
+                
+                  <CalendarComponent/>
+              </div>
+              </div>
+          </div>
       
       
     </DefaultLayout>

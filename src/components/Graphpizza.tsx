@@ -33,7 +33,7 @@ const RadialChart: React.FC = () => {
                   endAngle: undefined,
                   background: '#f2f2f2',
                   strokeWidth: '80%',
-                  opacity: 0.5,
+                  opacity: 0.3,
                   margin: 2, 
                   dropShadow: {
                       enabled: true,
@@ -46,7 +46,7 @@ const RadialChart: React.FC = () => {
               
                 dataLabels: {
                   name: {
-                    fontSize: '14px',
+                    fontSize: '12px',
                   },
                   value: {
                     fontSize: '16px',
@@ -55,7 +55,7 @@ const RadialChart: React.FC = () => {
                   total: {
                     show: true,
                     label: 'Eventos',
-                    fontSize: '14px',
+                    fontSize: '12px',
                     fontFamily: "IMPACT",
                     fontWeight: 600,
                     
@@ -68,12 +68,12 @@ const RadialChart: React.FC = () => {
               },
             },
             labels: ['EVENTO 379', 'EVENTO 380'],
-            colors:['#3F83F8','#00FF7F' ],
+            colors:['#3F83F8','#00FF7F'],
         };
           
   return (
     <div className="">
-       <h2 className='text-center	 mt-5'>{nomeEmpresa}</h2>
+       <h2 className='text-center	 mt-4'>{nomeEmpresa}</h2>
        <ReactApexChart options={chartOptions} series={chartOptions.series} type="radialBar" height={350} />
        <h3 className='flex items-center justify-center font-satoshi'>
         <p className='font-bold mr-2'>380</p> Faltam: R$:1000,00

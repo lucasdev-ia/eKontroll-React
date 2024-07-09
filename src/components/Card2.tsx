@@ -9,7 +9,7 @@ interface CardDataStatsProps {
 const Card2: React.FC<CardDataStatsProps> = ({ title, informacao }) => {
   return (
     <div>
-      <h1 className="text-lg font-semibold text-black dark:text-white">
+      <h1 className="text-xl font-semibold text-black dark:text-white">
               {informacao}
             </h1>
       <span className="text-sm font-medium">{title}</span>

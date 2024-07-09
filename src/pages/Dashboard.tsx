@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from "react";
 import api from "../services/api.jsx";
-// import Chart from "../components/Chart.jsx";
 import Card from "../components/Card.js";
 import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
-/*IMAGENS*/
-import ImgCliente from "../images/cliente.png";
-import logopadrao from "../images/logo_padrao.png";
-import ImgFidelidade from "../images/fidelidade.png";
-import BolinhaPiscando from "../components/GreenCircle.tsx";
-import ImgImposto from "../images/imposto.png";
-// import * as XLSX from "xlsx";
 import ComboChart from "../components/ComboChart.tsx";
 import RadialChart from "../components/Graphpizza.tsx";
-import LucroChart from "../components/graficoLucro.tsx";
+import LucroChart from "../components/graficoLucro.tsx"; 
 import EventCalendar from "../components/Calendar.tsx";
 import CalendarComponent from "../components/Calendar.tsx";
 
+import { CakeIcon, CheckIcon, CircleStackIcon, StarIcon, UserGroupIcon } from '@heroicons/react/24/solid'
 
 
 
@@ -26,6 +19,29 @@ const Dashboard: React.FC = () => {
   const [dataconv, setDataconv] = useState([]);
   const [earliestDate, setEarliestDate] = useState(null);
   const [closestToAnniversary, setClosestToAnniversary] = useState(null);
+  
+  /*IMAGENS*/
+  const logo = (imagem) => {
+  if(imagem == 1)
+    return(
+    <UserGroupIcon className="size-22 text-azul stroke-black dark:text-boxdark dark:stroke-white"/>
+  )
+  if(imagem == 2)
+    return(
+      <CakeIcon className="size-20 text-violet stroke-black dark:text-boxdark dark:stroke-white"/>
+  )
+  if(imagem == 3)
+    return(
+      <CircleStackIcon className="size-20 text-amarelo stroke-black dark:text-boxdark dark:stroke-white"/>
+
+  )
+  if(imagem == 4)
+    return(
+      <CheckIcon className="size-20 text-azul stroke-black dark:text-boxdark dark:stroke-white"/>
+
+  )
+  }
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -109,18 +125,16 @@ const Dashboard: React.FC = () => {
   return (
     <DefaultLayout>
     <div className="grid grid-cols-2 gap-4 md:grid-cols-1 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        
-        <Card value={resultados.length} title="Total de clientes" Cardimg = {ImgCliente} dataCadastro="" online={true} />
+        <Card value={resultados.length} title="Total de clientes" Cardimg = {logo(1)} dataCadastro="" online={true} />
         <Card
           value={"START INDUSTRIA E COMER"}
           dataCadastro={" - FALTAM " + " DIAS"}
           title="Ano de parceria"
-          Cardimg = {ImgFidelidade}
+          Cardimg = {logo(2)}
           online={false}
         />
-        
-        <Card value={"TOTAL: " + "100.000.000,00"} title="Impostos Arrecadados" Cardimg = {ImgImposto} dataCadastro="" online={false} />
-        <Card value="Teste:" title="Teste" Cardimg = {logopadrao} dataCadastro="" online={false} />
+        <Card value={"TOTAL: " + "100.000.00"} title="Impostos Arrecadados" Cardimg = {logo(3)} dataCadastro="" online={false} />
+        <Card value="Office" title="Teste" Cardimg = {logo(4)} dataCadastro="" online={false} />
     </div>
       
 
@@ -129,7 +143,7 @@ const Dashboard: React.FC = () => {
         <Card2  title="" informacao="EVENTO 379 E 380" />
           <div className="flex items-center justify-center mt-4 font-bold">
             <div className="w-5 h-5 bg-bluechart rounded-full mr-2"></div>
-              <h1 className="mr-20">EVENTO 379</h1>
+              <h1 className="mr-20">EVENTO 379</h1> 
                 <div className="w-5 h-5 bg-verdelimao rounded-full mr-2"></div>
               <h2>EVENTO 380</h2>
           </div>
@@ -156,18 +170,19 @@ const Dashboard: React.FC = () => {
           
           </div>
         
-          <div className="rounded-sm border border-stroke bg-white px-30   py-3 shadow-default dark:border-strokedark dark:bg-boxdark">  
-            <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>  
-            <LucroChart></LucroChart>
-          
+          <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark"> 
+            <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>
+          <div  className="grid grid-cols-1 px-24 text-black-2 dark:text-white ">
+            
+              <LucroChart></LucroChart>
+            </div>
           </div>
           <div>
               <div className="bg-white dark:bg-boxdark px-8 py-1">
                   <Card2  title="Próximas empresas a completar 1 ano de parceria." informacao="Tempo de parceria"/> 
               </div>
               <div className="text-black-2 dark:text-white bg-white px-10   py-3 shadow-default dark:border-strokedark dark:bg-boxdark ">
-                
-                  <CalendarComponent/>
+                <CalendarComponent/>
               </div>
               </div>
           </div>

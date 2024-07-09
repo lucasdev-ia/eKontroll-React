@@ -1,14 +1,13 @@
 import axios from "axios";
 import { addYears, intervalToDuration, parse } from "date-fns";
 
-const apiEkontroll = axios.create({
-  baseURL:
-    "https://h-apigateway.conectagov.estaleiro.serpro.gov.br/oauth2/jwt-token", // Substitua pela URL da sua API
+const api = axios.create({
+  baseURL: "https://app.e-kontroll.com.br/api/v1/metodo", // Substitua pela URL da sua API
 });
 
 const listarEmpresas = async () => {
   try {
-    const response = await apiEkontroll.post("/listar_empresas", {
+    const response = await api.post("/listar_empresas", {
       api_key: "p2zazIRGQ9mwizXKkmVRBasVVW234DLdKkIpu53Rw8eh6zFpBOLolUWBCZmz",
       api_key_empresa:
         "yQuZX1A45FYa7gohZvmlHHDsUPvjLnGCTxuXMdae4W8T5x05hgWEvQgtUmxf",
@@ -18,20 +17,6 @@ const listarEmpresas = async () => {
     console.error("Erro ao buscar dados da API", error);
   }
 };
-
-const apiCnpj = axios.create({
-  baseURL: "https://www.receitaws.com.br/v1/cnpj",
-})
-
-const listarCnpjs = async (req, res) => {
-  try {
-    const response = await apiCnpj.get(`/${req.params.cnpj}`);
-    return res.json(response.data);
-  } catch (error) {
-    console.error("Erro ao buscar dados do CNPJ", error);
-    return res.status(404).json({ message: "CNPJ não encontrado" });
-  }
-}
 
 const processData = async (data) => {
   interface ObjetoData {

@@ -91,3 +91,6 @@
 .fc .fc-daygrid-day-top{
     height: 8px;
 }
+.fc .fc-toolbar-title{
+  font-size: 19px;
+}

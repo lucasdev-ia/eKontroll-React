@@ -1,90 +1,36 @@
 import React, { useEffect, useState } from "react";
-import api from "../services/api.jsx";
-// import Chart from "../components/Chart.jsx";
-import "../css/Dashboard.css";
+import { listarEmpresas, processData } from "../services/api.jsx";
 import Card from "../components/Card.js";
-import Card4_5 from "../components/Card4-5.js";
 import DefaultLayout from "../layout/DefautLayout.js";
-import { compareAsc, differenceInDays, format, parse } from "date-fns";
-// import * as XLSX from "xlsx";
 
 const Dashboard: React.FC = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [dataconv, setDataconv] = useState([]);
-  const [earliestDate, setEarliestDate] = useState(null);
-  const [closestToAnniversary, setClosestToAnniversary] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.post("/listar_empresas", {
-          api_key:
-            "p2zazIRGQ9mwizXKkmVRBasVVW234DLdKkIpu53Rw8eh6zFpBOLolUWBCZmz",
-          api_key_empresa:
-            "yQuZX1A45FYa7gohZvmlHHDsUPvjLnGCTxuXMdae4W8T5x05hgWEvQgtUmxf",
-        });
-        setData(response.data.dados.data);
-        // const dateStrings = response.data.dados.data.map(item => item.data_cadastro);
-        // setDataconv(dateStrings)
-
-        // const earliest = findEarliestDate(dateStrings);
-        // const closest = findClosestToAnniversary(dateStrings);
-
-        // setEarliestDate(format(earliest, 'dd/MM/yyyy'));
-        // setClosestToAnniversary(format(closest, 'dd/MM/yyyy'));
-      } catch (error) {
-        console.error("Erro ao buscar dados da API", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  let resultados = data.filter(
+  const [dataconv, setDataconv] = useState<any[]>([]);
+  const filtro = data.filter(
     (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
   );
 
-  // resultados.forEach((item: any) => {
-  //   const convertToDate = parse(item.data_cadastro, "dd/MM/yyyy", new Date());
-  
-  //   const findEarliestDate = (dateStrings) => {
-  //     const dates = dateStrings.map(convertToDate);
-  //     dates.sort(compareAsc);
-  //     return dates[0];
-  //   };
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await listarEmpresas();
+        setData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar dados da API", error);
+      }
+    };
+    fetchDataAsync();
+  }, []);
 
-  //   const earliest = findEarliestDate(convertToDate)
-  // });
-
-  //  const findClosestToAnniversary = (dateStrings) => {
-  //    const now = new Date();
-  //    const dates = dateStrings.map(convertToDate);
-  //    let closestDate = null;
-  //    let minDifference = Infinity;
-
-  //    dates.forEach((date) => {
-  //      let nextAnniversary = new Date(
-  //        now.getFullYear(),
-  //        date.getMonth(),
-  //        date.getDate(),
-  //      );
-  //      if (nextAnniversary < now) {
-  //        nextAnniversary.setFullYear(nextAnniversary.getFullYear() + 1);
-  //      }
-  //      const difference = differenceInDays(nextAnniversary, now);
-  //      if (difference < minDifference) {
-  //        minDifference = difference;
-  //        closestDate = date;
-  //      }
-  //    });
-
-  //    return closestDate;
-  //  };
-
-  console.log(resultados)
+  useEffect(() => {
+    const processDataAsync = async () => {
+      const dataconv = await processData(data);
+      setDataconv(dataconv);
+    };
+    processDataAsync();
+  }, [data]);
 
   if (loading) {
     return (
@@ -93,38 +39,27 @@ const Dashboard: React.FC = () => {
       </div>
     );
   }
-
+  
+  console.log(dataconv)
   return (
     <DefaultLayout>
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <Card
           value={": "}
           dataCadastro={" - FALTAM " + " DIAS"}
           title="Próximo cliente a completar ano de parceria"
         />
-        <Card value="ORLANDO" title="Cliente mais antigo" />
-        <Card value={"TOTAL: " + resultados.length} title="Clientes ativos" />
-      </div>
-      <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
-          char 1
-        </div>
-        <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
-          char 2
-        </div>
-        {/* <Chart data={data} /> */}
-      </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
-        <Card4_5
-          informacao="START INDUSTRIA E COMERCIO DE CONFECCAO DO VESTUARIO LTDA"
-          title="10 Proximos clientes a completar ano de parceria"
+        <Card value="ORLANDO" title="Cliente mais antigo" dataCadastro="" />
+        <Card
+          value={"TOTAL: " + filtro.length}
+          title="Clientes ativos"
+          dataCadastro=""
         />
-        <Card4_5
-          informacao="START INDUSTRIA E COMERCIO DE CONFECCAO DO VESTUARIO LTDA"
-          title="10 Proximos clientes a completar ano de parceria"
+        <Card
+          value={"TOTAL: " + dataconv.length}
+          title="Clientes ativos com parceria ativa"
+          dataCadastro=""
         />
-        {/* <button onClick={exportToExcel}>Exportar para Excel</button> */}
       </div>
     </DefaultLayout>
   );

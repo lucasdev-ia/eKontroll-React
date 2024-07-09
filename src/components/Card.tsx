@@ -1,5 +1,4 @@
 import React /* ReactNode */ from "react";
-import "../css/Card.css";
 import BolinhaPiscando from "./GreenCircle.tsx";
 interface CardDataStatsProps {
   title: string;
@@ -18,7 +17,7 @@ const Card: React.FC<CardDataStatsProps> = ({ title, value, dataCadastro,Cardimg
       <div className="flex items-end justify-between">
       <img className="h-22 w-22" src={Cardimg}/>
         <div>
-          <div className="h-24 w-40">
+          <div className="h-20 w-40">
             
               <h4 className="text-xl	font-semibold text-black dark:text-white ml-7.5 mt-3">
                 {value}

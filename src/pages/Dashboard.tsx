@@ -16,6 +16,8 @@ import RadialChart from "../components/Graphpizza.tsx";
 import LucroChart from "../components/graficoLucro.tsx"; 
 import EventCalendar from "../components/Calendar.tsx";
 import CalendarComponent from "../components/Calendar.tsx";
+import { stringify } from "querystring";
+
 
 
 
@@ -26,6 +28,8 @@ const Dashboard: React.FC = () => {
   const [dataconv, setDataconv] = useState([]);
   const [earliestDate, setEarliestDate] = useState(null);
   const [closestToAnniversary, setClosestToAnniversary] = useState(null);
+  const [categories, setCategories] = useState([]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +40,7 @@ const Dashboard: React.FC = () => {
           api_key_empresa:
             "yQuZX1A45FYa7gohZvmlHHDsUPvjLnGCTxuXMdae4W8T5x05hgWEvQgtUmxf",
         });
+        
         setData(response.data.dados.data);
         // const dateStrings = response.data.dados.data.map(item => item.data_cadastro);
         // setDataconv(dateStrings)
@@ -52,12 +57,31 @@ const Dashboard: React.FC = () => {
       }
     };
 
-    fetchData();
-  }, []);
+    const fetchCategories = async () => {
+      try {
+        const response = await api.post("/categorias_receber", {
+            api_key: "p2zazIRGQ9mwizXKkmVRBasVVW234DLdKkIpu53Rw8eh6zFpBOLolUWBCZmz",
+            api_key_cliente: "eGO3MpW!WEVWuRW9QtdMv1wIsxny6%KknMS4C%dVScN4S(APBhOvvTcJjC",
+          },
+        );
+        console.log("Resposta recebida de categorias_receber:", response.data.dados); //Requisição feita com sucesso porem retorna dados vazios, verificar se a api_key muda visto que a api_key_cliente foi pega em E-API > EMPRESAS > cliente 212 (START INDUSTRIA E COMER)
+        
+        setCategories(response.data.categories);
+        
+        
+      } catch (error) {
+        console.error("Erro ao buscar categorias da API", error);
+      }
+    };
 
+    fetchData();
+    fetchCategories();
+  }, []);
+  
   let resultados = data.filter(
     (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
   );
+
 
   // resultados.forEach((item: any) => {
   //   const convertToDate = parse(item.data_cadastro, "dd/MM/yyyy", new Date());
@@ -97,6 +121,8 @@ const Dashboard: React.FC = () => {
   //  };
 
   console.log(resultados)
+  
+
 
   if (loading) {
     return (
@@ -158,7 +184,7 @@ const Dashboard: React.FC = () => {
         
           <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark"> 
             <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>
-          <div  className="grid grid-cols-1 px-24 text-black-2 dark:text-white ">
+          <div  className="grid grid-cols-1 px-30 text-black-2 dark:text-white ">
             
               <LucroChart></LucroChart>
             </div>

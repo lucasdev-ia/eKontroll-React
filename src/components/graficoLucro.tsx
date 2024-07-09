@@ -8,9 +8,13 @@ const LucroChart: React.FC = () => {
     chart: {
       type: 'donut',
       background: 'transparent',
+      toolbar: {
+        show: false
+      }
     },
     series: [41, 41],
     labels: ['Contas a Pagar', 'Contas a Receber'],
+    colors: ['#FF4560', '#008FFB'],
     responsive: [{
       breakpoint: 480,
       options: {
@@ -37,20 +41,41 @@ const LucroChart: React.FC = () => {
       }
     },
     legend: {
-    position: 'top',
-    fontSize: '19 px',
+      position: 'top',
+      fontSize: '18px',
+      fontFamily: 'Arial, sans-serif',
+      fontWeight: 'bold',
       labels: {
-        colors: ['#3F83F8'],  
-        useSeriesColors:true 
+        colors: ['#FFFFFF',]
+      },
+      markers: {
+        width: 12,
+        height: 12,
+        radius: 12
+      }
+    },
+    tooltip: {
+      theme: 'dark',
+      style: {
+        fontSize: '20px',
+        fontFamily: 'Arial, sans-serif'
+      },
+      y: {
+        formatter: function(val) {
+          return `R$ ${val}`;
+        }
       }
     }
   };
-
-  const series = [30, 60];
+  const series = [2000, 3000];
 
   return (
     <div className="lucro-chart">
       <ReactApexChart options={options} series={series} type="donut" />
+      <div className="flex space-x-5 mt-0 ">
+          <p className="font-bold mr-0">Contas a receber: R$3000,00</p><br />
+          <p className="font-bold mr-0">Contas a pagar: R$2000,00</p><br />
+      </div>
     </div>
   );
 };

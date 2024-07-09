@@ -119,8 +119,8 @@ const Dashboard: React.FC = () => {
           online={false}
         />
         
-        <Card value={"TOTAL: " + "100.000.000,00"} title="Impostos Arrecadados" Cardimg = {ImgImposto} dataCadastro="" online={false} />
-        <Card value="Teste:" title="Teste" Cardimg = {logopadrao} dataCadastro="" online={false} />
+        <Card value={"TOTAL: " + "100.000.00"} title="Impostos Arrecadados" Cardimg = {ImgImposto} dataCadastro="" online={false} />
+        <Card value="Office" title="Teste" Cardimg = {logopadrao} dataCadastro="" online={false} />
     </div>
       
 
@@ -129,7 +129,7 @@ const Dashboard: React.FC = () => {
         <Card2  title="" informacao="EVENTO 379 E 380" />
           <div className="flex items-center justify-center mt-4 font-bold">
             <div className="w-5 h-5 bg-bluechart rounded-full mr-2"></div>
-              <h1 className="mr-20">EVENTO 379</h1>
+              <h1 className="mr-20">EVENTO 379</h1> 
                 <div className="w-5 h-5 bg-verdelimao rounded-full mr-2"></div>
               <h2>EVENTO 380</h2>
           </div>
@@ -156,9 +156,10 @@ const Dashboard: React.FC = () => {
           
           </div>
         
-          <div className="rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark"> 
+          <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark"> 
             <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>
-            <div  className="grid grid-cols-1 px-30 text-black-2 dark:text-white">
+          <div  className="grid grid-cols-1 px-24 text-black-2 dark:text-white ">
+            
               <LucroChart></LucroChart>
             </div>
           </div>

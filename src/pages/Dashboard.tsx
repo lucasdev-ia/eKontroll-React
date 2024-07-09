@@ -13,7 +13,7 @@ import ImgImposto from "../images/imposto.png";
 // import * as XLSX from "xlsx";
 import ComboChart from "../components/ComboChart.tsx";
 import RadialChart from "../components/Graphpizza.tsx";
-import LucroChart from "../components/graficoLucro.tsx";
+import LucroChart from "../components/graficoLucro.tsx"; 
 import EventCalendar from "../components/Calendar.tsx";
 import CalendarComponent from "../components/Calendar.tsx";
 
@@ -156,18 +156,18 @@ const Dashboard: React.FC = () => {
           
           </div>
         
-          <div className="rounded-sm border border-stroke bg-white px-30   py-3 shadow-default dark:border-strokedark dark:bg-boxdark">  
-            <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>  
-            <LucroChart></LucroChart>
-          
+          <div className="rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark"> 
+            <Card2  title="Relação de cadastros de Categorias de Contas a Receber" informacao="Contas a Receber"/>
+            <div  className="grid grid-cols-1 px-30 text-black-2 dark:text-white">
+              <LucroChart></LucroChart>
+            </div>
           </div>
           <div>
               <div className="bg-white dark:bg-boxdark px-8 py-1">
                   <Card2  title="Próximas empresas a completar 1 ano de parceria." informacao="Tempo de parceria"/> 
               </div>
               <div className="text-black-2 dark:text-white bg-white px-10   py-3 shadow-default dark:border-strokedark dark:bg-boxdark ">
-                
-                  <CalendarComponent/>
+                <CalendarComponent/>
               </div>
               </div>
           </div>

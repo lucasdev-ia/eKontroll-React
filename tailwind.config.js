@@ -30,6 +30,8 @@ module.exports = {
         stroke: "#E2E8F0",
         gray: "#EFF4FB",
         graydark: "#333A48",
+        verdelimao: "#00FF7F",
+        bluechart: "#3F83F8",
         "gray-2": "#F7F9FC",
         "gray-3": "#FAFAFA",
         whiten: "#F1F5F9",
@@ -51,6 +53,11 @@ module.exports = {
         success: "#219653",
         danger: "#D34053",
         warning: "#FFA70B",
+        violet: "#EE82EE",
+        amarelo: "#FFD700",
+        azul: "#008080",
+        azullogo: "#271b79",
+        laranjalogo: "#FD5201",
       },
       fontSize: {
         "title-xxl": ["44px", "55px"],
@@ -249,12 +256,14 @@ module.exports = {
         "spin-3": "spin 3s linear infinite",
       },
       height: {
+        cardnew: "170px",
         card: "180px",
         "card4-5": "180px",
         graf1: "385px",
         graf2: "385px",
       },
       width: {
+        cardnew: "300px",
         card: "403.33px",
         "card4-5": "713px",
         graf1: "963px",
@@ -262,5 +271,9 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require("flowbite/plugin")({
+      charts: true,
+    }),
+  ],
 };

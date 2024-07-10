@@ -1,20 +1,26 @@
-import axios from "axios";
 import { addYears, intervalToDuration, parse } from "date-fns";
 
-const api = axios.create({
-  baseURL: "https://app.e-kontroll.com.br/api/v1/metodo", // Substitua pela URL da sua API
-});
+const metodo =  "listar_empresas";
+const url = `https://app.e-kontroll.com.br/api/v1/metodo/${metodo}`;
 
 const listarEmpresas = async () => {
   try {
-    const response = await api.post("/listar_empresas", {
-      api_key: "p2zazIRGQ9mwizXKkmVRBasVVW234DLdKkIpu53Rw8eh6zFpBOLolUWBCZmz",
-      api_key_empresa:
-        "yQuZX1A45FYa7gohZvmlHHDsUPvjLnGCTxuXMdae4W8T5x05hgWEvQgtUmxf",
-    });
-    return response.data.dados.data;
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        api_key: "p2zazIRGQ9mwizXKkmVRBasVVW234DLdKkIpu53Rw8eh6zFpBOLolUWBCZmz",
+        api_key_empresa:
+          "yQuZX1A45FYa7gohZvmlHHDsUPvjLnGCTxuXMdae4W8T5x05hgWEvQgtUmxf",
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => data.dados.data);
   } catch (error) {
     console.error("Erro ao buscar dados da API", error);
+    throw error; // rethrow the error so it can be caught by the caller
   }
 };
 

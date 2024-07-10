@@ -1,7 +1,9 @@
 import { addYears, intervalToDuration, parse } from "date-fns";
+import axios, { AxiosResponse, AxiosError } from 'axios';
 
 const metodo =  "listar_empresas";
 const url = `https://app.e-kontroll.com.br/api/v1/metodo/${metodo}`;
+
 
 const listarEmpresas = async () => {
   try {
@@ -23,6 +25,20 @@ const listarEmpresas = async () => {
     throw error; // rethrow the error so it can be caught by the caller
   }
 };
+const consultaCnpj = async (cnpj: string): Promise<any> => {
+  const url = `https://api-publica.speedio.com.br/buscarcnpj?cnpj=${cnpj}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Erro ao consultar o CNPJ:', error);
+    return null;
+  }
+}
+
+
 
 const processData = async (data) => {
   interface ObjetoData {
@@ -68,4 +84,4 @@ const processData = async (data) => {
   parsedDates.sort((a, b) => a.data.getTime() - b.data.getTime());
   return parsedDates;
 };
-export { listarEmpresas, processData };
+export { listarEmpresas, processData, consultaCnpj };

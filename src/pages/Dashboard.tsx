@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listarEmpresas, processData } from "../services/api.jsx";
+import { consultaCnpj, listarEmpresas, processData } from "../services/api.jsx";
 import Card from "../components/Card.js";
 import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
@@ -8,7 +8,6 @@ import {
   CakeIcon,
   CheckIcon,
   CircleStackIcon,
-  StarIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
 import ComboChart from "../components/ComboChart.tsx";
@@ -66,6 +65,19 @@ const Dashboard: React.FC = () => {
   //   };
   //   fetchDataAsync();
   // }, []);
+  
+  
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+  useEffect(() => {
+  consultaCnpj('31261468000163').then(data => {
+    if (data) {
+      console.log(data["DATA ABERTURA"]);
+    }
+  });
+}, []);
+
+
 
   useEffect(() => {
     const processDataAsync = async () => {

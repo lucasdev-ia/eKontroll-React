@@ -13,7 +13,7 @@ const LucroChart: React.FC = () => {
       }
     },
     series: [41, 41],
-    labels: ['Contas a Pagar', 'Contas a Receber'],
+    labels: ['Clientes Ativos', 'Clientes Inativos'],
     colors: ['#271b79', '#FD5201'],
     responsive: [{
       breakpoint: 480,
@@ -67,14 +67,15 @@ const LucroChart: React.FC = () => {
       }
     }
   };
-  const series = [2000, 3000];
+  const series = [612, 130];
 
   return (
     <div className="lucro-chart">
       <ReactApexChart options={options} series={series} type="donut" />
-      <div className="flex space-x-5 mt-0 ">
-          <p className="font-bold mr-0">Contas a receber: R$3000,00</p><br />
-          <p className="font-bold mr-0">Contas a pagar: R$2000,00</p><br />
+      <div className="flex space-x-10 mt-0 ">
+        <p className="font-bold mx-auto text-center">Totais De Clientes da Office: 742</p>
+
+
       </div>
     </div>
   );

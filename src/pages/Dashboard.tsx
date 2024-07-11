@@ -104,7 +104,7 @@ const Dashboard: React.FC = () => {
     <DefaultLayout>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-1 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <Card
-          value={filtro.length}
+          value={filtro.length} // para ver o total é so colocar data
           title="Total de clientes"
           Cardimg={logo(1)}
           dataCadastro=""
@@ -161,8 +161,8 @@ const Dashboard: React.FC = () => {
 
         <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
           <Card2
-            title="Relação de cadastros de Categorias de Contas a Receber"
-            informacao="Contas a Receber"
+            title="Mostrando a distribuição atual da base de clientes da office"
+            informacao="Resumo de Clientes Ativos/Inativo"
           />
           <div className="grid grid-cols-1 px-24 text-black-2 dark:text-white">
             <LucroChart />

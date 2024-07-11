@@ -57,6 +57,7 @@ const Dashboard: React.FC = () => {
       } catch (error) {
         console.error("Erro ao buscar dados da API", error);
       }
+      
     };
     fetchDataAsync();
   }, []);
@@ -74,7 +75,9 @@ const Dashboard: React.FC = () => {
   
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
+  useEffect(() => {
+  console.log(filtro)
+  }, []);
   useEffect(() => {
   consultaCnpj('43241060000109').then(data => {
     if (data) {

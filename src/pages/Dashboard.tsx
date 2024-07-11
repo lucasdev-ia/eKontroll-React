@@ -9,7 +9,9 @@ import {
   CheckIcon,
   CircleStackIcon,
   UserGroupIcon,
-} from "@heroicons/react/24/solid";
+  UserPlusIcon,
+} 
+from "@heroicons/react/24/solid";
 import ComboChart from "../components/ComboChart.tsx";
 import LucroChart from "../components/LucroChart.tsx";
 import CalendarComponent from "../components/CalendarComponent.tsx";
@@ -26,19 +28,23 @@ const Dashboard: React.FC = () => {
   const logo = (imagem) => {
     if (imagem == 1)
       return (
-        <UserGroupIcon className="text-azullogo size-22 stroke-black dark:stroke-white dark:text-boxdark" />
+        <UserGroupIcon className="text-azullogo size-20 stroke-black dark:stroke-white dark:text-boxdark" />
       );
     if (imagem == 2)
       return (
-        <CakeIcon className="text-laranjalogo size-20 stroke-black dark:stroke-white dark:text-boxdark" />
+        <CakeIcon className="text-laranjalogo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
       );
     if (imagem == 3)
       return (
-        <CircleStackIcon className="text-amarelo size-20 stroke-black dark:stroke-white dark:text-boxdark" />
+        <CircleStackIcon className="text-amarelo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
       );
     if (imagem == 4)
       return (
-        <CheckIcon className="text-azullogo size-20 stroke-black dark:stroke-white dark:text-boxdark" />
+        <CheckIcon className="text-azullogo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
+      );
+    if (imagem == 5) 
+      return (
+        <UserPlusIcon className="text-vermelhalogo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
       );
   };
 
@@ -119,11 +125,11 @@ const Dashboard: React.FC = () => {
           online={false}
         />
         <Card
-          value="Office"
-          title="Teste"
-          Cardimg={logo(4)}
+          value="Novos Clientes:"
+          title="NEW CARDIO"
+          Cardimg={logo(5)}
           dataCadastro=""
-          online={false}
+          online={true}
         />
       </div>
 

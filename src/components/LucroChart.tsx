@@ -14,7 +14,7 @@ const LucroChart: React.FC = () => {
     },
     series: [41, 41],
     labels: ['Contas a Pagar', 'Contas a Receber'],
-    colors: ['#FF4560', '#008FFB'],
+    colors: ['#271b79', '#FD5201'],
     responsive: [{
       breakpoint: 480,
       options: {

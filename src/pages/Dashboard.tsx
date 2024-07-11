@@ -23,7 +23,12 @@ const Dashboard: React.FC = () => {
   const filtro = data.filter(
     (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
   );
+  const lastClients = data
+  .filter((item: any) => item.status_empresa === "A" && item.data_cadastro != null)
+  .slice(-3)
+  .map(client => client.razao_social);
 
+const lastClientsString = lastClients.join('\n');
   /*IMAGENS*/
   const logo = (imagem) => {
     if (imagem == 1)
@@ -128,8 +133,8 @@ const Dashboard: React.FC = () => {
           online={false}
         />
         <Card
-          value="Novos Clientes:"
-          title="NEW CARDIO"
+          value={`Novos Clientes: ${lastClients.length}`}
+          title={lastClientsString}
           Cardimg={logo(5)}
           dataCadastro=""
           online={true}

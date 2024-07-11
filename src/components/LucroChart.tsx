@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { listarEmpresas } from "../services/api.jsx";
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import '../css/satoshi.css';
 
 const LucroChart: React.FC = () => {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const filtro = data.filter(
+    (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
+  );
+  const opossiteFilter = data.filter(
+    (item: any) => item.status_empresa === "I" && item.data_cadastro != null,
+  );
   const options: ApexOptions = {
     chart: {
       type: 'donut',
@@ -62,18 +71,32 @@ const LucroChart: React.FC = () => {
       },
       y: {
         formatter: function(val) {
-          return `R$ ${val}`;
+          return `${val} clientes`;
         }
       }
     }
   };
-  const series = [612, 130];
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await listarEmpresas();
+        setData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar dados da API", error);
+      }
+      
+    };
+    fetchDataAsync();
+  }, []);
+  const series = [filtro.length, opossiteFilter.length];
 
   return (
     <div className="lucro-chart">
       <ReactApexChart options={options} series={series} type="donut" />
       <div className="flex space-x-10 mt-0 ">
-        <p className="font-bold mx-auto text-center">Totais De Clientes da Office: 742</p>
+        <p className="font-bold mx-auto text-center">Totais De Clientes da Office: {data.length}</p>
 
 
       </div>

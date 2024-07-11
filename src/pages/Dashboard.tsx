@@ -70,9 +70,9 @@ const Dashboard: React.FC = () => {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
  
   useEffect(() => {
-  consultaCnpj('31261468000163').then(data => {
+  consultaCnpj('43241060000109').then(data => {
     if (data) {
-      console.log(data["DATA ABERTURA"]);
+      console.log(data);
     }
   });
 }, []);

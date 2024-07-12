@@ -86,7 +86,7 @@ const lastClientsString = lastClients.join('\n');
   useEffect(() => {
   consultaCnpj('43241060000109').then(data => {
     if (data) {
-      console.log(data);
+      console.log(data); 
     }
   });
 }, []);

@@ -25,7 +25,7 @@ const Dashboard: React.FC = () => {
   );
   const lastClients = data
   .filter((item: any) => item.status_empresa === "A" && item.data_cadastro != null)
-  .slice(-2)
+  .slice(-5)
   .map(client => client.razao_social);
 
 const lastClientsString = lastClients.join('\n');

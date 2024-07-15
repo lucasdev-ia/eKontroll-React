@@ -21,10 +21,10 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [dataconv, setDataconv] = useState<any[]>([]);
   const filtro = data.filter(
-    (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
+    (item: any) => item.status_empresa === "A" ,
   );
   const lastClients = data
-  .filter((item: any) => item.status_empresa === "A" && item.data_cadastro != null)
+  .filter((item: any) => item.status_empresa === "A" )
   .slice(-3)
   .map(client => client.razao_social);
 

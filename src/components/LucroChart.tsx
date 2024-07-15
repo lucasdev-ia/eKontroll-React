@@ -8,10 +8,10 @@ const LucroChart: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const filtro = data.filter(
-    (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
+    (item: any) => item.status_empresa === "A" ,
   );
   const opossiteFilter = data.filter(
-    (item: any) => item.status_empresa === "I" && item.data_cadastro != null,
+    (item: any) => item.status_empresa === "I" ,
   );
   const options: ApexOptions = {
     chart: {

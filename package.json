@@ -23,7 +23,7 @@
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "flowbite": "^2.4.1",
-    "heroicons": "^2.1.4",
+    "heroicons": "^2.1.5",
     "localforage": "^1.10.0",
     "luxon": "^3.4.4",
     "match-sorter": "^6.3.4",

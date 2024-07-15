@@ -18,7 +18,7 @@ import CalendarComponent from "../components/CalendarComponent.tsx";
 
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
   const [dataconv, setDataconv] = useState<any[]>([]);
   const filtro = data.filter(
     (item: any) => item.status_empresa === "A" && item.data_cadastro != null,

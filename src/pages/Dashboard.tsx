@@ -16,6 +16,8 @@ import ComboChart from "../components/ComboChart.tsx";
 import LucroChart from "../components/LucroChart.tsx";
 import CalendarComponent from "../components/CalendarComponent.tsx";
 
+
+
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,12 +25,26 @@ const Dashboard: React.FC = () => {
   const filtro = data.filter(
     (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
   );
-  const lastClients = data
-  .filter((item: any) => item.status_empresa === "A" && item.data_cadastro != null)
-  .slice(-2)
+    
+  
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+  const monthNames = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+  ];
+  const currentMonthName = monthNames[currentMonth - 1];
+const filteredData = data.filter((item: any) => {
+  if (!item.data_cadastro) { // nao tinha nada definido manha toda fazendo isso aaaaa
+    console.log('data_cadastro is null or undefined:', item);
+    return false; // Se data_cadastro for null ou undefined, exclua o item
+  } 
+  const [day, month, year] = item.data_cadastro.split('/').map(Number);
+  return month === currentMonth && year === currentYear;
+});
+const lastClients = filteredData
   .map(client => client.razao_social);
-
-const lastClientsString = lastClients.join('\n');
   /*IMAGENS*/
   const logo = (imagem) => {
     if (imagem == 1)
@@ -134,7 +150,7 @@ const lastClientsString = lastClients.join('\n');
         />
         <Card
           value={`Novos Clientes: ${lastClients.length}`}
-          title={lastClientsString}
+          title={`No mês de ${currentMonthName} recebemos ${lastClients.length} clientes`}
           Cardimg={logo(5)}
           dataCadastro=""
           online={true}

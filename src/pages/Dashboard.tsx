@@ -17,8 +17,6 @@ import LucroChart from "../components/LucroChart.tsx";
 import CalendarComponent from "../components/CalendarComponent.tsx";
 import { format, getMonth, parse,getYear, parseISO } from 'date-fns';
 
-
-
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true); 
@@ -27,25 +25,25 @@ const Dashboard: React.FC = () => {
   const filtro = data.filter(
     (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
   );
-  
+
+const clientesDoMes = async () => {
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentYear = currentDate.getFullYear();
-  const monthNames = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-  ];
-  const currentMonthName = monthNames[currentMonth - 1];
-const filteredData = data.filter((item: any) => {
-  if (!item.data_cadastro) { // nao tinha nada definido manha toda fazendo isso aaaaa
-    console.log('data_cadastro is null or undefined:', item);
-    return false; // Se data_cadastro for null ou undefined, exclua o item
-  } 
-  const [day, month, year] = item.data_cadastro.split('/').map(Number);
-  return month === currentMonth && year === currentYear;
-});
-const lastClients = filteredData
-  .map(client => client.razao_social);
+  const currentMonth = getMonth(currentDate);
+  const currentYear = getYear(currentDate);
+  
+  const clientesThisMonth = data.filter((item: any) => {
+    const registrationDate = format(item.data_cadastro, "dd/MM/yyyy", new Date()).toString();
+    return (
+      getMonth(registrationDate) === currentMonth &&
+      getYear(registrationDate) === currentYear
+    );
+  });
+  const numberOfNewClientes = clientesThisMonth.length;
+  console.log(numberOfNewClientes)
+  return numberOfNewClientes;
+}
+
+clientesDoMes();
   /*IMAGENS*/
   const logo = (imagem) => {
     if (imagem == 1)
@@ -141,13 +139,8 @@ const lastClients = filteredData
           online={false}
         />
         <Card
-<<<<<<< HEAD
           value={`Novos Clientes: ${numberOfNewClientes}`}
           title=""
-=======
-          value={`Novos Clientes: ${lastClients.length}`}
-          title={`No mês de ${currentMonthName} recebemos ${lastClients.length} clientes`}
->>>>>>> dfe41045b45a3ecddd77b824933f43c423c93d66
           Cardimg={logo(5)}
           dataCadastro=""
           online={true}

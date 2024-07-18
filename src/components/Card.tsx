@@ -20,7 +20,7 @@ const Card: React.FC<CardDataStatsProps> = ({
       <div className="flex items-end justify-between">
         <div>{Cardimg}</div>
         <div>
-          <div className="h-20 w-40">
+          <div className="h-20 w-45">
             <h4 className="ml-7.5 mt-4 text-base font-semibold text-black dark:text-white">
               {value}
             </h4>

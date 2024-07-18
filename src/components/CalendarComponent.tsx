@@ -19,7 +19,7 @@ const CalendarComponent: React.FC<CalendarProps> = () => {
     <FullCalendar
       plugins={[dayGridPlugin, listPlugin]}
       themeSystem="standard"
-      height={350}
+      height={400}
       locale="pt-br"
       initialView="dayGridMonth"
       headerToolbar={{

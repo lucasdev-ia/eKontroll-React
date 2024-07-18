@@ -56,11 +56,7 @@ const lastClients = filteredData
       return (
         <CircleStackIcon className="text-amarelo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
       );
-    if (imagem == 4)
-      return (
-        <CheckIcon className="text-azullogo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
-      );
-    if (imagem == 5) 
+    if (imagem == 4) 
       return (
         <UserPlusIcon className="text-vermelhalogo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
       );
@@ -133,7 +129,7 @@ const lastClients = filteredData
         <Card
           value={`Novos Clientes: ${lastClients.length}`}
           title={`No mês de ${currentMonthName} recebemos ${lastClients.length} clientes`}
-          Cardimg={logo(5)}
+          Cardimg={logo(4)}
           dataCadastro=""
           online={true}
         />

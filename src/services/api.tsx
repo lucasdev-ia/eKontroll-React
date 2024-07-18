@@ -45,7 +45,24 @@ const consultaCnpj = async (cnpj: string): Promise<any> => {
   }
 }
 
-
+const consultaCalendario = async () => {
+  const url = `http://192.168.25.83:3000/calendario`;
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },  
+    });
+    const data = await response.json();
+    console.log(data)
+    return data;
+  } catch (error) {
+    console.error('Erro ao consultar', error);
+    return null;
+  }
+}
+consultaCalendario();
 
 const processData = async (data) => {
   interface ObjetoData {
@@ -91,4 +108,4 @@ const processData = async (data) => {
   parsedDates.sort((a, b) => a.data.getTime() - b.data.getTime());
   return parsedDates;
 };
-export { listarEmpresas, processData, consultaCnpj };
+export { listarEmpresas, processData, consultaCnpj, consultaCalendario };

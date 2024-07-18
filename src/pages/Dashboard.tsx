@@ -33,7 +33,6 @@ const Dashboard: React.FC = () => {
   const currentMonthName = monthNames[currentMonth - 1];
 const filteredData = data.filter((item: any) => {
   if (!item.data_cadastro) { // nao tinha nada definido manha toda fazendo isso aaaaa
-    console.log('data_cadastro is null or undefined:', item);
     return false; // Se data_cadastro for null ou undefined, exclua o item
   } 
   const [day, month, year] = item.data_cadastro.split('/').map(Number);
@@ -76,14 +75,10 @@ const lastClients = filteredData
     fetchDataAsync();
   }, []);
 
-  useEffect(() => {
-  console.log(filtro)
-  }, []);
+  
   useEffect(() => {
   consultaCnpj('43241060000109').then(data => {
-    if (data) {
-      console.log(data); 
-    }
+    
   });
 }, []);
 

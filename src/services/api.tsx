@@ -25,7 +25,6 @@ const listarEmpresas = async () => {
     throw error; // rethrow the error so it can be caught by the caller
   }
 };
-console.log(listarEmpresas)
 const consultaCnpj = async (cnpj: string): Promise<any> => {
   const url = `https://api.cnpja.com/office/${cnpj}?simples=true`;
 

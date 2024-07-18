@@ -25,7 +25,29 @@ const listarEmpresas = async () => {
     throw error; // rethrow the error so it can be caught by the caller
   }
 };
+<<<<<<< HEAD
 
+=======
+console.log(listarEmpresas)
+const consultaCnpj = async (cnpj: string): Promise<any> => {
+  const url = `https://api.cnpja.com/office/${cnpj}?simples=true`;
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "ece5e0ba-a0c9-4396-988d-190e2c64af11-5fe1699e-4777-4fc2-ba23-31a8a3ebcfae"
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Erro ao consultar o CNPJ:', error);
+    return null;
+  }
+}
+>>>>>>> dfe41045b45a3ecddd77b824933f43c423c93d66
 
 
 

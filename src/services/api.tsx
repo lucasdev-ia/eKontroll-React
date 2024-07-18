@@ -61,7 +61,6 @@ const consultaCalendario = async () => {
     return null;
   }
 }
-consultaCalendario();
 
 const consultaAniversario = async () => {
   const url = `http://192.168.25.83:3000/calendario/proximo-aniversario`;

@@ -77,10 +77,8 @@ const lastClients = filteredData
 
   
   useEffect(() => {
-  consultaCnpj('43241060000109').then(data => {
-    
-  });
-}, []);
+    consultaCnpj('43241060000109').then(data => {});
+  }, []);
 
   useEffect(() => {
     const processDataAsync = async () => {
@@ -155,16 +153,9 @@ const lastClients = filteredData
             <ComboChart />
           </div>
         </div>
+      </div>
 
-        <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
-          <Card2
-            title="Mostrando a distribuição atual da base de clientes da office"
-            informacao="Resumo de Clientes Ativos/Inativo"
-          />
-          <div className="grid grid-cols-1 px-24 text-black-2 dark:text-white">
-            <LucroChart />
-          </div>
-        </div>
+      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-1 2xl:mt-7.5 2xl:gap-7.5">
         <div>
           <div className="bg-white px-8 py-1 dark:bg-boxdark">
             <Card2
@@ -174,6 +165,18 @@ const lastClients = filteredData
           </div>
           <div className="bg-white px-10 py-3 text-black-2 shadow-default dark:border-strokedark dark:bg-boxdark dark:text-white">
             <CalendarComponent />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
+        <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
+          <Card2
+            title="Mostrando a distribuição atual da base de clientes da office"
+            informacao="Resumo de Clientes Ativos/Inativo"
+          />
+          <div className="grid grid-cols-1 px-24 text-black-2 dark:text-white">
+            <LucroChart />
           </div>
         </div>
       </div>

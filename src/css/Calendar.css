@@ -19,12 +19,20 @@
   border: none; /* Remove bordas */
 }
 
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+  border-radius: 5px;
+
+}
+
 .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
   border-radius: 5px;
   margin-right: 5px; /* Ajusta o valor para espaçamento */
 }
 
-/* Estilos dos eventos */
+.fc .fc-list-event:hover td {
+  background-color: #1d145a; /* Cor de fundo ao passar o mouse */
+}
+
 .fc .fc-event {
   background-color: #271b79; /* Cor de fundo dos eventos */
   border-color: #000000;
@@ -36,10 +44,6 @@
   border-radius: 5px; /* Adiciona bordas arredondadas */
 }
 
-.fc-event:hover {
-  background-color: #1d145a; /* Cor de fundo ao passar o mouse */
-  cursor: pointer;
-}
 
 .fc .fc-daygrid-event-dot {
   border-color: #FD5201; /* Cor do ponto do evento */
@@ -82,4 +86,8 @@
 
 .fc .fc-daygrid-day-top {
   height: 8px;
+}
+
+.fc .fc-col-header-cell {
+  background: #271b79;
 }

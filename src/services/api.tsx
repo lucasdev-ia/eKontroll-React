@@ -25,9 +25,6 @@ const listarEmpresas = async () => {
     throw error; // rethrow the error so it can be caught by the caller
   }
 };
-<<<<<<< HEAD
-
-=======
 console.log(listarEmpresas)
 const consultaCnpj = async (cnpj: string): Promise<any> => {
   const url = `https://api.cnpja.com/office/${cnpj}?simples=true`;
@@ -47,7 +44,6 @@ const consultaCnpj = async (cnpj: string): Promise<any> => {
     return null;
   }
 }
->>>>>>> dfe41045b45a3ecddd77b824933f43c423c93d66
 
 
 
@@ -95,4 +91,4 @@ const processData = async (data) => {
   parsedDates.sort((a, b) => a.data.getTime() - b.data.getTime());
   return parsedDates;
 };
-export { listarEmpresas, processData };
+export { listarEmpresas, processData, consultaCnpj };

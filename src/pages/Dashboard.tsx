@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { consultaCnpj, listarEmpresas, processData } from "../services/api.jsx";
+import { listarEmpresas, processData } from "../services/api.jsx";
 import Card from "../components/Card.js";
 import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
@@ -15,20 +15,35 @@ from "@heroicons/react/24/solid";
 import ComboChart from "../components/ComboChart.tsx";
 import LucroChart from "../components/LucroChart.tsx";
 import CalendarComponent from "../components/CalendarComponent.tsx";
+import { format, getMonth, parse,getYear, parseISO } from 'date-fns';
 
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true); 
   const [dataconv, setDataconv] = useState<any[]>([]);
+  
   const filtro = data.filter(
     (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
   );
-  const lastClients = data
-  .filter((item: any) => item.status_empresa === "A" && item.data_cadastro != null)
-  .slice(-2)
-  .map(client => client.razao_social);
 
-const lastClientsString = lastClients.join('\n');
+const clientesDoMes = async () => {
+  const currentDate = new Date();
+  const currentMonth = getMonth(currentDate);
+  const currentYear = getYear(currentDate);
+  
+  const clientesThisMonth = data.filter((item: any) => {
+    const registrationDate = format(item.data_cadastro, g"dd/MM/yyyy", new Date()).toString();
+    return (
+      getMonth(registrationDate) === currentMonth &&
+      getYear(registrationDate) === currentYear
+    );
+  });
+  const numberOfNewClientes = clientesThisMonth.length;
+  console.log(numberOfNewClientes)
+  return numberOfNewClientes;
+}
+
+clientesDoMes();
   /*IMAGENS*/
   const logo = (imagem) => {
     if (imagem == 1)
@@ -79,25 +94,16 @@ const lastClientsString = lastClients.join('\n');
   // }, []);
   
   
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
-  useEffect(() => {
-  console.log(filtro)
-  }, []);
-  useEffect(() => {
-  consultaCnpj('43241060000109').then(data => {
-    if (data) {
-      console.log(data); 
-    }
-  });
-}, []);
 
 
 
   useEffect(() => {
     const processDataAsync = async () => {
       const dataconv = await processData(data);
+      
       setDataconv(dataconv);
     };
+    
     processDataAsync();
   }, [data]);
 
@@ -133,8 +139,8 @@ const lastClientsString = lastClients.join('\n');
           online={false}
         />
         <Card
-          value={`Novos Clientes: ${lastClients.length}`}
-          title={lastClientsString}
+          value={`Novos Clientes: ${numberOfNewClientes}`}
+          title=""
           Cardimg={logo(5)}
           dataCadastro=""
           online={true}

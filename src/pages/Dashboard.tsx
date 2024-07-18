@@ -81,19 +81,6 @@ const lastClientsString = lastClients.join('\n');
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
-  console.log(filtro)
-  }, []);
-  useEffect(() => {
-  consultaCnpj('43241060000109').then(data => {
-    if (data) {
-      console.log(data); 
-    }
-  });
-}, []);
-
-
-
-  useEffect(() => {
     const processDataAsync = async () => {
       const dataconv = await processData(data);
       setDataconv(dataconv);

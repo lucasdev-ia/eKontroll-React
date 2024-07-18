@@ -4,8 +4,8 @@ import { ApexOptions } from 'apexcharts';
 import '../css/satoshi.css'
 
 const total = 250;
-const valor1 = 200;
-const valor2 = 140;
+const valor1 = 200; //379
+const valor2 = 140; //380
 const nomeEmpresa = "Empresa nome para teste"
 function valueToPercent (value1, value2) {
   return [Math.round((value1 * 100) / total),Math.round((value2 * 100) / total)]
@@ -75,10 +75,10 @@ const ChartEvento379e380: React.FC = () => {
         height={350}
       />
       <h3 className="flex items-center justify-center font-satoshi">
-        <p className="mr-2 font-bold">380</p> Faltam: R$:1000,00
+        <p className="mr-2 font-bold">380</p> Faltam: R$:{total - valor2}
       </h3>
       <h4 className="flex items-center justify-center font-satoshi">
-        <p className="mr-2 font-bold">379</p> Faltam: R$:1000,00
+        <p className="mr-2 font-bold">379</p> Faltam: R$:{total - valor1}
       </h4>
     </div>
   );

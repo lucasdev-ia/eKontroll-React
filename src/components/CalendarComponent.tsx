@@ -39,19 +39,19 @@ const CalendarComponent: React.FC<CalendarProps> = () => {
         {
           title: 'SUPERDUPER',
           date: '2024-07-10',
-          color: 'orange',
+          color: 'orange'
         },
         {
           title: 'MCDONALDS',
           date: '2024-07-15',
           
-          color: 'orange',
+          color: 'orange'
         },
         {
           title: 'SÃO LUIZ',
           date: '2024-07-08',
           
-          color: 'orange',
+          color: 'orange'
         },
       ]}
       eventDidMount={handleEventMount}

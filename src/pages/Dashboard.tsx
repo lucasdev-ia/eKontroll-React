@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { consultaCnpj, listarEmpresas, processData } from "../services/api.jsx";
+import { consultaCnpj, listarEmpresas, processData, consultaAniversario } from "../services/api.jsx";
 import Card from "../components/Card.js";
 import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
@@ -18,6 +18,7 @@ import CalendarComponent from "../components/CalendarComponent.tsx";
 
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
+  const [BirhtdayData, setBirthday] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [dataconv, setDataconv] = useState<any[]>([]);
   const filtro = data.filter(
@@ -40,7 +41,21 @@ const filteredData = data.filter((item: any) => {
 });
 const lastClients = filteredData
   .map(client => client.razao_social);
+
+  useEffect(() => {
+    const BirthdayData = async () => {
+      try {
+        const data = await consultaAniversario();
+        console.log(data)
+        setBirthday(data);
+      } catch (error) {
+        console.error("Erro ao buscar dados da API", error);
+      }
+    };
+    BirthdayData();
+  }, []);
   
+
   /*IMAGENS*/
   const logo = (imagem) => {
     if (imagem == 1)
@@ -106,8 +121,8 @@ const lastClients = filteredData
           online={true}
         />
         <Card
-          value={"START INDUSTRIA E COMER"}
-          dataCadastro={" - FALTAM " + " DIAS"}
+          value={BirhtdayData.title}
+          dataCadastro={""}
           title="Ano de parceria"
           Cardimg={logo(2)}
           online={false}
@@ -145,12 +160,11 @@ const lastClients = filteredData
           </div>
         </div>
         <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
-          <Card2
-            informacao="Relação de horas trabalhadas"
-            title="Funcionários que mais trabalharam nos ultimos 5 meses"
-          />
-          <div className="">
-            <ComboChart />
+        <Card2
+            title="Mostrando a distribuição atual da base de clientes da office"
+            informacao="Resumo de Clientes Ativos/Inativo" />
+          <div className="grid grid-cols-1 px-24 text-black-2 dark:text-white">
+            <LucroChart />
           </div>
         </div>
       </div>
@@ -165,18 +179,6 @@ const lastClients = filteredData
           </div>
           <div className="bg-white px-10 py-3 text-black-2 shadow-default dark:border-strokedark dark:bg-boxdark dark:text-white">
             <CalendarComponent />
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
-          <Card2
-            title="Mostrando a distribuição atual da base de clientes da office"
-            informacao="Resumo de Clientes Ativos/Inativo"
-          />
-          <div className="grid grid-cols-1 px-24 text-black-2 dark:text-white">
-            <LucroChart />
           </div>
         </div>
       </div>

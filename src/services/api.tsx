@@ -125,4 +125,4 @@ const processData = async (data) => {
   parsedDates.sort((a, b) => a.data.getTime() - b.data.getTime());
   return parsedDates;
 };
-export { listarEmpresas, processData, consultaCnpj, consultaCalendario };
+export { listarEmpresas, processData, consultaCnpj, consultaCalendario, consultaAniversario };

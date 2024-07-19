@@ -1,14 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import '../css/Calendar.css'; // Importar arquivo CSS customizado
+import { consultaCalendario } from '../services/api';
+
+
 
 interface CalendarProps {}
 
 const CalendarComponent: React.FC<CalendarProps> = () => {
+ 
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await consultaCalendario();
+        setData(data);
+      } catch (error) {
+        console.error("Erro ao buscar dados da API", error);
+      }
+      
+    };
+    fetchDataAsync();
+  }, []);
+
+
   const handleEventMount = (arg: { event: any; el: HTMLElement }) => {
     const eventElement = arg.el;
+
     // Exemplo: ajustar posição ou estilo do evento
     eventElement.style.position = 'relative';
     eventElement.style.left = '0px'; // Ajuste de posição horizontal
@@ -19,7 +40,7 @@ const CalendarComponent: React.FC<CalendarProps> = () => {
     <FullCalendar
       plugins={[dayGridPlugin, listPlugin]}
       themeSystem="standard"
-      height={350}
+      height="auto"
       locale="pt-br"
       initialView="dayGridMonth"
       headerToolbar={{
@@ -35,25 +56,7 @@ const CalendarComponent: React.FC<CalendarProps> = () => {
         list: 'Lista',
         
       }}
-      events={[
-        {
-          title: 'SUPERDUPER',
-          date: '2024-07-10',
-          color: 'orange',
-        },
-        {
-          title: 'MCDONALDS',
-          date: '2024-07-15',
-          
-          color: 'orange',
-        },
-        {
-          title: 'SÃO LUIZ',
-          date: '2024-07-08',
-          
-          color: 'orange',
-        },
-      ]}
+      events={data}
       eventDidMount={handleEventMount}
       listDayFormat={{ month: 'long', day: 'numeric' }} // Formato para exibir dia e mês na lista
       allDayText="" // Altera o texto "all-day" para "Dia Inteiro"

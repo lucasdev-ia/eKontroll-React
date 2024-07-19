@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { listarEmpresas } from "../services/api.jsx";
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import '../css/satoshi.css';
 
 const LucroChart: React.FC = () => {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const filtro = data.filter(
+    (item: any) => item.status_empresa === "A",
+  );
+  const opossiteFilter = data.filter(
+    (item: any) => item.status_empresa === "I",
+  );
   const options: ApexOptions = {
     chart: {
       type: 'donut',
@@ -13,8 +22,8 @@ const LucroChart: React.FC = () => {
       }
     },
     series: [41, 41],
-    labels: ['Contas a Pagar', 'Contas a Receber'],
-    colors: ['#FF4560', '#008FFB'],
+    labels: ['Clientes Ativos', 'Clientes Inativos'],
+    colors: ['#271b79', '#FD5201'],
     responsive: [{
       breakpoint: 480,
       options: {
@@ -62,19 +71,34 @@ const LucroChart: React.FC = () => {
       },
       y: {
         formatter: function(val) {
-          return `R$ ${val}`;
+          return `${val} clientes`;
         }
       }
     }
   };
-  const series = [2000, 3000];
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await listarEmpresas();
+        setData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar dados da API", error);
+      }
+      
+    };
+    fetchDataAsync();
+  }, []);
+  const series = [filtro.length, opossiteFilter.length];
 
   return (
     <div className="lucro-chart">
       <ReactApexChart options={options} series={series} type="donut" />
-      <div className="flex space-x-5 mt-0 ">
-          <p className="font-bold mr-0">Contas a receber: R$3000,00</p><br />
-          <p className="font-bold mr-0">Contas a pagar: R$2000,00</p><br />
+      <div className="flex space-x-10 mt-0 ">
+        <p className="font-bold mx-auto text-center">Totais De Clientes da Office: {data.length}</p>
+
+
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
   const filtro = data.filter(
     (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
   );
-
+  console.log(filtro)
   /*IMAGENS*/
   const logo = (imagem) => {
     if (imagem == 1)

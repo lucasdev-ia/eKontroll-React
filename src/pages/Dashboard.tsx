@@ -122,7 +122,7 @@ const lastClients = filteredData
         />
         <Card
           value={BirhtdayData.title}
-          dataCadastro={""}
+          dataCadastro=""
           title="Ano de parceria"
           Cardimg={logo(2)}
           online={false}

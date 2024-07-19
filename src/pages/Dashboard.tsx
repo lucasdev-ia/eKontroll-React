@@ -121,9 +121,9 @@ const lastClients = filteredData
           online={true}
         />
         <Card
-          value={BirhtdayData.title}
+          value={`${BirhtdayData.length} Empresas`}
           dataCadastro={""}
-          title="Ano de parceria"
+          title="Completam aniversário hoje"
           Cardimg={logo(2)}
           online={false}
         />

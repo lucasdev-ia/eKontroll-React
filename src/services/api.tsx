@@ -63,7 +63,7 @@ const consultaCalendario = async () => {
 }
 
 const consultaAniversario = async () => {
-  const url = `http://192.168.25.83:3000/calendario/proximo-aniversario`;
+  const url = `http://192.168.25.83:3000/calendario/aniversario-hoje`;
   try {
     const response = await fetch(url, {
       method: "GET",

@@ -79,8 +79,24 @@ const consultaAniversario = async () => {
     return null;
   }
 }
-consultaAniversario();
-
+const consultaEventos = async () => {
+  const url = `http://192.168.25.83:3000/eventos`;
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },  
+    });
+    const data = await response.json();
+    console.log(data)
+    return data;
+  } catch (error) {
+    console.error('Erro ao consultar', error);
+    return null;
+  }
+}
+consultaEventos();
 const processData = async (data) => {
   interface ObjetoData {
     status_empresa: string;

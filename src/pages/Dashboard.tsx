@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { consultaCnpj, listarEmpresas, processData, consultaAniversario } from "../services/api.jsx";
+import { listarEmpresas, processData, consultaAniversario, consultaEventos } from "../services/api.jsx";
 import Card from "../components/Card.js";
 import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
@@ -10,8 +10,8 @@ import {
   CircleStackIcon,
   UserGroupIcon,
   UserPlusIcon,
-} 
-from "@heroicons/react/24/solid";
+}
+  from "@heroicons/react/24/solid";
 import ComboChart from "../components/ComboChart.tsx";
 import LucroChart from "../components/LucroChart.tsx";
 import CalendarComponent from "../components/CalendarComponent.tsx";
@@ -21,8 +21,9 @@ const Dashboard: React.FC = () => {
   const [BirhtdayData, setBirthday] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [dataconv, setDataconv] = useState<any[]>([]);
+  const [eventos, setEventos] = useState<any[]>([]);
   const filtro = data.filter(
-    (item: any) => item.status_empresa === "A" );
+    (item: any) => item.status_empresa === "A");
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
@@ -32,15 +33,15 @@ const Dashboard: React.FC = () => {
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
   const currentMonthName = monthNames[currentMonth - 1];
-const filteredData = data.filter((item: any) => {
-  if (!item.data_cadastro) { // nao tinha nada definido manha toda fazendo isso aaaaa
-    return false; // Se data_cadastro for null ou undefined, exclua o item
-  } 
-  const [day, month, year] = item.data_cadastro.split('/').map(Number);
-  return month === currentMonth && year === currentYear;
-});
-const lastClients = filteredData
-  .map(client => client.razao_social);
+  const filteredData = data.filter((item: any) => {
+    if (!item.data_cadastro) { // nao tinha nada definido manha toda fazendo isso aaaaa
+      return false; // Se data_cadastro for null ou undefined, exclua o item
+    }
+    const [day, month, year] = item.data_cadastro.split('/').map(Number);
+    return month === currentMonth && year === currentYear;
+  });
+  const lastClients = filteredData
+    .map(client => client.razao_social);
 
   useEffect(() => {
     const BirthdayData = async () => {
@@ -54,7 +55,53 @@ const lastClients = filteredData
     };
     BirthdayData();
   }, []);
+
+  function parseValue(value) {
+    if (
+      value === 'sem informações' ||
+      value === undefined ||
+      value === Infinity ||
+      Number.isNaN(parseFloat(value))
+    ) {
+      return -Infinity; // Tratar como valor inexistente ou inválido
+    }
+    return parseFloat(value);
+  }
   
+  useEffect(() => {
+
+    const Eventos379e380 = async () => {
+      try {
+        const data = await consultaEventos();
+        const organizedData = data.sort((a, b) => {
+          // Calcular o máximo entre valor379 e valor380 para cada item
+          const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
+            ? Math.max(parseValue(a.valor379), parseValue(a.valor380))
+            : -Infinity;
+          const maxB = (b.valor379 !== undefined || b.valor380 !== undefined)
+            ? Math.max(parseValue(b.valor379), parseValue(b.valor380))
+            : -Infinity;
+        
+          // Tratar casos específicos de Infinity e NaN
+          if (maxA === -Infinity && maxB !== -Infinity) return 1;
+          if (maxB === -Infinity && maxA !== -Infinity) return -1;
+          
+          // Tratar casos específicos de Infinity
+          if (maxA === Infinity) return 1;
+          if (maxB === Infinity) return -1;
+        
+          // Ordem decrescente
+          return maxB - maxA;
+        });
+        console.log(organizedData)
+        setEventos(organizedData);
+      } catch (error) {
+        console.error("Erro ao buscar dados da API", error);
+      }
+    };
+    Eventos379e380();
+  }, []);
+
 
   /*IMAGENS*/
   const logo = (imagem) => {
@@ -70,7 +117,7 @@ const lastClients = filteredData
       return (
         <CircleStackIcon className="text-amarelo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
       );
-    if (imagem == 4) 
+    if (imagem == 4)
       return (
         <UserPlusIcon className="text-vermelhalogo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
       );
@@ -85,15 +132,11 @@ const lastClients = filteredData
       } catch (error) {
         console.error("Erro ao buscar dados da API", error);
       }
-      
+
     };
     fetchDataAsync();
   }, []);
 
-  
-  useEffect(() => {
-    consultaCnpj('43241060000109').then(data => {});
-  }, []);
 
   useEffect(() => {
     const processDataAsync = async () => {
@@ -128,7 +171,7 @@ const lastClients = filteredData
           online={false}
         />
         <Card
-          value={"TOTAL: " + "100.000.00"}
+          value="R$ 100.000.00"
           title="Impostos Arrecadados"
           Cardimg={logo(3)}
           dataCadastro=""
@@ -143,8 +186,8 @@ const lastClients = filteredData
         />
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-2 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className=" mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-3 2xl:mt-7.5 2xl:gap-7.5">
+        <div className="col-span-2 rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
           <Card2 title="" informacao="EVENTO 379 E 380" />
           <div className="mt-4 flex items-center justify-center font-bold">
             <div className="bg-laranjalogo mr-2 h-5 w-5 rounded-full"></div>
@@ -153,17 +196,32 @@ const lastClients = filteredData
             <h2>EVENTO 380</h2>
           </div>
 
-          <div className="grid grid-cols-3 text-black-2 dark:text-white">
-            <ChartEvento379e380 />
-            <ChartEvento379e380 />
-            <ChartEvento379e380 />
+          <div className=" place-items-end grid grid-cols-3 text-black-2 dark:text-white">
+            <ChartEvento379e380
+              valor1={eventos[0].valor379}
+              valor2={eventos[0].valor380}
+              empresa={eventos[0].nome}
+              sobrou379={eventos[0].sobra379}
+              sobrou380={eventos[0].sobra380} />
+            <ChartEvento379e380
+              valor1={eventos[1].valor379}
+              valor2={eventos[1].valor380}
+              empresa={eventos[1].nome}
+              sobrou379={eventos[1].sobra379}
+              sobrou380={eventos[1].sobra380} />
+            <ChartEvento379e380
+              valor1={eventos[2].valor379}
+              valor2={eventos[2].valor380}
+              empresa={eventos[2].nome}
+              sobrou379={eventos[2].sobra379}
+              sobrou380={eventos[2].sobra380} />
           </div>
         </div>
         <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
-        <Card2
+          <Card2
             title="Mostrando a distribuição atual da base de clientes da office"
             informacao="Resumo de Clientes Ativos/Inativo" />
-          <div className="grid grid-cols-1 px-24 text-black-2 dark:text-white">
+          <div className="mt-10 text-black-2 dark:text-white">
             <LucroChart />
           </div>
         </div>

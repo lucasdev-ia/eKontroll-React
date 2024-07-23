@@ -95,7 +95,7 @@ const LucroChart: React.FC = () => {
   return (
     <div className="lucro-chart">
       <ReactApexChart options={options} series={series} type="donut" />
-      <div className="flex space-x-10 mt-0 ">
+      <div className="flex ">
         <p className="font-bold mx-auto text-center">Totais De Clientes da Office: {data.length}</p>
 
 

@@ -181,9 +181,9 @@ const Dashboard: React.FC = () => {
           online={true}
         />
         <Card
-          value={`${BirhtdayData.length} ${BirhtdayData.length == 1 ? "Empresa" : "Empresas"}`}
+          value={BirhtdayData.title}
           dataCadastro={""}
-          title={`${BirhtdayData.length == 1 ? "Completa aniversário hoje" : "Completam aniversário hoje"} `}
+          title="Ano de parceria"
           Cardimg={logo(2)}
           online={false}
         />

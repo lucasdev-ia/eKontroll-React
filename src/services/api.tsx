@@ -1,5 +1,4 @@
 import { addYears, intervalToDuration, parse } from "date-fns";
-import axios, { AxiosResponse, AxiosError } from 'axios';
 
 const metodo = "listar_empresas";
 const url = `https://app.e-kontroll.com.br/api/v1/metodo/${metodo}`;
@@ -15,7 +14,7 @@ const listarEmpresas = async () => {
       body: JSON.stringify({
         api_key: "p2zazIRGQ9mwizXKkmVRBasVVW234DLdKkIpu53Rw8eh6zFpBOLolUWBCZmz",
         api_key_empresa:
-          "yQuZX1A45FYa7gohZvmlHHDsUPvjLnGCTxuXMdae4W8T5x05hgWEvQgtUmxf",
+          "yQuZX1A45FYa7gohZvmlHHDsUPvjLnGCTxuXMdae4W8T5x05hgW  QgtUmxf",
       }),
     })
       .then((response) => response.json())

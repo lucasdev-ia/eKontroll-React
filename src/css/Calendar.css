@@ -91,3 +91,7 @@
 .fc .fc-col-header-cell {
   background: #271b79;
 }
+/* Modo claro */
+.fc .fc-col-header-cell {
+  color: white; /* Define a cor dos dias da semana como branco */
+}

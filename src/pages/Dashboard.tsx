@@ -10,6 +10,10 @@ import {
   CircleStackIcon,
   UserGroupIcon,
   UserPlusIcon,
+  ArrowRightIcon,
+  ArrowLeftIcon,
+  ListBulletIcon,
+
 }
   from "@heroicons/react/24/solid";
 import ComboChart from "../components/ComboChart.tsx";
@@ -22,6 +26,19 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [dataconv, setDataconv] = useState<any[]>([]);
   const [eventos, setEventos] = useState<any[]>([]);
+  const [contador, setContador] = useState(0);
+
+  const incrementarContador = () => {
+    if (contador + 3 < eventos.length) {
+      setContador(contador + 1);
+    }
+  };
+  const DiminuirContador = () => {
+    if (contador > 0) {
+      setContador(contador - 1);
+    }
+  };
+
   const filtro = data.filter(
     (item: any) => item.status_empresa === "A");
 
@@ -67,7 +84,7 @@ const Dashboard: React.FC = () => {
     }
     return parseFloat(value);
   }
-  
+
   useEffect(() => {
 
     const Eventos379e380 = async () => {
@@ -81,15 +98,15 @@ const Dashboard: React.FC = () => {
           const maxB = (b.valor379 !== undefined || b.valor380 !== undefined)
             ? Math.max(parseValue(b.valor379), parseValue(b.valor380))
             : -Infinity;
-        
+
           // Tratar casos específicos de Infinity e NaN
           if (maxA === -Infinity && maxB !== -Infinity) return 1;
           if (maxB === -Infinity && maxA !== -Infinity) return -1;
-          
+
           // Tratar casos específicos de Infinity
           if (maxA === Infinity) return 1;
           if (maxB === Infinity) return -1;
-        
+
           // Ordem decrescente
           return maxB - maxA;
         });
@@ -188,7 +205,15 @@ const Dashboard: React.FC = () => {
 
       <div className=" mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-3 2xl:mt-7.5 2xl:gap-7.5">
         <div className="col-span-2 rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
-          <Card2 title="" informacao="EVENTO 379 E 380" />
+          <div className="flex items-center justify-between max-w-200  p-1 bg-gray-100 rounded-md">
+
+            <Card2 title="" informacao="EVENTO 379 E 380" />
+            <div className="flex justify-end mt-3">
+              <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" onClick={DiminuirContador}><ArrowLeftIcon className="h-5 w-5 mr-1" /></button>
+              <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" onClick={incrementarContador}><ArrowRightIcon className="h-5 w-5 mr-1" /></button>
+              <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" ><ListBulletIcon className="h-5 w-5 mr-1" /></button>
+            </div>
+          </div>
           <div className="mt-4 flex items-center justify-center font-bold">
             <div className="bg-laranjalogo mr-2 h-5 w-5 rounded-full"></div>
             <h1 className="mr-20">EVENTO 379</h1>
@@ -198,23 +223,23 @@ const Dashboard: React.FC = () => {
 
           <div className=" place-items-end grid grid-cols-3 text-black-2 dark:text-white">
             <ChartEvento379e380
-              valor1={eventos[0].valor379}
-              valor2={eventos[0].valor380}
-              empresa={eventos[0].nome}
-              sobrou379={eventos[0].sobra379}
-              sobrou380={eventos[0].sobra380} />
+              valor1={eventos[contador].valor379}
+              valor2={eventos[contador].valor380}
+              empresa={eventos[contador].nome}
+              sobrou379={eventos[contador].sobra379}
+              sobrou380={eventos[contador].sobra380} />
             <ChartEvento379e380
-              valor1={eventos[1].valor379}
-              valor2={eventos[1].valor380}
-              empresa={eventos[1].nome}
-              sobrou379={eventos[1].sobra379}
-              sobrou380={eventos[1].sobra380} />
+              valor1={eventos[contador + 1].valor379}
+              valor2={eventos[contador + 1].valor380}
+              empresa={eventos[contador + 1].nome}
+              sobrou379={eventos[contador + 1].sobra379}
+              sobrou380={eventos[contador + 1].sobra380} />
             <ChartEvento379e380
-              valor1={eventos[2].valor379}
-              valor2={eventos[2].valor380}
-              empresa={eventos[2].nome}
-              sobrou379={eventos[2].sobra379}
-              sobrou380={eventos[2].sobra380} />
+              valor1={eventos[contador + 2].valor379}
+              valor2={eventos[contador + 2].valor380}
+              empresa={eventos[contador + 2].nome}
+              sobrou379={eventos[contador + 2].sobra379}
+              sobrou380={eventos[contador + 2].sobra380} />
           </div>
         </div>
         <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">

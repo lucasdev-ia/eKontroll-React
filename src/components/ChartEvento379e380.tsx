@@ -18,7 +18,7 @@ function valueToPercent(value1: number, value2: number): number[] {
 const ChartEvento379e380: React.FC<ChartProps> = ({ valor1, valor2, empresa, sobrou379, sobrou380 }) => {
   const nomeEmpresa = empresa;
   const chartOptions: ApexOptions = {
-    series: valueToPercent(valor1, valor2),
+    series: valueToPercent(valor2, valor1),
 
     chart: {
       height: 350,
@@ -67,10 +67,11 @@ const ChartEvento379e380: React.FC<ChartProps> = ({ valor1, valor2, empresa, sob
         },
       },
     },
-    labels: ['EVENTO 379', 'EVENTO 380'],
+    labels: ['EVENTO 380', 'EVENTO 379'],
     colors: ['#271b79', '#FD5201'],
   };
-
+  const resposta379 = sobrou380 < 0 ? "Passou" : "Faltam";
+  const resposta380 = sobrou379 < 0 ? "Passou" : "Faltam";
   return (
     <div className="">
       <h2 className="mt-5 text-center">{nomeEmpresa}</h2>
@@ -81,10 +82,10 @@ const ChartEvento379e380: React.FC<ChartProps> = ({ valor1, valor2, empresa, sob
         height={350}
       />
       <h3 className="flex items-center justify-center font-satoshi">
-        <p className="mr-2 font-bold">380</p> Faltam: R$:{sobrou380}
+        <p className="mr-2 font-bold">380</p> {resposta379}: R$:{sobrou380}
       </h3>
       <h4 className="flex items-center justify-center font-satoshi">
-        <p className="mr-2 font-bold">379</p> Faltam: R$:{sobrou379}
+        <p className="mr-2 font-bold">379</p> {resposta380}: R$:{sobrou379}
       </h4>
     </div>
   );

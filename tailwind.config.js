@@ -58,8 +58,8 @@ module.exports = {
         azul: "#008080",
         azullogo: "#271b79",
         laranjalogo: "#FD5201",
-        laranjahover: '#C73D00', // Cor mais escura para hover
-
+        laranjahover: '#C73D00',// Cor mais escura para hover
+        verdecalendario: '#008000'
       },
       fontSize: {
         "title-xxl": ["44px", "55px"],

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listarEmpresas, processData, consultaAniversario, consultaEventos } from "../services/api.jsx";
+import { listarEmpresas, processData, consultaAniversario, consultaEventos, consultaAniversarioSocio } from "../services/api.jsx";
 import Card from "../components/Card.js";
 import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
@@ -13,6 +13,7 @@ import {
   ArrowRightIcon,
   ArrowLeftIcon,
   ListBulletIcon,
+  UserCircleIcon
 
 }
   from "@heroicons/react/24/solid";
@@ -23,6 +24,7 @@ import CalendarComponent from "../components/CalendarComponent.tsx";
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [BirhtdayData, setBirthday] = useState<any>();
+  const [socioAniversario, setSocio] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [dataconv, setDataconv] = useState<any[]>([]);
   const [eventos, setEventos] = useState<any[]>([]);
@@ -71,6 +73,19 @@ const Dashboard: React.FC = () => {
       }
     };
     BirthdayData();
+  }, []);
+
+  useEffect(() => {
+    const AniversarioSocios = async () => {
+      try {
+        const data = await consultaAniversarioSocio();
+        console.log(data)
+        setSocio(data);
+      } catch (error) {
+        console.error("Erro ao buscar dados da API", error);
+      }
+    };
+    AniversarioSocios();
   }, []);
 
   function parseValue(value) {
@@ -132,11 +147,11 @@ const Dashboard: React.FC = () => {
       );
     if (imagem == 3)
       return (
-        <CircleStackIcon className="text-amarelo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
+        <UserCircleIcon className="text-verdecalendario size-19 stroke-black dark:stroke-white dark:text-boxdark" />
       );
     if (imagem == 4)
       return (
-        <UserPlusIcon className="text-vermelhalogo size-19 stroke-black dark:stroke-white dark:text-boxdark" />
+        <UserPlusIcon className="text- size-19 stroke-black dark:stroke-white dark:text-boxdark" />
       );
   };
 
@@ -188,8 +203,8 @@ const Dashboard: React.FC = () => {
           online={false}
         />
         <Card
-          value="R$ 100.000.00"
-          title="Impostos Arrecadados"
+          value={`${socioAniversario.length} ${socioAniversario.length == 1 ? "Socio" : "Socios"}`}
+          title={`${socioAniversario.length == 1 ? "Completa aniversário hoje" : "Completam aniversário hoje"} `}
           Cardimg={logo(3)}
           dataCadastro=""
           online={false}

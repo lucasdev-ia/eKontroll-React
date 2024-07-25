@@ -42,9 +42,44 @@ const consultaCalendario = async () => {
     return null;
   }
 }
+const consultaCalendarioSocio = async () => {
+  const url = `http://192.168.25.83:3000/calendario/socios`;
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log(data)
+    return data;
+  } catch (error) {
+    console.error('Erro ao consultar', error);
+    return null;
+  }
+}
+
 
 const consultaAniversario = async () => {
   const url = `http://192.168.25.83:3000/calendario/aniversario-hoje`;
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log(data)
+    return data;
+  } catch (error) {
+    console.error('Erro ao consultar', error);
+    return null;
+  }
+}
+const consultaAniversarioSocio = async () => {
+  const url = `http://192.168.25.83:3000/calendario/aniversario-socios`;
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -122,4 +157,4 @@ const processData = async (data) => {
   parsedDates.sort((a, b) => a.data.getTime() - b.data.getTime());
   return parsedDates;
 };
-export { listarEmpresas, processData, consultaCalendario, consultaAniversario, consultaEventos };
+export { listarEmpresas, processData, consultaCalendario, consultaAniversario, consultaEventos, consultaCalendarioSocio, consultaAniversarioSocio };

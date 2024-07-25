@@ -3,16 +3,16 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import '../css/Calendar.css'; // Importar arquivo CSS customizado
-import { consultaCalendario } from '../services/api';
+import { consultaCalendario, consultaCalendarioSocio } from '../services/api';
 
 
 
-interface CalendarProps {}
+interface CalendarProps { }
 
 const CalendarComponent: React.FC<CalendarProps> = () => {
- 
-  const [data, setData] = useState<any[]>([]);
 
+  const [data, setData] = useState<any[]>([]);
+  const [socio, setSocio] = useState<any[]>([]);
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
@@ -21,12 +21,43 @@ const CalendarComponent: React.FC<CalendarProps> = () => {
       } catch (error) {
         console.error("Erro ao buscar dados da API", error);
       }
-      
+
     };
     fetchDataAsync();
   }, []);
 
+  useEffect(() => {
+    const calendarioSocios = async () => {
+      try {
+        const data = await consultaCalendarioSocio();
+        const seenNames = new Set();
 
+        const dataMap = data
+          .filter(item => {
+            if (seenNames.has(item.title)) {
+              return false; // Ignora itens com nome duplicado
+            } else {
+              seenNames.add(item.title);
+              return true; // Inclui itens com nome único
+            }
+          })
+          .map(item => ({
+            title: `${item.title} || EMPRESA: ${item.empresa}`,
+            date: item.date, // Ou qualquer outra transformação desejada
+            color: item.color,
+          }));
+        setSocio(dataMap);
+
+      } catch (error) {
+        console.error("Erro ao buscar dados da API", error);
+      }
+
+    };
+    calendarioSocios();
+
+  }, []);
+
+const datasTotais = [...data, ...socio] 
   const handleEventMount = (arg: { event: any; el: HTMLElement }) => {
     const eventElement = arg.el;
 
@@ -54,9 +85,9 @@ const CalendarComponent: React.FC<CalendarProps> = () => {
         week: 'Semana',
         day: 'Dia',
         list: 'Lista',
-        
+
       }}
-      events={data}
+      events={datasTotais}
       eventDidMount={handleEventMount}
       listDayFormat={{ month: 'long', day: 'numeric' }} // Formato para exibir dia e mês na lista
       allDayText="" // Altera o texto "all-day" para "Dia Inteiro"

@@ -38,7 +38,7 @@ const consultaCalendario = async () => {
     console.log(data)
     return data;
   } catch (error) {
-    console.error('Erro ao consultar o CNPJ:', error);
+    console.error('Erro ao consultar', error);
     return null;
   }
 }
@@ -75,10 +75,9 @@ const consultaEventos = async () => {
   } catch (error) {
     console.error('Erro ao consultar', error);
     return null;
-  }
+  }   
 }
-consultaAniversario();
-
+consultaEventos();
 const processData = async (data) => {
   interface ObjetoData {
     status_empresa: string;

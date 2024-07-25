@@ -57,11 +57,6 @@ const LucroChart: React.FC = () => {
       labels: {
         colors: ['#FFFFFF',]
       },
-      markers: {
-        width: 12,
-        height: 12,
-        radius: 12
-      }
     },
     tooltip: {
       theme: 'dark',

@@ -214,7 +214,7 @@ const Dashboard: React.FC = () => {
           title={`No mês de ${currentMonthName} recebemos ${lastClients.length} clientes`}
           Cardimg={logo(4)}
           dataCadastro=""
-          online={true}
+          online={false}
         />
       </div>
 

@@ -40,10 +40,9 @@ const Dashboard: React.FC = () => {
       setContador(contador - 1);
     }
   };
-
   const filtro = data.filter(
     (item: any) => item.status_empresa === "A");
-
+    
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();

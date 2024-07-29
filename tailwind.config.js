@@ -56,7 +56,7 @@ module.exports = {
         violet: "#EE82EE",
         amarelo: "#FFD700",
         azul: "#008080",
-        azullogo: "#271b79",
+      azullogo: "#271b79",
         laranjalogo: "#FD5201",
         laranjahover: '#C73D00',// Cor mais escura para hover
         verdecalendario: '#008000'

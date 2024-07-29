@@ -63,7 +63,7 @@ const Dashboard: React.FC = () => {
     .map(client => client.razao_social);
 
   useEffect(() => {
-    const BirthdayData = async () => {
+    const BirthdayData = async () => {  
       try {
         const data = await consultaAniversario();
         console.log(data)

@@ -30,6 +30,7 @@ const Dashboard: React.FC = () => {
   const [eventos, setEventos] = useState<any[]>([]);
   const [contador, setContador] = useState(0);
 
+
   const incrementarContador = () => {
     if (contador + 3 < eventos.length) {
       setContador(contador + 1);

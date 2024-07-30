@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { listarEmpresas } from '../services/api';
+import { listarEmpresas  } from '../services/api';
+import DefaultLayout from '../layout/DefautLayout';
 
 const ClientList: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [clientsPerPage, setClientsPerPage] = useState(25);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,75 +32,69 @@ const ClientList: React.FC = () => {
     );
   }
 
-  const groupClientsByInitial = (clients: any[]) => {
-    return clients.reduce((acc, client) => {
-      const initial = client.razao_social.charAt(0).toUpperCase();
-      if (!isNaN(parseInt(initial))) {
-        if (!acc['#']) {
-          acc['#'] = [];
-        }
-        acc['#'].push(client);
-      } else {
-        if (!acc[initial]) {
-          acc[initial] = [];
-        }
-        acc[initial].push(client);
-      }
-      return acc;
-    }, {} as Record<string, any[]>);
-  };
-
-  const groupedClients = groupClientsByInitial(data.sort((a, b) => a.razao_social.localeCompare(b.razao_social)));
-
   const handleClick = (clientId: number) => {
-    console.log('Navigating with clientId:', clientId);
-    navigate('/', { state: { clientId } }); // Navegue para a rota desejada com clientId
+    navigate('/', { state: { clientId } });
   };
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleClientsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setClientsPerPage(parseInt(event.target.value));
+    setCurrentPage(1);
+  };
+
+  const indexOfLastClient = currentPage * clientsPerPage;
+  const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+  const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Lista de Clientes</h1>
-      <div>
-        {Object.keys(groupedClients).sort().filter(initial => initial !== '#').map((initial) => (
-          <div key={initial}>
-            <h2 className="text-xl font-semibold mt-4">{initial}</h2>
-            <hr className="mb-2" />
-            <ul>
-              {groupedClients[initial].map((cliente) => (
-                <li key={cliente.codi_emp}>
-                  <a
-                    href="#"
-                    onClick={() => handleClick(cliente.codi_emp)} // Passe codi_emp como clientId
-                    className="text-blue-500 hover:underline"
-                  >
-                    {cliente.razao_social}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-        {groupedClients['#'] && (
-          <div>
-            <h2 className="text-xl font-semibold mt-4">#</h2>
-            <hr className="mb-2" />
-            <ul>
-              {groupedClients['#'].map((cliente) => (
-                <li key={cliente.codi_emp}>
-                  <a
-                    href="#"
-                    onClick={() => handleClick(cliente.codi_emp)} // Passe codi_emp como clientId
-                    className="text-blue-500 hover:underline"
-                  >
-                    {cliente.razao_social}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+    <DefaultLayout>
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Lista de Clientes</h1>
+        
+        <div className="mb-4">
+          <label htmlFor="clientsPerPage" className="mr-2">Clientes por página:</label>
+          <select
+            id="clientsPerPage"
+            value={clientsPerPage}
+            onChange={handleClientsPerPageChange}
+            className="border rounded p-1"
+          >
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+
+        <ul>
+          {currentClients.map((cliente) => (
+            <li key={cliente.codi_emp}>
+              <a
+                href="#"
+                onClick={() => handleClick(cliente.codi_emp)}
+                className="text-blue-500 hover:underline"
+              >
+                {cliente.razao_social}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex justify-center mt-4">
+          {Array.from({ length: Math.ceil(data.length / clientsPerPage) }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index + 1)}
+              className={`px-4 py-2 mx-1 border rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
+    </DefaultLayout>
   );
 };
 

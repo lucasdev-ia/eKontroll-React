@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listarEmpresas, processData } from "../services/api.jsx";// consultaAniversario, consultaEventos, consultaAniversarioSocio
+import { listarEmpresas, processData, consultaAniversario, consultaEventos, consultaAniversarioSocio } from "../services/api.jsx"; 
 import Card from "../components/Card.js";
 import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
@@ -77,7 +77,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const BirthdayData = async () => {  
       try {
-        //const data = await consultaAniversario();
+        const data = await consultaAniversario();
         console.log(data)
         setBirthday(data);
       } catch (error) {
@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const AniversarioSocios = async () => {
       try {
-        //const data = await consultaAniversarioSocio();
+        const data = await consultaAniversarioSocio();
         console.log(data)
         setSocio(data);
       } catch (error) {
@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
 
     const Eventos379e380 = async () => {
       try {
-       // const data = await consultaEventos();
+        const data = await consultaEventos();
         const organizedData = data.sort((a, b) => {
           // Calcular o máximo entre valor379 e valor380 para cada item
           const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
@@ -244,7 +244,6 @@ const Dashboard: React.FC = () => {
                 onClick={() => navigate('/clients')}
               >
               <ListBulletIcon className="h-5 w-5 mr-1" />
-              Listar Clientes
               </button>
               </Link>
             </div>
@@ -257,7 +256,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className=" place-items-end grid grid-cols-3 text-black-2 dark:text-white">
-            {/* <ChartEvento379e380
+            <ChartEvento379e380
               valor1={eventos[contador].valor379}
               valor2={eventos[contador].valor380}
               empresa={eventos[contador].nome}
@@ -274,7 +273,7 @@ const Dashboard: React.FC = () => {
               valor2={eventos[contador + 2].valor380}
               empresa={eventos[contador + 2].nome}
               sobrou379={eventos[contador + 2].sobra379}
-              sobrou380={eventos[contador + 2].sobra380} /> */}
+              sobrou380={eventos[contador + 2].sobra380} />
           </div>
         </div>
         <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">

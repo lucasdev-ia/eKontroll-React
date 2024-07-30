@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listarEmpresas, processData, consultaAniversario, consultaEventos, consultaAniversarioSocio } from "../services/api.jsx";
+import { listarEmpresas, processData } from "../services/api.jsx";// consultaAniversario, consultaEventos, consultaAniversarioSocio
 import Card from "../components/Card.js";
 import Card2 from "../components/Card2.js";
 import DefaultLayout from "../layout/DefautLayout.js";
@@ -20,6 +20,8 @@ import {
 import ComboChart from "../components/ComboChart.tsx";
 import LucroChart from "../components/LucroChart.tsx";
 import CalendarComponent from "../components/CalendarComponent.tsx";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
 
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
@@ -29,8 +31,17 @@ const Dashboard: React.FC = () => {
   const [dataconv, setDataconv] = useState<any[]>([]);
   const [eventos, setEventos] = useState<any[]>([]);
   const [contador, setContador] = useState(0);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-
+  useEffect(() => {
+    if (location.state && location.state.clientId) {
+      const clientId = location.state.clientId;
+      console.log('ID do cliente selecionado:', clientId);
+      // Aqui recebe o ID selecionado na rota /clientes
+    }
+  }, [location.state]);
+  
   const incrementarContador = () => {
     if (contador + 3 < eventos.length) {
       setContador(contador + 1);
@@ -66,7 +77,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const BirthdayData = async () => {  
       try {
-        const data = await consultaAniversario();
+        //const data = await consultaAniversario();
         console.log(data)
         setBirthday(data);
       } catch (error) {
@@ -79,7 +90,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const AniversarioSocios = async () => {
       try {
-        const data = await consultaAniversarioSocio();
+        //const data = await consultaAniversarioSocio();
         console.log(data)
         setSocio(data);
       } catch (error) {
@@ -105,7 +116,7 @@ const Dashboard: React.FC = () => {
 
     const Eventos379e380 = async () => {
       try {
-        const data = await consultaEventos();
+       // const data = await consultaEventos();
         const organizedData = data.sort((a, b) => {
           // Calcular o máximo entre valor379 e valor380 para cada item
           const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
@@ -227,7 +238,15 @@ const Dashboard: React.FC = () => {
             <div className="flex justify-end mt-3">
               <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" onClick={DiminuirContador}><ArrowLeftIcon className="h-5 w-5 mr-1" /></button>
               <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" onClick={incrementarContador}><ArrowRightIcon className="h-5 w-5 mr-1" /></button>
-              <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" ><ListBulletIcon className="h-5 w-5 mr-1" /></button>
+              <Link to="/clients">
+              <button
+                className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition"
+                onClick={() => navigate('/clients')}
+              >
+              <ListBulletIcon className="h-5 w-5 mr-1" />
+              Listar Clientes
+              </button>
+              </Link>
             </div>
           </div>
           <div className="mt-4 flex items-center justify-center font-bold">
@@ -238,7 +257,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className=" place-items-end grid grid-cols-3 text-black-2 dark:text-white">
-            <ChartEvento379e380
+            {/* <ChartEvento379e380
               valor1={eventos[contador].valor379}
               valor2={eventos[contador].valor380}
               empresa={eventos[contador].nome}
@@ -255,7 +274,7 @@ const Dashboard: React.FC = () => {
               valor2={eventos[contador + 2].valor380}
               empresa={eventos[contador + 2].nome}
               sobrou379={eventos[contador + 2].sobra379}
-              sobrou380={eventos[contador + 2].sobra380} />
+              sobrou380={eventos[contador + 2].sobra380} /> */}
           </div>
         </div>
         <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">

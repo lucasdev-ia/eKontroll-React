@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import '../css/Calendar.css'; // Importar arquivo CSS customizado
-import { consultaCalendario, consultaCalendarioSocio } from '../services/api';
+//import { consultaCalendario, consultaCalendarioSocio } from '../services/api';
 
 
 
@@ -13,49 +13,49 @@ const CalendarComponent: React.FC<CalendarProps> = () => {
 
   const [data, setData] = useState<any[]>([]);
   const [socio, setSocio] = useState<any[]>([]);
-  useEffect(() => {
-    const fetchDataAsync = async () => {
-      try {
-        const data = await consultaCalendario();
-        setData(data);
-      } catch (error) {
-        console.error("Erro ao buscar dados da API", error);
-      }
+  // useEffect(() => {
+  //   const fetchDataAsync = async () => {
+  //     try {
+  //       const data = await consultaCalendario();
+  //       setData(data);
+  //     } catch (error) {
+  //       console.error("Erro ao buscar dados da API", error);
+  //     }
 
-    };
-    fetchDataAsync();
-  }, []);
+  //   };
+  //   fetchDataAsync();
+  // }, []);
 
-  useEffect(() => {
-    const calendarioSocios = async () => {
-      try {
-        const data = await consultaCalendarioSocio();
-        const seenNames = new Set();
+  // useEffect(() => {
+  //   const calendarioSocios = async () => {
+  //     try {
+  //       const data = await consultaCalendarioSocio();
+  //       const seenNames = new Set();
 
-        const dataMap = data
-          .filter(item => {
-            if (seenNames.has(item.title)) {
-              return false; // Ignora itens com nome duplicado
-            } else {
-              seenNames.add(item.title);
-              return true; // Inclui itens com nome único
-            }
-          })
-          .map(item => ({
-            title: `${item.title} || EMPRESA: ${item.empresa}`,
-            date: item.date, // Ou qualquer outra transformação desejada
-            color: item.color,
-          }));
-        setSocio(dataMap);
+  //       const dataMap = data
+  //         .filter(item => {
+  //           if (seenNames.has(item.title)) {
+  //             return false; // Ignora itens com nome duplicado
+  //           } else {
+  //             seenNames.add(item.title);
+  //             return true; // Inclui itens com nome único
+  //           }
+  //         })
+  //         .map(item => ({
+  //           title: `${item.title} || EMPRESA: ${item.empresa}`,
+  //           date: item.date, // Ou qualquer outra transformação desejada
+  //           color: item.color,
+  //         }));
+  //       setSocio(dataMap);
 
-      } catch (error) {
-        console.error("Erro ao buscar dados da API", error);
-      }
+  //     } catch (error) {
+  //       console.error("Erro ao buscar dados da API", error);
+  //     }
 
-    };
-    calendarioSocios();
+  //   };
+  //   calendarioSocios();
 
-  }, []);
+  // }, []);
 
 const datasTotais = [...data, ...socio] 
   const handleEventMount = (arg: { event: any; el: HTMLElement }) => {

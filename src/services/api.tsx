@@ -1,7 +1,7 @@
 import { addYears, intervalToDuration, parse } from "date-fns";
 import axios, { AxiosResponse, AxiosError } from 'axios';
 
-const metodo = "listar_empresas";
+const metodo =  "listar_empresas";
 const url = `https://app.e-kontroll.com.br/api/v1/metodo/${metodo}`;
 
 
@@ -25,94 +25,62 @@ const listarEmpresas = async () => {
     throw error; // rethrow the error so it can be caught by the caller
   }
 };
-const consultaCalendario = async () => {
-  const url = `http://192.168.25.83:3000/calendario`;
+const consultaCnpj = async (cnpj: string): Promise<any> => {
+  const url = `https://api.cnpja.com/office/${cnpj}?simples=true`;
+
   try {
     const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "ece5e0ba-a0c9-4396-988d-190e2c64af11-5fe1699e-4777-4fc2-ba23-31a8a3ebcfae"
       },
     });
     const data = await response.json();
-    console.log(data)
     return data;
   } catch (error) {
-    console.error('Erro ao consultar', error);
-    return null;
-  }
-}
-const consultaCalendarioSocio = async () => {
-  const url = `http://192.168.25.83:3000/calendario/socios`;
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    console.log(data)
-    return data;
-  } catch (error) {
-    console.error('Erro ao consultar', error);
+    console.error('Erro ao consultar o CNPJ:', error);
     return null;
   }
 }
 
+// const consultaCalendario = async () => {
+//   const url = `http://192.168.25.83:3000/calendario`;
+//   try {
+//     const response = await fetch(url, {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },  
+//     });
+//     const data = await response.json();
+//     console.log(data)
+//     return data;
+//   } catch (error) {
+//     console.error('Erro ao consultar', error);
+//     return null;
+//   }
+// }
 
-const consultaAniversario = async () => {
-  const url = `http://192.168.25.83:3000/calendario/aniversario-hoje`;
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    console.log(data)
-    return data;
-  } catch (error) {
-    console.error('Erro ao consultar', error);
-    return null;
-  }
-}
-const consultaAniversarioSocio = async () => {
-  const url = `http://192.168.25.83:3000/calendario/aniversario-socios`;
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    console.log(data)
-    return data;
-  } catch (error) {
-    console.error('Erro ao consultar', error);
-    return null;
-  }
-}
-const consultaEventos = async () => {
-  const url = `http://192.168.25.83:3000/eventos`;
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    console.log(data)
-    return data;
-  } catch (error) {
-    console.error('Erro ao consultar', error);
-    return null;
-  }   
-}
-consultaEventos();
+// const consultaAniversario = async () => {
+//   const url = `http://192.168.25.83:3000/calendario/proximo-aniversario`;
+//   try {
+//     const response = await fetch(url, {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },  
+//     });
+//     const data = await response.json();
+//     console.log(data)
+//     return data;
+//   } catch (error) {
+//     console.error('Erro ao consultar', error);
+//     return null;
+//   }
+// }
+// consultaAniversario();
+
 const processData = async (data) => {
   interface ObjetoData {
     status_empresa: string;
@@ -157,4 +125,4 @@ const processData = async (data) => {
   parsedDates.sort((a, b) => a.data.getTime() - b.data.getTime());
   return parsedDates;
 };
-export { listarEmpresas, processData, consultaCalendario, consultaAniversario, consultaEventos, consultaCalendarioSocio, consultaAniversarioSocio };
+export { listarEmpresas, processData, consultaCnpj}; //consultaCalendario };

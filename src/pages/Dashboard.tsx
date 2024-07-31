@@ -285,20 +285,6 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-1 2xl:mt-7.5 2xl:gap-7.5">
-        <div>
-          <div className="bg-white px-8 py-1 dark:bg-boxdark">
-            <Card2
-              title="Próximas empresas a completar 1 ano de parceria."
-              informacao="Tempo de parceria"
-            />
-          </div>
-          <div className="bg-white px-10 py-3 text-black-2 shadow-default dark:border-strokedark dark:bg-boxdark dark:text-white">
-            <CalendarComponent />
-          </div>
-        </div>
-      </div>
     </DefaultLayout>
   );
 };

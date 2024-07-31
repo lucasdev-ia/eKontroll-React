@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { listarEmpresas  } from '../services/api';
+import { listarEmpresas } from '../services/api';
 import DefaultLayout from '../layout/DefautLayout';
+import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight } from 'react-icons/hi2';
+import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
 
 const ClientList: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
@@ -41,7 +43,7 @@ const ClientList: React.FC = () => {
   };
 
   const handleClientsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setClientsPerPage(parseInt(event.target.value));
+    setClientsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1);
   };
 
@@ -49,11 +51,57 @@ const ClientList: React.FC = () => {
   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
   const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
 
+  const totalPages = Math.ceil(data.length / clientsPerPage);
+
+  const getPageNumbers = () => {
+    const pageNumbers: number[] = [];
+    const maxVisiblePages = 5;
+
+    // Always show the first page
+    if (totalPages > 1) {
+      pageNumbers.push(1);
+    }
+
+    let startPage = Math.max(2, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
+
+    if (endPage === totalPages - 1) {
+      startPage = Math.max(2, totalPages - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    // Always show the last page if it's not already included
+    if (totalPages > 1 && !pageNumbers.includes(totalPages)) {
+      pageNumbers.push(totalPages);
+    }
+
+    return pageNumbers;
+  };
+
+  const handleFirstPage = () => {
+    setCurrentPage(1);
+  };
+
+  const handleLastPage = () => {
+    setCurrentPage(totalPages);
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
+  };
+
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Lista de Clientes</h1>
-        
+
         <div className="mb-4">
           <label htmlFor="clientsPerPage" className="mr-2">Clientes por página:</label>
           <select
@@ -82,16 +130,44 @@ const ClientList: React.FC = () => {
           ))}
         </ul>
 
-        <div className="flex justify-center mt-4">
-          {Array.from({ length: Math.ceil(data.length / clientsPerPage) }, (_, index) => (
+        <div className="flex justify-center mt-4 space-x-2">
+          <button
+            onClick={handleFirstPage}
+            className="px-4 py-2 border rounded bg-gray-200"
+            disabled={currentPage === 1}
+          >
+            <LuArrowLeftToLine />
+          </button>
+          <button
+            onClick={handlePreviousPage}
+            className="px-4 py-2 border rounded bg-gray-200"
+            disabled={currentPage === 1}
+          >
+            <HiOutlineArrowSmallLeft />
+          </button>
+          {getPageNumbers().map((page) => (
             <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={`px-4 py-2 mx-1 border rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={`px-4 py-2 border rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
             >
-              {index + 1}
+              {page}
             </button>
           ))}
+          <button
+            onClick={handleNextPage}
+            className="px-4 py-2 border rounded bg-gray-200"
+            disabled={currentPage === totalPages}
+          >
+            <HiOutlineArrowSmallRight />
+          </button>
+          <button
+            onClick={handleLastPage}
+            className="px-4 py-2 border rounded bg-gray-200"
+            disabled={currentPage === totalPages}
+          >
+            <LuArrowRightToLine />
+          </button>
         </div>
       </div>
     </DefaultLayout>

@@ -17,12 +17,10 @@ const Card: React.FC<CardDataStatsProps> = ({
   Cardimg,
   online,
 }) => {
-  const navigate = useNavigate(); // Mover useNavigate para dentro do Card
 
   return (
     <div
       className="h-cardnew w-310px rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark cursor-pointer" // Adicionar cursor-pointer para indicar que é clicável
-      onClick={() => navigate('/calendario')}
     >
       <div className="flex items-end justify-between">
         <div>{Cardimg}</div>

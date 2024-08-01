@@ -10,7 +10,6 @@ interface ChartProps {
   sobrou379: number;
   sobrou380: number;
 }
-
 function valueToPercent(value1: number, value2: number): number[] {
   return [Math.round((value1 * 100) / 100), Math.round((value2 * 100) / 100)];
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { listarEmpresas } from '../services/api';
+import { consultaEventos } from '../services/api';
 import DefaultLayout from '../layout/DefautLayout';
 import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight } from 'react-icons/hi2';
 import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
@@ -15,7 +15,7 @@ const ClientList: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await listarEmpresas();
+        const data = await consultaEventos();
         setData(data);
         setLoading(false);
       } catch (error) {
@@ -28,7 +28,7 @@ const ClientList: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-white">
+      <div className="flex h-screen items-center justify-center bg-white-900 dark:bg-gray-900">
         <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" />
       </div>
     );
@@ -57,7 +57,6 @@ const ClientList: React.FC = () => {
     const pageNumbers: number[] = [];
     const maxVisiblePages = 5;
 
-    // Always show the first page
     if (totalPages > 1) {
       pageNumbers.push(1);
     }
@@ -73,7 +72,6 @@ const ClientList: React.FC = () => {
       pageNumbers.push(i);
     }
 
-    // Always show the last page if it's not already included
     if (totalPages > 1 && !pageNumbers.includes(totalPages)) {
       pageNumbers.push(totalPages);
     }
@@ -96,19 +94,19 @@ const ClientList: React.FC = () => {
   const handleNextPage = () => {
     setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
   };
-
+  
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Lista de Clientes</h1>
+        <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white-900">Lista de Clientes</h1>
 
         <div className="mb-4">
-          <label htmlFor="clientsPerPage" className="mr-2">Clientes por página:</label>
+          <label htmlFor="clientsPerPage" className="mr-2 text-gray-900 dark:text-white-900">Clientes por página:</label>
           <select
             id="clientsPerPage"
             value={clientsPerPage}
             onChange={handleClientsPerPageChange}
-            className="border rounded p-1"
+            className="border rounded p-1 text-gray-900 dark:bg-gray-800 dark:text-white-900 dark:border-gray-600"
           >
             <option value="25">25</option>
             <option value="50">50</option>
@@ -116,31 +114,63 @@ const ClientList: React.FC = () => {
           </select>
         </div>
 
-        <ul>
-          {currentClients.map((cliente) => (
-            <li key={cliente.codi_emp}>
-              <a
-                href="#"
-                onClick={() => handleClick(cliente.codi_emp)}
-                className="text-blue-500 hover:underline"
-              >
-                {cliente.razao_social}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border dark:bg-[#1e2a38] dark:border-gray-700">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border text-gray-900 dark:text-white-900">Nome</th>
+                <th className="py-2 px-4 border text-gray-900 dark:text-900">Evento 379</th>
+                <th className="py-2 px-4 border text-gray-900 dark:text-900">Evento 380</th>
+                <th className="py-2 px-4 border text-gray-900 dark:text-900">Sobra / Falta 379</th>
+                <th className="py-2 px-4 border text-gray-900 dark:text-900">Sobra / Falta 380</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentClients.map((cliente) => (
+                <tr 
+                  key={cliente.codi_emp}
+                  className={`hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                    cliente.valor379 > 80 ? 'bg-red-800' : cliente.valor379 > 50 ? 'bg-yellow-600' : ''
+                  }`}                  
+                >
+                  <td className="py-2 px-4 border text-gray-900 dark:text-white-900">{cliente.nome}</td>
+                  <td className="py-2 px-4 border text-gray-900 dark:text-white">
+                    {cliente.valor379 === null ? '0 %' : `${cliente.valor379} %`}
+                  </td>
+                  <td className="py-2 px-4 border text-gray-900 dark:text-white">
+                    {cliente.valor380 === null ? '0 %' : `${cliente.valor380} %`}
+                  </td>
+                  <td className="py-2 px-4 border text-gray-900 dark:text-white">
+                    {cliente.sobra379 !== null
+                      ? cliente.sobra379 < 0
+                        ? `Faltam R$ ${Math.abs(cliente.sobra379)}`
+                        : `Sobrou R$ ${cliente.sobra379}`
+                      : 'Sobrou R$ 0,00'}
+                  </td>
+                  <td className="py-2 px-4 border text-gray-900 dark:text-white">
+                    {cliente.sobra380 !== null
+                      ? cliente.sobra380 < 0  
+                        ? `Faltam R$ ${Math.abs(cliente.sobra380)}`
+                        : `Sobrou R$ ${cliente.sobra380}`
+                      : 'Sobrou R$ 0,00'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <div className="flex justify-center mt-4 space-x-2">
           <button
             onClick={handleFirstPage}
-            className="px-4 py-2 border rounded bg-gray-200"
+            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white"
             disabled={currentPage === 1}
           >
             <LuArrowLeftToLine />
           </button>
           <button
             onClick={handlePreviousPage}
-            className="px-4 py-2 border rounded bg-gray-200"
+            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white"
             disabled={currentPage === 1}
           >
             <HiOutlineArrowSmallLeft />
@@ -149,21 +179,21 @@ const ClientList: React.FC = () => {
             <button
               key={page}
               onClick={() => handlePageChange(page)}
-              className={`px-4 py-2 border rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`px-4 py-2 border rounded ${currentPage === page ? 'bg-blue-600 text-white dark:bg-blue-700 dark:text-gray-300' : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white'}`}
             >
               {page}
             </button>
           ))}
           <button
             onClick={handleNextPage}
-            className="px-4 py-2 border rounded bg-gray-200"
+            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white"
             disabled={currentPage === totalPages}
           >
             <HiOutlineArrowSmallRight />
           </button>
           <button
             onClick={handleLastPage}
-            className="px-4 py-2 border rounded bg-gray-200"
+            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white"
             disabled={currentPage === totalPages}
           >
             <LuArrowRightToLine />

@@ -60,8 +60,8 @@ module.exports = {
         laranjalogo: "#FD5201",
         laranjahover: '#C73D00',// Cor mais escura para hover
         verdecalendario: '#008000',
-        redempresas: '#cc0000',
-        yellowempresas: '#FFFF00'
+        redempresas: '#df0000',
+        yellowempresas: '#dcdf00'
       },
       fontSize: {
         "title-xxl": ["44px", "55px"],

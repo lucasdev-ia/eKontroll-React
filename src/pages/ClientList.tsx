@@ -56,24 +56,19 @@ const ClientList: React.FC = () => {
   const getPageNumbers = () => {
     const pageNumbers: number[] = [];
     const maxVisiblePages = 5;
+    const halfMaxVisible = Math.floor(maxVisiblePages / 2);
 
-    if (totalPages > 1) {
-      pageNumbers.push(1);
-    }
+    let startPage = Math.max(1, currentPage - halfMaxVisible);
+    let endPage = Math.min(totalPages, currentPage + halfMaxVisible);
 
-    let startPage = Math.max(2, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
-
-    if (endPage === totalPages - 1) {
-      startPage = Math.max(2, totalPages - maxVisiblePages + 1);
+    if (currentPage <= halfMaxVisible) {
+      endPage = Math.min(totalPages, maxVisiblePages);
+    } else if (currentPage + halfMaxVisible >= totalPages) {
+      startPage = Math.max(1, totalPages - maxVisiblePages + 1);
     }
 
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
-    }
-
-    if (totalPages > 1 && !pageNumbers.includes(totalPages)) {
-      pageNumbers.push(totalPages);
     }
 
     return pageNumbers;
@@ -94,7 +89,7 @@ const ClientList: React.FC = () => {
   const handleNextPage = () => {
     setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
   };
-  
+
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
@@ -129,15 +124,13 @@ const ClientList: React.FC = () => {
               {currentClients.map((cliente) => (
                 <tr 
                   key={cliente.codi_emp}
-                  className={`hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                    cliente.valor379 > 80 ? 'bg-red-800' : cliente.valor379 > 50 ? 'bg-yellow-600' : ''
-                  }`}                  
+                  className="hover:bg-gray-100 dark:hover:bg-gray-700"                 
                 >
                   <td className="py-2 px-4 border text-gray-900 dark:text-white-900">{cliente.nome}</td>
-                  <td className="py-2 px-4 border text-gray-900 dark:text-white">
+                  <td className={`py-2 px-4 border text-gray-900 dark:text-white ${cliente.valor379 > 80 ? 'bg-redempresas' : cliente.valor379 > 50 ? 'bg-yellow-400' :''}`}> 
                     {cliente.valor379 === null ? '0 %' : `${cliente.valor379} %`}
                   </td>
-                  <td className="py-2 px-4 border text-gray-900 dark:text-white">
+                  <td className={`py-2 px-4 border text-gray-900 dark:text-white ${cliente.valor380 > 80 ? 'bg-redempresas' : cliente.valor380 > 50 ? 'bg-yellow-400' :''}`}> 
                     {cliente.valor380 === null ? '0 %' : `${cliente.valor380} %`}
                   </td>
                   <td className="py-2 px-4 border text-gray-900 dark:text-white">

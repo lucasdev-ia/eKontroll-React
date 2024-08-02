@@ -5,6 +5,14 @@ import DefaultLayout from '../layout/DefautLayout';
 import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight } from 'react-icons/hi2';
 import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
 
+// Função utilitária para tratar valores inválidos
+const parseValue = (value) => {
+  if (value === null || value === undefined || value === Infinity || value === -Infinity || Number.isNaN(parseFloat(value))) {
+    return 0; // Tratar como valor inexistente ou inválido
+  }
+  return parseFloat(value);
+};
+
 const ClientList: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -90,6 +98,19 @@ const ClientList: React.FC = () => {
     setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
   };
 
+  // Função para determinar a classe de fundo
+  const getBackgroundColor = (value) => {
+    const numericValue = parseValue(value);
+    if (numericValue === Infinity || numericValue === -Infinity) {
+      return ''; // Sem cor especial
+    } else if (numericValue > 80) {
+      return 'bg-redempresas'; // Vermelho
+    } else if (numericValue > 50) {
+      return 'bg-yellow-400'; // Amarelo
+    }
+    return ''; // Cor padrão
+  };
+
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
@@ -107,6 +128,19 @@ const ClientList: React.FC = () => {
             <option value="50">50</option>
             <option value="100">100</option>
           </select>
+        </div>
+
+        <div className="flex justify-end mb-4">
+          <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2">
+              <div className="h-4 w-4 bg-redempresas rounded-full"></div>
+              <span className="text-red-500">CRITICO</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="h-4 w-4 bg-yellow-400 rounded-full"></div>
+              <span className="text-yellow-300">PRÓXIMO DE CRÍTICO</span>
+            </div>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -127,25 +161,25 @@ const ClientList: React.FC = () => {
                   className="hover:bg-gray-100 dark:hover:bg-gray-700"                 
                 >
                   <td className="py-2 px-4 border text-gray-900 dark:text-white-900">{cliente.nome}</td>
-                  <td className={`py-2 px-4 border text-gray-900 dark:text-white ${cliente.valor379 > 80 ? 'bg-redempresas' : cliente.valor379 > 50 ? 'bg-yellow-400' :''}`}> 
-                    {cliente.valor379 === null ? '0 %' : `${cliente.valor379} %`}
+                  <td className={`py-2 px-4 border text-gray-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
+                    {isNaN(parseValue(cliente.valor379)) || parseValue(cliente.valor379) === Infinity || parseValue(cliente.valor379) === -Infinity ? '0 %' : `${parseValue(cliente.valor379)} %`}
                   </td>
-                  <td className={`py-2 px-4 border text-gray-900 dark:text-white ${cliente.valor380 > 80 ? 'bg-redempresas' : cliente.valor380 > 50 ? 'bg-yellow-400' :''}`}> 
-                    {cliente.valor380 === null ? '0 %' : `${cliente.valor380} %`}
-                  </td>
-                  <td className="py-2 px-4 border text-gray-900 dark:text-white">
-                    {cliente.sobra379 !== null
-                      ? cliente.sobra379 < 0
-                        ? `Faltam R$ ${Math.abs(cliente.sobra379)}`
-                        : `Sobrou R$ ${cliente.sobra379}`
-                      : 'Sobrou R$ 0,00'}
+                  <td className={`py-2 px-4 border text-gray-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
+                    {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity ? '0 %' : `${parseValue(cliente.valor380)} %`}
                   </td>
                   <td className="py-2 px-4 border text-gray-900 dark:text-white">
-                    {cliente.sobra380 !== null
-                      ? cliente.sobra380 < 0  
-                        ? `Faltam R$ ${Math.abs(cliente.sobra380)}`
-                        : `Sobrou R$ ${cliente.sobra380}`
-                      : 'Sobrou R$ 0,00'}
+                    {parseValue(cliente.sobra379) === 0
+                      ? 'Sobrou R$ 0,00'
+                      : parseValue(cliente.sobra379) < 0
+                        ? `Faltam R$ ${Math.abs(parseValue(cliente.sobra379))}`
+                        : `Sobrou R$ ${parseValue(cliente.sobra379)}`}
+                  </td>
+                  <td className="py-2 px-4 border text-gray-900 dark:text-white">
+                    {parseValue(cliente.sobra380) === 0
+                      ? 'Sobrou R$ 0,00'
+                      : parseValue(cliente.sobra380) < 0
+                        ? `Faltam R$ ${Math.abs(parseValue(cliente.sobra380))}`
+                        : `Sobrou R$ ${parseValue(cliente.sobra380)}`}
                   </td>
                 </tr>
               ))}
@@ -156,40 +190,40 @@ const ClientList: React.FC = () => {
         <div className="flex justify-center mt-4 space-x-2">
           <button
             onClick={handleFirstPage}
-            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white"
+            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
             disabled={currentPage === 1}
           >
-            <LuArrowLeftToLine />
+            <LuArrowLeftToLine className="inline-block" />
           </button>
           <button
             onClick={handlePreviousPage}
-            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white"
+            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
             disabled={currentPage === 1}
           >
             <HiOutlineArrowSmallLeft />
           </button>
-          {getPageNumbers().map((page) => (
+          {getPageNumbers().map((number) => (
             <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`px-4 py-2 border rounded ${currentPage === page ? 'bg-blue-600 text-white dark:bg-blue-700 dark:text-gray-300' : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white'}`}
+              key={number}
+              onClick={() => handlePageChange(number)}
+              className={`px-4 py-2 border rounded ${number === currentPage ? 'bg-gray-300 dark:bg-gray-700' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
             >
-              {page}
+              {number}
             </button>
           ))}
           <button
             onClick={handleNextPage}
-            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white"
+            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
             disabled={currentPage === totalPages}
           >
             <HiOutlineArrowSmallRight />
           </button>
           <button
             onClick={handleLastPage}
-            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white"
+            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
             disabled={currentPage === totalPages}
           >
-            <LuArrowRightToLine />
+            <LuArrowRightToLine className="inline-block" />
           </button>
         </div>
       </div>

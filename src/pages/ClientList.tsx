@@ -36,7 +36,7 @@ const ClientList: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-white-900 dark:bg-gray-900">
+      <div className="flex h-screen items-center justify-center bg-white dark:bg-gray-">
         <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" />
       </div>
     );
@@ -114,15 +114,15 @@ const ClientList: React.FC = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white-900">Lista de Clientes</h1>
+        <h1 className="text-2xl font-bold mb-4 text-black dark:text-white">Lista de Clientes</h1>
 
         <div className="mb-4">
-          <label htmlFor="clientsPerPage" className="mr-2 text-gray-900 dark:text-white-900">Clientes por página:</label>
+          <label htmlFor="clientsPerPage" className="mr-2 text-black dark:text-white-900">Clientes por página:</label>
           <select
             id="clientsPerPage"
             value={clientsPerPage}
             onChange={handleClientsPerPageChange}
-            className="border rounded p-1 text-gray-900 dark:bg-gray-800 dark:text-white-900 dark:border-gray-600"
+            className="border rounded p-1 text-black dark:bg-gray-800 dark:text-white-900 dark:border-gray-600"
           >
             <option value="25">25</option>
             <option value="50">50</option>
@@ -144,37 +144,37 @@ const ClientList: React.FC = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border dark:bg-[#1e2a38] dark:border-gray-700">
+          <table className="min-w-full bg-white text-black dark:text-white border dark:bg-[#1e2a38] dark:border-gray-700">
             <thead>
               <tr>
-                <th className="py-2 px-4 border text-gray-900 dark:text-white-900">Nome</th>
-                <th className="py-2 px-4 border text-gray-900 dark:text-900">Evento 379</th>
-                <th className="py-2 px-4 border text-gray-900 dark:text-900">Evento 380</th>
-                <th className="py-2 px-4 border text-gray-900 dark:text-900">Sobra / Falta 379</th>
-                <th className="py-2 px-4 border text-gray-900 dark:text-900">Sobra / Falta 380</th>
+                <th className="py-2 px-4 border text-black-900 dark:text-white">Nome</th>
+                <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 379</th>
+                <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 380</th>
+                <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 379</th>
+                <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 380</th>
               </tr>
             </thead>
             <tbody>
               {currentClients.map((cliente) => (
                 <tr 
                   key={cliente.codi_emp}
-                  className="hover:bg-gray-100 dark:hover:bg-gray-700"                 
+                  className="hover:bg-gray-100 dark:hover:bg-black-700"                 
                 >
-                  <td className="py-2 px-4 border text-gray-900 dark:text-white-900">{cliente.nome}</td>
-                  <td className={`py-2 px-4 border text-gray-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
+                  <td className="py-2 px-4 border text-black-900 dark:text-white">{cliente.nome}</td>
+                  <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
                     {isNaN(parseValue(cliente.valor379)) || parseValue(cliente.valor379) === Infinity || parseValue(cliente.valor379) === -Infinity ? '0 %' : `${parseValue(cliente.valor379)} %`}
                   </td>
-                  <td className={`py-2 px-4 border text-gray-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
+                  <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
                     {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity ? '0 %' : `${parseValue(cliente.valor380)} %`}
                   </td>
-                  <td className="py-2 px-4 border text-gray-900 dark:text-white">
+                  <td className="py-2 px-4 border text-black-900 dark:text-white">
                     {parseValue(cliente.sobra379) === 0
                       ? 'Sobrou R$ 0,00'
                       : parseValue(cliente.sobra379) < 0
                         ? `Faltam R$ ${Math.abs(parseValue(cliente.sobra379))}`
                         : `Sobrou R$ ${parseValue(cliente.sobra379)}`}
                   </td>
-                  <td className="py-2 px-4 border text-gray-900 dark:text-white">
+                  <td className="py-2 px-4 border text-black-900 dark:text-white">
                     {parseValue(cliente.sobra380) === 0
                       ? 'Sobrou R$ 0,00'
                       : parseValue(cliente.sobra380) < 0
@@ -206,21 +206,21 @@ const ClientList: React.FC = () => {
             <button
               key={number}
               onClick={() => handlePageChange(number)}
-              className={`px-4 py-2 border rounded ${number === currentPage ? 'bg-gray-300 dark:bg-gray-700' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
+              className={`px-4 py-2 border rounded ${number === currentPage ? 'bg-black-300 dark:bg-black-700' : 'bg-gray-200 dark:bg-black-800 dark:border-black-600'}`}
             >
               {number}
             </button>
           ))}
           <button
             onClick={handleNextPage}
-            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+            className="px-4 py-2 border rounded bg-black-200 dark:bg-black-800 dark:border-black-600"
             disabled={currentPage === totalPages}
           >
             <HiOutlineArrowSmallRight />
           </button>
           <button
             onClick={handleLastPage}
-            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+            className="px-4 py-2 border rounded bg-black-200 dark:bg-black-800 dark:border-black-600"
             disabled={currentPage === totalPages}
           >
             <LuArrowRightToLine className="inline-block" />

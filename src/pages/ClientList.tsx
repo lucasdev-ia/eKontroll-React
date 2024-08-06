@@ -125,9 +125,9 @@ const ClientList: React.FC = () => {
     if (numericValue === Infinity || numericValue === -Infinity) {
       return ''; // Sem cor especial
     } else if (numericValue > 80) {
-      return 'bg-redempresas'; // Vermelho
+      return 'bg-redempresas dark:text-black'; // Vermelho
     } else if (numericValue > 50) {
-      return 'bg-yellow-400'; // Amarelo
+      return 'bg-yellowempresas dark:text-black'; // Amarelo
     }
     return ''; // Cor padrão
   };

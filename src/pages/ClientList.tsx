@@ -117,12 +117,12 @@ const ClientList: React.FC = () => {
         <h1 className="text-2xl font-bold mb-4 text-black dark:text-white">Lista de Clientes</h1>
 
         <div className="mb-4">
-          <label htmlFor="clientsPerPage" className="mr-2 text-black dark:text-white-900">Clientes por página:</label>
+          <label htmlFor="clientsPerPage" className="mr-2 text-black dark:text-white">Clientes por página:</label>
           <select
             id="clientsPerPage"
             value={clientsPerPage}
             onChange={handleClientsPerPageChange}
-            className="border rounded p-1 text-black dark:bg-gray-800 dark:text-white-900 dark:border-gray-600"
+            className="border rounded p-1 dark:bg-gray-800"
           >
             <option value="25">25</option>
             <option value="50">50</option>
@@ -193,37 +193,37 @@ const ClientList: React.FC = () => {
             className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
             disabled={currentPage === 1}
           >
-            <LuArrowLeftToLine className="inline-block" />
+            <LuArrowLeftToLine className="inline-block text-gray-700 dark:text-white" />
           </button>
           <button
             onClick={handlePreviousPage}
             className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
             disabled={currentPage === 1}
           >
-            <HiOutlineArrowSmallLeft />
+            <HiOutlineArrowSmallLeft className="inline-block text-gray-700 dark:text-white" />
           </button>
-          {getPageNumbers().map((number) => (
+          {getPageNumbers().map((pageNumber) => (
             <button
-              key={number}
-              onClick={() => handlePageChange(number)}
-              className={`px-4 py-2 border rounded ${number === currentPage ? 'bg-black-300 dark:bg-black-700' : 'bg-gray-200 dark:bg-black-800 dark:border-black-600'}`}
+              key={pageNumber}
+              onClick={() => handlePageChange(pageNumber)}
+              className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
             >
-              {number}
+              {pageNumber}
             </button>
           ))}
           <button
             onClick={handleNextPage}
-            className="px-4 py-2 border rounded bg-black-200 dark:bg-black-800 dark:border-black-600"
+            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
             disabled={currentPage === totalPages}
           >
-            <HiOutlineArrowSmallRight />
+            <HiOutlineArrowSmallRight className="inline-block text-gray-700 dark:text-white" />
           </button>
           <button
             onClick={handleLastPage}
-            className="px-4 py-2 border rounded bg-black-200 dark:bg-black-800 dark:border-black-600"
+            className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
             disabled={currentPage === totalPages}
           >
-            <LuArrowRightToLine className="inline-block" />
+            <LuArrowRightToLine className="inline-block text-gray-700 dark:text-white" />
           </button>
         </div>
       </div>

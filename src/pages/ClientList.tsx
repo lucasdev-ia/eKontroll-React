@@ -57,8 +57,29 @@ const ClientList: React.FC = () => {
 
   const indexOfLastClient = currentPage * clientsPerPage;
   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-  const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
+  const organizedData = data.sort((a, b) => {
+    // Calcular o máximo entre valor379 e valor380 para cada item
+    const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
+      ? Math.max(parseValue(a.valor379), parseValue(a.valor380))
+      : -Infinity;
+    const maxB = (b.valor379 !== undefined || b.valor380 !== undefined)
+      ? Math.max(parseValue(b.valor379), parseValue(b.valor380))
+      : -Infinity;
 
+    // Tratar casos específicos de Infinity e NaN
+    if (maxA === -Infinity && maxB !== -Infinity) return 1;
+    if (maxB === -Infinity && maxA !== -Infinity) return -1;
+
+    // Tratar casos específicos de Infinity
+    if (maxA === Infinity) return 1;
+    if (maxB === Infinity) return -1;
+
+    // Ordem decrescente
+    return maxB - maxA;
+  });
+
+  const currentClients = organizedData.slice(indexOfFirstClient, indexOfLastClient);
+ 
   const totalPages = Math.ceil(data.length / clientsPerPage);
 
   const getPageNumbers = () => {
@@ -169,17 +190,17 @@ const ClientList: React.FC = () => {
                   </td>
                   <td className="py-2 px-4 border text-black-900 dark:text-white">
                     {parseValue(cliente.sobra379) === 0
-                      ? 'Sobrou R$ 0,00'
+                      ? 'Sem informaçoes'
                       : parseValue(cliente.sobra379) < 0
-                        ? `Faltam R$ ${Math.abs(parseValue(cliente.sobra379))}`
-                        : `Sobrou R$ ${parseValue(cliente.sobra379)}`}
+                        ? `Passou R$ ${Math.abs(parseValue(cliente.sobra379))}`
+                        : `Faltam R$ ${parseValue(cliente.sobra379)}`}
                   </td>
                   <td className="py-2 px-4 border text-black-900 dark:text-white">
                     {parseValue(cliente.sobra380) === 0
-                      ? 'Sobrou R$ 0,00'
+                      ? 'Sem informaçoes'
                       : parseValue(cliente.sobra380) < 0
-                        ? `Faltam R$ ${Math.abs(parseValue(cliente.sobra380))}`
-                        : `Sobrou R$ ${parseValue(cliente.sobra380)}`}
+                        ? `Passou R$ ${Math.abs(parseValue(cliente.sobra380))}`
+                        : `Faltam R$ ${parseValue(cliente.sobra380)}`}
                   </td>
                 </tr>
               ))}

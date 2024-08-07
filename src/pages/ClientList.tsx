@@ -154,22 +154,19 @@ const ClientList: React.FC = () => {
           </select>
         </div>
 
-        <div className="flex justify-end mb-4">
+      <div className="flex justify-end mb-4">
+        <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <div className="flex items-center space-x-2">
-              <div className="h-4 w-4 bg-red-600 rounded-full"></div>
-              <span className="text-red-500">CRITICO</span>
+              <span className="inline-block px-3 py-1 text-white bg-red-600 rounded-full text-sm font-semibold">CRÍTICO</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="h-4 w-4 bg-yellow-400 rounded-full"></div>
-              <span className="text-yellow-300">PRÓXIMO DE CRÍTICO</span>
+          <div className="flex items-center space-x-2">
+            <span className="inline-block px-3 py-1 text-white bg-yellow-400 rounded-full text-sm font-semibold">PRÓXIMO DE CRÍTICO</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="h-4 w-4 bg-green-600 rounded-full"></div>
-              <span className="text-verdeescuro">VERDE</span>
-            </div>
+          <div className="flex items-center space-x-2">
+            <span className="inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold">VERDE</span>
           </div>
         </div>
+      </div>
 
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white text-black dark:text-white border dark:bg-[#1e2a38] dark:border-gray-700">

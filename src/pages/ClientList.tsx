@@ -125,9 +125,12 @@ const ClientList: React.FC = () => {
     if (numericValue === Infinity || numericValue === -Infinity) {
       return ''; // Sem cor especial
     } else if (numericValue > 80) {
-      return 'bg-redempresas dark:text-black'; // Vermelho
+      return 'bg-redempresas dark:bg-red-600 bg-opacity-60 dark:text-black'; // Vermelho
     } else if (numericValue > 50) {
-      return 'bg-yellowempresas dark:text-black'; // Amarelo
+      return 'bg-yellowempresas dark:bg-yellow-400 bg-opacity-60  dark:text-black'; // Amarelo
+    }
+    else if (numericValue > 20) {
+      return 'bg-greenempresas bg-opacity-60  dark:bg-green-600 dark:text-black'
     }
     return ''; // Cor padrão
   };
@@ -154,12 +157,16 @@ const ClientList: React.FC = () => {
         <div className="flex justify-end mb-4">
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-2">
-              <div className="h-4 w-4 bg-redempresas rounded-full"></div>
+              <div className="h-4 w-4 bg-red-600 rounded-full"></div>
               <span className="text-red-500">CRITICO</span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="h-4 w-4 bg-yellow-400 rounded-full"></div>
               <span className="text-yellow-300">PRÓXIMO DE CRÍTICO</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="h-4 w-4 bg-green-600 rounded-full"></div>
+              <span className="text-verdeescuro">VERDE</span>
             </div>
           </div>
         </div>

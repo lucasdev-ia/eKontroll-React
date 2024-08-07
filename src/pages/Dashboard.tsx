@@ -238,10 +238,10 @@ const Dashboard: React.FC = () => {
             <div className="flex justify-end mt-3">
               <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" onClick={DiminuirContador}><ArrowLeftIcon className="h-5 w-5 mr-1" /></button>
               <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" onClick={incrementarContador}><ArrowRightIcon className="h-5 w-5 mr-1" /></button>
-              <Link to="/clients">
+              <Link to="/clientes">
               <button
                 className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition"
-                onClick={() => navigate('/clients')}
+                onClick={() => navigate('/clientes')}
               >
               <ListBulletIcon className="h-5 w-5 mr-1" />
               </button>

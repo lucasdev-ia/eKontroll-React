@@ -125,12 +125,12 @@ const ClientList: React.FC = () => {
     if (numericValue === Infinity || numericValue === -Infinity) {
       return ''; // Sem cor especial
     } else if (numericValue > 80) {
-      return 'bg-redempresas dark:bg-red-600 bg-opacity-60 dark:text-black'; // Vermelho
+      return 'bg-redempresas dark:bg-vermelhoescuro bg-opacity-60 dark:text-black'; // Vermelho
     } else if (numericValue > 50) {
-      return 'bg-yellowempresas dark:bg-yellow-400 bg-opacity-60  dark:text-black'; // Amarelo
+      return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-60  dark:text-black'; // Amarelo
     }
     else if (numericValue > 20) {
-      return 'bg-greenempresas bg-opacity-60  dark:bg-green-600 dark:text-black'
+      return 'bg-greenempresas bg-opacity-60  dark:bg-verdeescuro dark:text-black'
     }
     return ''; // Cor padrão
   };
@@ -157,13 +157,13 @@ const ClientList: React.FC = () => {
       <div className="flex justify-end mb-4">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-              <span className="inline-block px-3 py-1 text-white bg-red-600 rounded-full text-sm font-semibold">CRÍTICO</span>
+              <span className="inline-block px-3 py-1 text-white bg-vermelhoescuro rounded-full text-sm font-semibold">CRÍTICO</span>
             </div>
           <div className="flex items-center space-x-2">
-            <span className="inline-block px-3 py-1 text-white bg-yellow-400 rounded-full text-sm font-semibold">PRÓXIMO DE CRÍTICO</span>
+            <span className="inline-block px-3 py-1 text-white bg-amareloescuro rounded-full text-sm font-semibold">PRÓXIMO DE CRÍTICO</span>
             </div>
           <div className="flex items-center space-x-2">
-            <span className="inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold">VERDE</span>
+            <span className="inline-block px-3 py-1 text-white bg-verdeescuro rounded-full text-sm font-semibold">VERDE</span>
           </div>
         </div>
       </div>

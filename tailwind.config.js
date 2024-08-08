@@ -62,10 +62,11 @@ module.exports = {
         verdecalendario: '#008000',
         redempresas: '#FFCCCC',
         yellowempresas: '#FFFFC2',
-        vermelhoescuro: '#FF000033',
-        amareloescuro: '#FFFF0033',
+        vermelhoescuro: '#FF00004D',
+        amareloescuro: '#FFFF004D',
         greenempresas: '#B3F5E4',
-        verdeescuro: '#00FF0033'
+        verdeescuro: '#00FF004D',
+        blackseveridade:'#010e21'
       },
       fontSize: {
         "title-xxl": ["44px", "55px"],

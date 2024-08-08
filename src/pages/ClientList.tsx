@@ -156,14 +156,17 @@ const ClientList: React.FC = () => {
 
       <div className="flex justify-end mb-4">
         <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
+            <span className="inline-block px-3 py-1 text-white dark:bg-blackseveridade bg-black rounded-full text-sm font-semibold">Severidade:</span>
+          </div>
           <div className="flex items-center space-x-2">
-              <span className="inline-block px-3 py-1 text-white bg-vermelhoescuro rounded-full text-sm font-semibold">CRÍTICO</span>
+              <span className="inline-block px-3 py-1 text-white bg-red-700 rounded-full text-sm font-semibold">Alto</span>
             </div>
           <div className="flex items-center space-x-2">
-            <span className="inline-block px-3 py-1 text-white bg-amareloescuro rounded-full text-sm font-semibold">PRÓXIMO DE CRÍTICO</span>
+            <span className="inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold">Medio</span>
             </div>
           <div className="flex items-center space-x-2">
-            <span className="inline-block px-3 py-1 text-white bg-verdeescuro rounded-full text-sm font-semibold">VERDE</span>
+            <span className="inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold">Baixo</span>
           </div>
         </div>
       </div>
@@ -173,10 +176,10 @@ const ClientList: React.FC = () => {
             <thead>
               <tr>
                 <th className="py-2 px-4 border text-black-900 dark:text-white">Nome</th>
-                <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 379</th>
-                <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 380</th>
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 379</th>
-                <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 380</th>
+                <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 379 </th>
+                <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 379</th>
+                <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 380</th>
               </tr>
             </thead>
             <tbody>
@@ -186,18 +189,15 @@ const ClientList: React.FC = () => {
                   className="hover:bg-gray-100 dark:hover:bg-black-700"                 
                 >
                   <td className="py-2 px-4 border text-black-900 dark:text-white">{cliente.nome}</td>
-                  <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
-                    {isNaN(parseValue(cliente.valor379)) || parseValue(cliente.valor379) === Infinity || parseValue(cliente.valor379) === -Infinity ? '0 %' : `${parseValue(cliente.valor379)} %`}
-                  </td>
-                  <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
-                    {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity ? '0 %' : `${parseValue(cliente.valor380)} %`}
-                  </td>
                   <td className="py-2 px-4 border text-black-900 dark:text-white">
                     {parseValue(cliente.sobra379) === 0
                       ? 'Sem informaçoes'
                       : parseValue(cliente.sobra379) < 0
                         ? `Passou R$ ${Math.abs(parseValue(cliente.sobra379))}`
                         : `Faltam R$ ${parseValue(cliente.sobra379)}`}
+                  </td>
+                  <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
+                    {isNaN(parseValue(cliente.valor379)) || parseValue(cliente.valor379) === Infinity || parseValue(cliente.valor379) === -Infinity ? '0 %' : `${parseValue(cliente.valor379)} %`}
                   </td>
                   <td className="py-2 px-4 border text-black-900 dark:text-white">
                     {parseValue(cliente.sobra380) === 0
@@ -206,6 +206,12 @@ const ClientList: React.FC = () => {
                         ? `Passou R$ ${Math.abs(parseValue(cliente.sobra380))}`
                         : `Faltam R$ ${parseValue(cliente.sobra380)}`}
                   </td>
+                  <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
+                    {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity ? '0 %' : `${parseValue(cliente.valor380)} %`}
+                  </td>
+                  
+                 
+                  
                 </tr>
               ))}
             </tbody>

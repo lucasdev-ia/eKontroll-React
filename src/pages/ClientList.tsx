@@ -138,23 +138,26 @@ const ClientList: React.FC = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4 text-black dark:text-white">Lista de Clientes</h1>
-
-        <div className="mb-4">
-          <label htmlFor="clientsPerPage" className="mr-2 text-black dark:text-white">Clientes por página:</label>
-          <select
-            id="clientsPerPage"
-            value={clientsPerPage}
-            onChange={handleClientsPerPageChange}
-            className="border rounded p-1 dark:bg-gray-800"
-          >
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <h1 className="text-2xl font-bold text-black dark:text-white">Lista de Clientes</h1>
+            <div className="flex items-center space-x-2 ml-2">
+              <label htmlFor="clientsPerPage" className="text-black dark:text-white"></label>
+              <select
+                id="clientsPerPage"
+                value={clientsPerPage}
+                onChange={handleClientsPerPageChange}
+                className="border rounded p-1 dark:bg-gray-800"
+              >
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+          </div>
         </div>
 
-      <div className="flex justify-end mb-4">
+        <div className="flex justify-end mb-4">
         <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
             <span className="inline-block px-3 py-1 text-white dark:bg-blackseveridade bg-black rounded-full text-sm font-semibold">Severidade:</span>
@@ -178,7 +181,7 @@ const ClientList: React.FC = () => {
                 <th className="py-2 px-4 border text-black-900 dark:text-white">Nome</th>
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 379</th>
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 379 </th>
-                <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 379</th>
+                <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 380</th>
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 380</th>
               </tr>
             </thead>
@@ -191,7 +194,7 @@ const ClientList: React.FC = () => {
                   <td className="py-2 px-4 border text-black-900 dark:text-white">{cliente.nome}</td>
                   <td className="py-2 px-4 border text-black-900 dark:text-white">
                     {parseValue(cliente.sobra379) === 0
-                      ? 'Sem informaçoes'
+                      ? 'Sem informações'
                       : parseValue(cliente.sobra379) < 0
                         ? `Passou R$ ${Math.abs(parseValue(cliente.sobra379))}`
                         : `Faltam R$ ${parseValue(cliente.sobra379)}`}
@@ -201,7 +204,7 @@ const ClientList: React.FC = () => {
                   </td>
                   <td className="py-2 px-4 border text-black-900 dark:text-white">
                     {parseValue(cliente.sobra380) === 0
-                      ? 'Sem informaçoes'
+                      ? 'Sem informações'
                       : parseValue(cliente.sobra380) < 0
                         ? `Passou R$ ${Math.abs(parseValue(cliente.sobra380))}`
                         : `Faltam R$ ${parseValue(cliente.sobra380)}`}
@@ -209,9 +212,6 @@ const ClientList: React.FC = () => {
                   <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
                     {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity ? '0 %' : `${parseValue(cliente.valor380)} %`}
                   </td>
-                  
-                 
-                  
                 </tr>
               ))}
             </tbody>
@@ -237,7 +237,7 @@ const ClientList: React.FC = () => {
             <button
               key={pageNumber}
               onClick={() => handlePageChange(pageNumber)}
-              className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-laranjalogo dark:bg-azullogo text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
+              className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-azullogo dark:bg-azullogo text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
             >
               {pageNumber}
             </button>

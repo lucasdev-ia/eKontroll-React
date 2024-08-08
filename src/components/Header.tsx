@@ -22,7 +22,7 @@ const Header = () => {
             className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3" // Adicione a margem superior aqui
             onClick={() => navigate('/')}
           >
-            Home
+            Inicio
           </button>
 
           <button

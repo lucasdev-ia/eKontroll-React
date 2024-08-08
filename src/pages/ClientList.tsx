@@ -237,7 +237,7 @@ const ClientList: React.FC = () => {
             <button
               key={pageNumber}
               onClick={() => handlePageChange(pageNumber)}
-              className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
+              className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-laranjalogo dark:bg-azullogo text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
             >
               {pageNumber}
             </button>

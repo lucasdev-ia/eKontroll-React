@@ -1,5 +1,4 @@
 import React from "react";
-import { CiCalendar } from "react-icons/ci"; 
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import logoPadrao from "../images/logo_padrao.png";
 import logoDark from "../images/logo_dark.png";
@@ -18,9 +17,28 @@ const Header = () => {
           <div className="header-logo hidden dark:inline-block">
             <img src={logoDark} className="h-24 w-36 cursor-pointer" onClick={() => navigate('/')} />
           </div>
-          <button className="ml-4 bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" onClick={() => navigate('/calendario')} >
-            <CiCalendar className="h-6 w-6" /> {/* Ícone de calendário */}
+        
+          <button
+            className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3" // Adicione a margem superior aqui
+            onClick={() => navigate('/')}
+          >
+            Home
           </button>
+
+          <button
+            className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3" // Adicione a margem superior aqui
+            onClick={() => navigate('/calendario')}
+          >
+            Calendário
+          </button>
+
+          <button
+            className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3" // Adicione a margem superior aqui
+            onClick={() => navigate('/clientes')}
+          >
+            Eventos
+          </button>
+
         </div>
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">

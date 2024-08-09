@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { consultaEventos } from '../services/api';
 import DefaultLayout from '../layout/DefautLayout';
-import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight } from 'react-icons/hi2';
+import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight, HiOutlineChevronUp, HiOutlineChevronDown } from 'react-icons/hi2';
 import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
 
 // Função utilitária para tratar valores inválidos
@@ -18,6 +18,7 @@ const ClientList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [clientsPerPage, setClientsPerPage] = useState(25);
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'ascending' | 'descending' } | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,7 +56,9 @@ const ClientList: React.FC = () => {
     setCurrentPage(1);
   };
 
-  const indexOfLastClient = currentPage * clientsPerPage;
+  
+
+  const indexOfLastClient = currentPage * clientsPerPage;//ornaizaacao atual
   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
   const organizedData = data.sort((a, b) => {
     // Calcular o máximo entre valor379 e valor380 para cada item
@@ -79,7 +82,6 @@ const ClientList: React.FC = () => {
   });
 
   const currentClients = organizedData.slice(indexOfFirstClient, indexOfLastClient);
- 
   const totalPages = Math.ceil(data.length / clientsPerPage);
 
   const getPageNumbers = () => {
@@ -138,7 +140,7 @@ const ClientList: React.FC = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-">
           <div className="flex items-center">
             <h1 className="text-2xl font-bold text-black dark:text-white">Lista de Clientes</h1>
             <div className="flex items-center space-x-2 ml-2">
@@ -158,27 +160,28 @@ const ClientList: React.FC = () => {
         </div>
 
         <div className="flex justify-end mb-4">
-        <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2">
-            <span className="inline-block px-3 py-1 text-white dark:bg-blackseveridade bg-black rounded-full text-sm font-semibold">Severidade:</span>
-          </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <span className="inline-block px-3 py-1 text-white dark:bg-blackseveridade bg-black rounded-full text-sm font-semibold">Severidade:</span>
+            </div>
+            <div className="flex items-center space-x-2">
               <span className="inline-block px-3 py-1 text-white bg-red-700 rounded-full text-sm font-semibold">Alto</span>
             </div>
-          <div className="flex items-center space-x-2">
-            <span className="inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold">Medio</span>
+            <div className="flex items-center space-x-2">
+              <span className="inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold">Medio</span>
             </div>
-          <div className="flex items-center space-x-2">
-            <span className="inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold">Baixo</span>
+            <div className="flex items-center space-x-2">
+              <span className="inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold">Baixo</span>
+            </div>
           </div>
         </div>
-      </div>
 
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white text-black dark:text-white border dark:bg-[#1e2a38] dark:border-gray-700">
             <thead>
               <tr>
-                <th className="py-2 px-4 border text-black-900 dark:text-white">Nome</th>
+                <th
+                  className="py-2 px-4 border text-black-900 dark:text-white cursor-pointer">Nome</th>
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 379</th>
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 379 </th>
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 380</th>

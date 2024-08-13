@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { consultaEventos } from '../services/api';
 import DefaultLayout from '../layout/DefautLayout';
-import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight, HiOutlineChevronUp, HiOutlineChevronDown } from 'react-icons/hi2';
+import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight} from 'react-icons/hi2';
+import { FaArrowDown, FaArrowUp,FaArrowRight } from 'react-icons/fa';
 import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
 
 // Função utilitária para tratar valores inválidos
@@ -15,26 +16,96 @@ const parseValue = (value) => {
 
 const ClientList: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
+  const [originalData, setOriginalData] = useState([]); // Armazenar dados na ordem original
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [clientsPerPage, setClientsPerPage] = useState(25);
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'ascending' | 'descending' } | null>(null);
-  const navigate = useNavigate();
+  const [sortField, setSortField] = useState<string | null>('nome'); // Inicializa com 'nome' para ordenar por nome ao carregar
+  const [sortDirection, setSortDirection] = useState(null);
 
+
+
+  const navigate = useNavigate();
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await consultaEventos();
-        setData(data);
+        const response = await consultaEventos();
+
+        // Organizar os dados após carregar
+        const organizedData = response.sort((a, b) => {
+          const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
+            ? Math.max(parseValue(a.valor379), parseValue(a.valor380))
+            : -Infinity;
+          const maxB = (b.valor379 !== undefined || b.valor380 !== undefined)
+            ? Math.max(parseValue(b.valor379), parseValue(b.valor380))
+            : -Infinity;
+
+          if (maxA === -Infinity && maxB !== -Infinity) return 1;
+          if (maxB === -Infinity && maxA !== -Infinity) return -1;
+
+          if (maxA === Infinity) return 1;
+          if (maxB === Infinity) return -1;
+
+          // Ordem decrescente
+          return maxB - maxA;
+        });
+
+        setData(organizedData);
+        setOriginalData(organizedData); // Salvar a ordem inicial
         setLoading(false);
       } catch (error) {
         console.error("Erro ao buscar dados da API", error);
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
+  const handleSort = (field) => {
+    let newSortDirection;
+
+    if (sortField === field) {
+      // Ciclo de ordenação: ASC -> DESC -> Padrão (null)
+      if (sortDirection === 'ASC') {
+        newSortDirection = 'DESC';
+      } else if (sortDirection === 'DESC') {
+        newSortDirection = null; // Volta à ordem padrão
+      } else {
+        newSortDirection = 'ASC';
+      }
+    } else {
+      // Se um novo campo de ordenação for clicado, começar em ASC
+      newSortDirection = 'ASC';
+    }
+
+    setSortField(field);
+    setSortDirection(newSortDirection);
+
+    let sortedData;
+
+    if (newSortDirection === 'ASC') {
+      sortedData = [...data].sort((a, b) => {
+        const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
+        const valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
+        return valueA.localeCompare(valueB);
+      });
+    } else if (newSortDirection === 'DESC') {
+      sortedData = [...data].sort((a, b) => {
+        const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
+        const valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
+        return valueB.localeCompare(valueA);
+      });
+    } else {
+      sortedData = [...originalData]; // Voltar à ordem original
+    }
+
+    setData(sortedData);
+  };
+
+  //const currentClients = organizedData.slice(indexOfFirstClient, indexOfLastClient);
+  
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white dark:bg-gray-">
@@ -42,7 +113,7 @@ const ClientList: React.FC = () => {
       </div>
     );
   }
-
+// olha
   const handleClick = (clientId: number) => {
     navigate('/', { state: { clientId } });
   };
@@ -58,30 +129,11 @@ const ClientList: React.FC = () => {
 
   
 
-  const indexOfLastClient = currentPage * clientsPerPage;//ornaizaacao atual
+  const indexOfLastClient = currentPage * clientsPerPage;
   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-  const organizedData = data.sort((a, b) => {
-    // Calcular o máximo entre valor379 e valor380 para cada item
-    const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
-      ? Math.max(parseValue(a.valor379), parseValue(a.valor380))
-      : -Infinity;
-    const maxB = (b.valor379 !== undefined || b.valor380 !== undefined)
-      ? Math.max(parseValue(b.valor379), parseValue(b.valor380))
-      : -Infinity;
+  //const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
 
-    // Tratar casos específicos de Infinity e NaN
-    if (maxA === -Infinity && maxB !== -Infinity) return 1;
-    if (maxB === -Infinity && maxA !== -Infinity) return -1;
 
-    // Tratar casos específicos de Infinity
-    if (maxA === Infinity) return 1;
-    if (maxB === Infinity) return -1;
-
-    // Ordem decrescente
-    return maxB - maxA;
-  });
-
-  const currentClients = organizedData.slice(indexOfFirstClient, indexOfLastClient);
   const totalPages = Math.ceil(data.length / clientsPerPage);
 
   const getPageNumbers = () => {
@@ -120,6 +172,9 @@ const ClientList: React.FC = () => {
   const handleNextPage = () => {
     setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
   };
+
+  
+  
 
   // Função para determinar a classe de fundo
   const getBackgroundColor = (value) => {
@@ -173,7 +228,7 @@ const ClientList: React.FC = () => {
             <div className="flex items-center space-x-2">
               <span className="inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold">Baixo</span>
             </div>
-          </div>
+          </div>  
         </div>
 
         <div className="overflow-x-auto">
@@ -181,7 +236,12 @@ const ClientList: React.FC = () => {
             <thead>
               <tr>
                 <th
-                  className="py-2 px-4 border text-black-900 dark:text-white cursor-pointer">Nome</th>
+                  className="py-2 px-4 border cursor-pointer"
+                  onClick={() => handleSort('nome')}
+                  >
+                  Nome {sortField === 'nome' && (sortDirection === 'ASC' ? <FaArrowUp className="inline-block ml-2" /> : sortDirection === 'DESC' ? <FaArrowDown className="inline-block ml-2" /> : <FaArrowRight className="inline-block ml-2" />)}
+                  </th>
+
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 379</th>
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 379 </th>
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 380</th>
@@ -189,7 +249,7 @@ const ClientList: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {currentClients.map((cliente) => (
+              {data.map((cliente) => (
                 <tr 
                   key={cliente.codi_emp}
                   className="hover:bg-gray-100 dark:hover:bg-black-700"                 

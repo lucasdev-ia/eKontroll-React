@@ -104,7 +104,7 @@ const ClientList: React.FC = () => {
     setData(sortedData);
   };
 
-  //const currentClients = organizedData.slice(indexOfFirstClient, indexOfLastClient);
+  //const currentClients = organizedData(indexOfFirstClient, indexOfLastClient);
   
   if (loading) {
     return (
@@ -124,14 +124,15 @@ const ClientList: React.FC = () => {
 
   const handleClientsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setClientsPerPage(parseInt(event.target.value, 10));
-    setCurrentPage(1);
-  };
+    setCurrentPage(1); // Reinicia para a primeira página
+};
+
 
   
+const indexOfLastClient = currentPage * clientsPerPage;
+const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
 
-  const indexOfLastClient = currentPage * clientsPerPage;
-  const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-  //const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
 
 
   const totalPages = Math.ceil(data.length / clientsPerPage);
@@ -213,7 +214,6 @@ const ClientList: React.FC = () => {
             </div>
           </div>
         </div>
-
         <div className="flex justify-end mb-4">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
@@ -224,11 +224,11 @@ const ClientList: React.FC = () => {
             </div>
             <div className="flex items-center space-x-2">
               <span className="inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold">Medio</span>
-            </div>
+            </div>    
             <div className="flex items-center space-x-2">
               <span className="inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold">Baixo</span>
             </div>
-          </div>  
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -249,7 +249,7 @@ const ClientList: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((cliente) => (
+              {currentClients.map((cliente) => (
                 <tr 
                   key={cliente.codi_emp}
                   className="hover:bg-gray-100 dark:hover:bg-black-700"                 

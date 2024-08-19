@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { consultaEventos } from '../services/api';
 import DefaultLayout from '../layout/DefautLayout';
 import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight} from 'react-icons/hi2';
-import { FaArrowDown, FaArrowUp,FaArrowRight } from 'react-icons/fa';
+import { FaArrowDown, FaArrowUp,FaArrowsAltV } from 'react-icons/fa';
 import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
 
 // Função utilitária para tratar valores inválidos
@@ -22,9 +22,10 @@ const ClientList: React.FC = () => {
   const [clientsPerPage, setClientsPerPage] = useState(25);
   const [sortField, setSortField] = useState<string | null>('nome'); // Inicializa com 'nome' para ordenar por nome ao carregar
   const [sortDirection, setSortDirection] = useState(null);
-
-
-
+  const [sortFieldNumber, setSortFieldNumber] = useState<string | null>(null);
+  const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
+  const [severityFilter, setSeverityFilter] = useState<string | null>(null);
+  
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -62,6 +63,28 @@ const ClientList: React.FC = () => {
 
     fetchData();
   }, []);
+
+  const handleSortNumber = (field: string) => {
+    let newSortDirection: string | null = 'DESC';
+  
+    // Se o campo de ordenação atual for o mesmo e estiver em ordem descendente, altere para ascendente
+    if (sortFieldNumber === field && sortDirectionNumber === 'DESC') {
+      newSortDirection = 'ASC';
+    } else if (sortFieldNumber === field && sortDirectionNumber === 'ASC') {
+      newSortDirection = null; // Reseta a ordenação
+    }
+  
+    setSortFieldNumber(field);
+    setSortDirectionNumber(newSortDirection);
+  
+    if (newSortDirection === 'DESC') {
+      setData([...data].sort((a, b) => parseValue(b[field]) - parseValue(a[field])));
+    } else if (newSortDirection === 'ASC') {
+      setData([...data].sort((a, b) => parseValue(a[field]) - parseValue(b[field])));
+    } else {
+      setData([...originalData]); // Retorna à ordenação original
+    }
+  };
 
   const handleSort = (field) => {
     let newSortDirection;
@@ -128,11 +151,9 @@ const ClientList: React.FC = () => {
 };
 
 
-  
 const indexOfLastClient = currentPage * clientsPerPage;
 const indexOfFirstClient = indexOfLastClient - clientsPerPage;
 const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
-
 
 
   const totalPages = Math.ceil(data.length / clientsPerPage);
@@ -239,18 +260,33 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
                   className="py-2 px-4 border cursor-pointer"
                   onClick={() => handleSort('nome')}
                   >
-                  Nome {sortField === 'nome' && (sortDirection === 'ASC' ? <FaArrowUp className="inline-block ml-2" /> : sortDirection === 'DESC' ? <FaArrowDown className="inline-block ml-2" /> : <FaArrowRight className="inline-block ml-2" />)}
+                  Nome {sortField === 'nome' && (sortDirection === 'ASC' ? <FaArrowUp className="inline-block ml-2" /> : sortDirection === 'DESC' ? <FaArrowDown className="inline-block ml-2" /> : <FaArrowsAltV className="inline-block ml-2" />)}
                   </th>
-
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 379</th>
-                <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 379 </th>
+                <th
+                  className="py-2 px-4 border cursor-pointer"
+                  onClick={() => handleSortNumber('valor379')}
+                  >
+                  Evento 379 
+                       {sortFieldNumber === 'valor379' && sortDirectionNumber === 'ASC' && <FaArrowUp className="inline-block ml-2" />}
+                       {sortFieldNumber === 'valor379' && sortDirectionNumber === 'DESC' && <FaArrowDown className="inline-block ml-2" />}
+                       {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <FaArrowsAltV className="inline-block ml-2" />}
+                   </th>
                 <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 380</th>
-                <th className="py-2 px-4 border text-black-900 dark:text-900">Evento 380</th>
+                <th
+                  className="py-2 px-4 border cursor-pointer"
+                  onClick={() => handleSortNumber('valor380')}
+                  >
+                  Evento 380 
+                        {sortFieldNumber === 'valor380' && sortDirectionNumber === 'ASC' && <FaArrowUp className="inline-block ml-2" />}
+                        {sortFieldNumber === 'valor380' && sortDirectionNumber === 'DESC' && <FaArrowDown className="inline-block ml-2" />}
+                        {(sortFieldNumber !== 'valor380' || sortDirectionNumber === null) && <FaArrowsAltV className="inline-block ml-2" />}
+                    </th>
               </tr>
             </thead>
             <tbody>
               {currentClients.map((cliente) => (
-                <tr 
+                <tr   
                   key={cliente.codi_emp}
                   className="hover:bg-gray-100 dark:hover:bg-black-700"                 
                 >
@@ -306,7 +342,7 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
             </button>
           ))}
           <button
-            onClick={handleNextPage}
+            onClick={handleNextPage}  
             className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
             disabled={currentPage === totalPages}
           >

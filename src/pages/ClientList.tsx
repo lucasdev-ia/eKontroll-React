@@ -14,6 +14,7 @@ const parseValue = (value) => {
   return parseFloat(value);
 };
 
+
 const ClientList: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [originalData, setOriginalData] = useState([]); // Armazenar dados na ordem original
@@ -24,8 +25,7 @@ const ClientList: React.FC = () => {
   const [sortDirection, setSortDirection] = useState(null);
   const [sortFieldNumber, setSortFieldNumber] = useState<string | null>(null);
   const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
-  const [severityFilter, setSeverityFilter] = useState<string | null>(null);
-  
+    
   const navigate = useNavigate();
   
   useEffect(() => {

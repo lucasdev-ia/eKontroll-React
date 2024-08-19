@@ -25,7 +25,7 @@ const ClientList: React.FC = () => {
   const [sortDirection, setSortDirection] = useState(null);
   const [sortFieldNumber, setSortFieldNumber] = useState<string | null>(null);
   const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
-    
+
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -262,7 +262,15 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
                   >
                   Nome {sortField === 'nome' && (sortDirection === 'ASC' ? <FaArrowUp className="inline-block ml-2" /> : sortDirection === 'DESC' ? <FaArrowDown className="inline-block ml-2" /> : <FaArrowsAltV className="inline-block ml-2" />)}
                   </th>
-                <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 379</th>
+                  <th
+                  className="py-2 px-4 border cursor-pointer"
+                  onClick={() => handleSortNumber('valor379')}
+                  >
+                  Sobra / Falta 379 
+                       {sortFieldNumber === 'valor379' && sortDirectionNumber === 'ASC' && <FaArrowUp className="inline-block ml-2" />}
+                       {sortFieldNumber === 'valor379' && sortDirectionNumber === 'DESC' && <FaArrowDown className="inline-block ml-2" />}
+                       {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <FaArrowsAltV className="inline-block ml-2" />}
+                   </th>
                 <th
                   className="py-2 px-4 border cursor-pointer"
                   onClick={() => handleSortNumber('valor379')}
@@ -272,7 +280,15 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
                        {sortFieldNumber === 'valor379' && sortDirectionNumber === 'DESC' && <FaArrowDown className="inline-block ml-2" />}
                        {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <FaArrowsAltV className="inline-block ml-2" />}
                    </th>
-                <th className="py-2 px-4 border text-black-900 dark:text-900">Sobra / Falta 380</th>
+                    <th
+                  className="py-2 px-4 border cursor-pointer"
+                  onClick={() => handleSortNumber('valor379')}
+                  >
+                  Sobra / Falta 380 
+                       {sortFieldNumber === 'valor379' && sortDirectionNumber === 'ASC' && <FaArrowUp className="inline-block ml-2" />}
+                       {sortFieldNumber === 'valor379' && sortDirectionNumber === 'DESC' && <FaArrowDown className="inline-block ml-2" />}
+                       {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <FaArrowsAltV className="inline-block ml-2" />}
+                   </th>
                 <th
                   className="py-2 px-4 border cursor-pointer"
                   onClick={() => handleSortNumber('valor380')}

@@ -87,33 +87,33 @@ const ClientList: React.FC = () => {
     }
   };
 
-  const handleSeverityFilter = (severity: string) => {
-    setFilterSeverity(severity);
-  
-    const filterValidValues = (valor: number) => {
-      return valor !== Infinity && valor !== -Infinity && !isNaN(valor);
-    };
-  
-    if (severity === 'Alto') {
-      setData(originalData.filter(cliente => 
-        filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 80 ||
-        filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 80
-      ));
-    } else if (severity === 'Medio') {
-      setData(originalData.filter(cliente => 
-        filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 50 && parseValue(cliente.valor379) <= 80 ||
-        filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 50 && parseValue(cliente.valor380) <= 80
-      ));
-    } else if (severity === 'Baixo') {
-      setData(originalData.filter(cliente => 
-        filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 20 && parseValue(cliente.valor379) <= 50 ||
-        filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 20 && parseValue(cliente.valor380) <= 50
-      ));
-    } else {
-      setData(originalData); // Reseta para mostrar todos os clientes se não houver filtragem
-    }
+const handleSeverityFilter = (severity: string) => {
+  setFilterSeverity(severity);
+
+  const filterValidValues = (valor: number) => {
+    return valor !== Infinity && valor !== -Infinity && !isNaN(valor);
   };
-  
+
+  if (severity === 'Alto') {
+    setData(originalData.filter(cliente => 
+      filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 80 ||
+      filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 80
+    ));
+  } else if (severity === 'Medio') {
+    setData(originalData.filter(cliente => 
+      filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 50 && parseValue(cliente.valor379) <= 80 ||
+      filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 50 && parseValue(cliente.valor380) <= 80
+    ));
+  } else if (severity === 'Baixo') {
+    setData(originalData.filter(cliente => 
+      filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 20 && parseValue(cliente.valor379) <= 50 ||
+      filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 20 && parseValue(cliente.valor380) <= 50
+    ));
+  } else {
+    setData(originalData); // Reseta para mostrar todos os clientes se não houver filtragem
+  }
+};
+
 
   const handleSort = (field) => {
     let newSortDirection;

@@ -17,7 +17,7 @@ const parseValue = (value) => {
 
 const ClientList: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
-  const [originalData, setOriginalData] = useState([]); // Armazenar dados na ordem original
+  const [originalData, setOriginalData] = useState<any[]>([]); // Armazenar dados na ordem original
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [clientsPerPage, setClientsPerPage] = useState(25);
@@ -25,6 +25,7 @@ const ClientList: React.FC = () => {
   const [sortDirection, setSortDirection] = useState(null);
   const [sortFieldNumber, setSortFieldNumber] = useState<string | null>(null);
   const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
+  const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
 
   const navigate = useNavigate();
   
@@ -86,6 +87,23 @@ const ClientList: React.FC = () => {
     }
   };
 
+  const handleSeverityFilter = (severity: string) => {
+    setFilterSeverity(severity);
+  
+    if (severity === 'Alto') {
+      setData(originalData.filter(cliente => parseValue(cliente.valor379) > 80 || parseValue(cliente.valor380) > 80));
+    } else if (severity === 'Medio') {
+      setData(originalData.filter(cliente => (parseValue(cliente.valor379) > 50 && parseValue(cliente.valor379) <= 80) || 
+                                              (parseValue(cliente.valor380) > 50 && parseValue(cliente.valor380) <= 80)));
+    } else if (severity === 'Baixo') {
+      setData(originalData.filter(cliente => (parseValue(cliente.valor379) > 20 && parseValue(cliente.valor379) <= 50) || 
+                                              (parseValue(cliente.valor380) > 20 && parseValue(cliente.valor380) <= 50)));
+    } else {
+      setData(originalData); // Reseta para mostrar todos os clientes se não houver filtragem
+    }
+  };
+  
+
   const handleSort = (field) => {
     let newSortDirection;
 
@@ -127,7 +145,6 @@ const ClientList: React.FC = () => {
     setData(sortedData);
   };
 
-  //const currentClients = organizedData(indexOfFirstClient, indexOfLastClient);
   
   if (loading) {
     return (
@@ -241,13 +258,22 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
               <span className="inline-block px-3 py-1 text-white dark:bg-blackseveridade bg-black rounded-full text-sm font-semibold">Severidade:</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="inline-block px-3 py-1 text-white bg-red-700 rounded-full text-sm font-semibold">Alto</span>
+            <span className={`inline-block px-3 py-1 text-white bg-red-700 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'}`}
+             onClick={() => handleSeverityFilter('Alto')}>
+                Alto
+            </span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold">Medio</span>
+            <span className={`inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Medio' ? 'bg-opacity-100' : 'bg-opacity-60'}`}
+              onClick={() => handleSeverityFilter('Medio')}>
+                Medio
+            </span>
             </div>    
             <div className="flex items-center space-x-2">
-              <span className="inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold">Baixo</span>
+            <span className={`inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'}`}
+              onClick={() => handleSeverityFilter('Baixo')}>
+                 Baixo
+            </span>
             </div>
           </div>
         </div>

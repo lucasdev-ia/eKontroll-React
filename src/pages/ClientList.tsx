@@ -7,12 +7,12 @@ import { FaArrowDown, FaArrowUp,FaArrowsAltV } from 'react-icons/fa';
 import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
 
 // Função utilitária para tratar valores inválidos
-const parseValue = (value) => {
-  if (value === null || value === undefined || value === Infinity || value === -Infinity || Number.isNaN(parseFloat(value))) {
-    return 0; // Tratar como valor inexistente ou inválido
-  }
-  return parseFloat(value);
-};
+  const parseValue = (value) => {
+    if (value === null || value === undefined || value === Infinity || value === -Infinity || Number.isNaN(parseFloat(value))) {
+      return 0; // Tratar como valor inexistente ou inválido
+    }
+    return parseFloat(value);
+  };
 
 
 const ClientList: React.FC = () => {
@@ -90,14 +90,25 @@ const ClientList: React.FC = () => {
   const handleSeverityFilter = (severity: string) => {
     setFilterSeverity(severity);
   
+    const filterValidValues = (valor: number) => {
+      return valor !== Infinity && valor !== -Infinity && !isNaN(valor);
+    };
+  
     if (severity === 'Alto') {
-      setData(originalData.filter(cliente => parseValue(cliente.valor379) > 80 || parseValue(cliente.valor380) > 80));
+      setData(originalData.filter(cliente => 
+        filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 80 ||
+        filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 80
+      ));
     } else if (severity === 'Medio') {
-      setData(originalData.filter(cliente => (parseValue(cliente.valor379) > 50 && parseValue(cliente.valor379) <= 80) || 
-                                              (parseValue(cliente.valor380) > 50 && parseValue(cliente.valor380) <= 80)));
+      setData(originalData.filter(cliente => 
+        filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 50 && parseValue(cliente.valor379) <= 80 ||
+        filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 50 && parseValue(cliente.valor380) <= 80
+      ));
     } else if (severity === 'Baixo') {
-      setData(originalData.filter(cliente => (parseValue(cliente.valor379) > 20 && parseValue(cliente.valor379) <= 50) || 
-                                              (parseValue(cliente.valor380) > 20 && parseValue(cliente.valor380) <= 50)));
+      setData(originalData.filter(cliente => 
+        filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 20 && parseValue(cliente.valor379) <= 50 ||
+        filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 20 && parseValue(cliente.valor380) <= 50
+      ));
     } else {
       setData(originalData); // Reseta para mostrar todos os clientes se não houver filtragem
     }

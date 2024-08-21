@@ -5,6 +5,8 @@ import DefaultLayout from '../layout/DefautLayout';
 import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight} from 'react-icons/hi2';
 import { FaArrowDown, FaArrowUp,FaArrowsAltV } from 'react-icons/fa';
 import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
+import { CgArrowsVAlt } from "react-icons/cg";
+
 
 // Função utilitária para tratar valores inválidos
   const parseValue = (value) => {
@@ -313,7 +315,7 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
                   className="py-2 px-4 border cursor-pointer"
                   onClick={() => handleSort('nome')}
                   >
-                  Nome {sortField === 'nome' && (sortDirection === 'ASC' ? <FaArrowUp className="inline-block ml-2" /> : sortDirection === 'DESC' ? <FaArrowDown className="inline-block ml-2" /> : <FaArrowsAltV className="inline-block ml-2" />)}
+                  Nome {sortField === 'nome' && (sortDirection === 'ASC' ? <FaArrowUp className="inline-block ml-2" /> : sortDirection === 'DESC' ? <FaArrowDown className="inline-block ml-2" /> : <CgArrowsVAlt className="inline-block ml-2" />)}
                   </th>
                   <th
                   className="py-2 px-4 border cursor-pointer"
@@ -322,7 +324,7 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
                   Sobra / Falta 379 
                        {sortFieldNumber === 'valor379' && sortDirectionNumber === 'ASC' && <FaArrowUp className="inline-block ml-2" />}
                        {sortFieldNumber === 'valor379' && sortDirectionNumber === 'DESC' && <FaArrowDown className="inline-block ml-2" />}
-                       {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <FaArrowsAltV className="inline-block ml-2" />}
+                       {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
                    </th>
                 <th
                   className="py-2 px-4 border cursor-pointer"
@@ -331,7 +333,7 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
                   Evento 379 
                        {sortFieldNumber === 'valor379' && sortDirectionNumber === 'ASC' && <FaArrowUp className="inline-block ml-2" />}
                        {sortFieldNumber === 'valor379' && sortDirectionNumber === 'DESC' && <FaArrowDown className="inline-block ml-2" />}
-                       {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <FaArrowsAltV className="inline-block ml-2" />}
+                       {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
                    </th>
                     <th
                   className="py-2 px-4 border cursor-pointer"
@@ -340,7 +342,7 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
                   Sobra / Falta 380 
                        {sortFieldNumber === 'valor379' && sortDirectionNumber === 'ASC' && <FaArrowUp className="inline-block ml-2" />}
                        {sortFieldNumber === 'valor379' && sortDirectionNumber === 'DESC' && <FaArrowDown className="inline-block ml-2" />}
-                       {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <FaArrowsAltV className="inline-block ml-2" />}
+                       {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
                    </th>
                 <th
                   className="py-2 px-4 border cursor-pointer"
@@ -349,7 +351,7 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
                   Evento 380 
                         {sortFieldNumber === 'valor380' && sortDirectionNumber === 'ASC' && <FaArrowUp className="inline-block ml-2" />}
                         {sortFieldNumber === 'valor380' && sortDirectionNumber === 'DESC' && <FaArrowDown className="inline-block ml-2" />}
-                        {(sortFieldNumber !== 'valor380' || sortDirectionNumber === null) && <FaArrowsAltV className="inline-block ml-2" />}
+                        {(sortFieldNumber !== 'valor380' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
                     </th>
               </tr>
             </thead>

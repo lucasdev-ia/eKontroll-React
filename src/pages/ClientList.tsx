@@ -26,6 +26,8 @@ const ClientList: React.FC = () => {
   const [sortFieldNumber, setSortFieldNumber] = useState<string | null>(null);
   const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
   const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
+  const [filterActive, setFilterActive] = useState(false);
+
 
   const navigate = useNavigate();
   
@@ -87,32 +89,38 @@ const ClientList: React.FC = () => {
     }
   };
 
-const handleSeverityFilter = (severity: string) => {
-  setFilterSeverity(severity);
-
-  const filterValidValues = (valor: number) => {
-    return valor !== Infinity && valor !== -Infinity && !isNaN(valor);
+  const handleSeverityFilter = (severity: string) => {
+    if (filterSeverity === severity) {
+      // Se o filtro atual for o mesmo que o clicado, desative o filtro
+      setFilterSeverity(null);
+      setFilterActive(false);
+      setData(originalData); // Retorna à visualização padrão
+    } else {
+      setFilterSeverity(severity);
+      setFilterActive(true);
+  
+      const filterValidValues = (valor: number) => {
+        return valor !== Infinity && valor !== -Infinity && !isNaN(valor);
+      };
+  
+      if (severity === 'Alto') {
+        setData(originalData.filter(cliente => 
+          filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 80 ||
+          filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 80
+        ));
+      } else if (severity === 'Medio') {
+        setData(originalData.filter(cliente => 
+          filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 50 && parseValue(cliente.valor379) <= 80 ||
+          filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 50 && parseValue(cliente.valor380) <= 80
+        ));
+      } else if (severity === 'Baixo') {
+        setData(originalData.filter(cliente => 
+          filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 20 && parseValue(cliente.valor379) <= 50 ||
+          filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 20 && parseValue(cliente.valor380) <= 50
+        ));
+      }
+    }
   };
-
-  if (severity === 'Alto') {
-    setData(originalData.filter(cliente => 
-      filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 80 ||
-      filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 80
-    ));
-  } else if (severity === 'Medio') {
-    setData(originalData.filter(cliente => 
-      filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 50 && parseValue(cliente.valor379) <= 80 ||
-      filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 50 && parseValue(cliente.valor380) <= 80
-    ));
-  } else if (severity === 'Baixo') {
-    setData(originalData.filter(cliente => 
-      filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 20 && parseValue(cliente.valor379) <= 50 ||
-      filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 20 && parseValue(cliente.valor380) <= 50
-    ));
-  } else {
-    setData(originalData); // Reseta para mostrar todos os clientes se não houver filtragem
-  }
-};
 
 
   const handleSort = (field) => {
@@ -164,7 +172,7 @@ const handleSeverityFilter = (severity: string) => {
       </div>
     );
   }
-// olha
+  
   const handleClick = (clientId: number) => {
     navigate('/', { state: { clientId } });
   };
@@ -223,16 +231,20 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
     setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
   };
 
+  const handleResetFilter = () => {
+    setFilterSeverity(null);
+    setFilterActive(false);
+    setData(originalData); // Retorna à visualização padrão
+  };
   
   
-
   // Função para determinar a classe de fundo
   const getBackgroundColor = (value) => {
     const numericValue = parseValue(value);
     if (numericValue === Infinity || numericValue === -Infinity) {
       return ''; // Sem cor especial
     } else if (numericValue > 80) {
-      return 'bg-redempresas dark:bg-vermelhoescuro bg-opacity-60 dark:text-black'; // Vermelho
+      return 'bg- mpresas dark:bg-vermelhoescuro bg-opacity-60 dark:text-black'; // Vermelho
     } else if (numericValue > 50) {
       return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-60  dark:text-black'; // Amarelo
     }
@@ -266,22 +278,26 @@ const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
         <div className="flex justify-end mb-4">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              <span className="inline-block px-3 py-1 text-white dark:bg-blackseveridade bg-black rounded-full text-sm font-semibold">Severidade:</span>
+            <span 
+              className="inline-block px-3 py-1 text-white dark:bg-blackseveridade bg-black rounded-full text-sm font-semibold cursor-pointer"
+              onClick={handleResetFilter}>
+              Severidade:
+            </span>            
             </div>
             <div className="flex items-center space-x-2">
-            <span className={`inline-block px-3 py-1 text-white bg-red-700 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'}`}
-             onClick={() => handleSeverityFilter('Alto')}>
+            <span className={`inline-block px-3 py-1 text-white bg-red-700 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-red-800`}
+             onClick={() =>  handleSeverityFilter('Alto')}>
                 Alto
             </span>
             </div>
             <div className="flex items-center space-x-2">
-            <span className={`inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Medio' ? 'bg-opacity-100' : 'bg-opacity-60'}`}
+            <span className={`inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Medio' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-yellow-800`}
               onClick={() => handleSeverityFilter('Medio')}>
                 Medio
             </span>
             </div>    
             <div className="flex items-center space-x-2">
-            <span className={`inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'}`}
+            <span className={`inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-green-900`}
               onClick={() => handleSeverityFilter('Baixo')}>
                  Baixo
             </span>

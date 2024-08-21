@@ -62,8 +62,8 @@ module.exports = {
         verdecalendario: '#008000',
         redempresas: '#FFCCCC',
         yellowempresas: '#FFFFC2',
-        vermelhoescuro: '#FF00004D',
-        amareloescuro: '#FFFF004D',
+        vermelhoescuro: '#FF000033',
+        amareloescuro: '#FFFF0066',
         greenempresas: '#B3F5E4',
         verdeescuro: '#00FF004D',
         blackseveridade:'#010e21'

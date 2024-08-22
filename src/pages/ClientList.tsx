@@ -80,7 +80,9 @@
       setSortFieldNumber(field);
       setSortDirectionNumber(newSortDirection);
     
-      if (newSortDirection === 'DESC') {
+      if (newSortDirection === null) {
+        setData(originalData); // Volta para a ordem original
+      } else {
         setData((prevData) => {
           return [...prevData].sort((a, b) => {
             const valueA = parseValue(a[field]);
@@ -91,25 +93,12 @@
             if (valueA === -Infinity) return 1;
             if (valueB === -Infinity) return -1;
     
-            return valueB - valueA; // Ordenação descendente
-          });
-        });
-      } else if (newSortDirection === 'ASC') {
-        setData((prevData) => {
-          return [...prevData].sort((a, b) => {
-            const valueA = parseValue(a[field]);
-            const valueB = parseValue(b[field]);
-    
-            if (valueA === Infinity) return 1;
-            if (valueB === Infinity) return -1;
-            if (valueA === -Infinity) return 1;
-            if (valueB === -Infinity) return -1;
-    
-            return valueA - valueB; // Ordenação ascendente
+            return newSortDirection === 'DESC' ? valueB - valueA : valueA - valueB;
           });
         });
       }
     };
+    
           
 
     const handleSeverityFilter = (severity: string) => {
@@ -145,9 +134,9 @@
     };
 
 
-    const handleSort = (field) => {
+    const handleSort = (field: string) => {
       let newSortDirection;
-
+    
       if (sortField === field) {
         // Ciclo de ordenação: ASC -> DESC -> Padrão (null)
         if (sortDirection === 'ASC') {
@@ -161,28 +150,24 @@
         // Se um novo campo de ordenação for clicado, começar em ASC
         newSortDirection = 'ASC';
       }
-
+    
       setSortField(field);
       setSortDirection(newSortDirection);
-
+    
       let sortedData;
-
-      if (newSortDirection === 'ASC') {
-        sortedData = [...data].sort((a, b) => {
-          const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
-          const valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
-          return valueA.localeCompare(valueB);
-        });
-      } else if (newSortDirection === 'DESC') {
-        sortedData = [...data].sort((a, b) => {
-          const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
-          const valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
-          return valueB.localeCompare(valueA);
-        });
-      } else {
+    
+      if (newSortDirection === null) {
         sortedData = [...originalData]; // Voltar à ordem original
+      } else {
+        sortedData = [...data].sort((a, b) => {
+          const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
+          const valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
+          return newSortDirection === 'ASC'
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA);
+        });
       }
-
+    
       setData(sortedData);
     };
 

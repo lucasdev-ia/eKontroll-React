@@ -244,7 +244,6 @@
       setData(originalData); // Retorna à visualização padrão
     };
     
-    
     const getBackgroundColor = (value) => {
       const numericValue = parseValue(value);
       if (numericValue === Infinity || numericValue === -Infinity) {

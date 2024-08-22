@@ -136,7 +136,7 @@
 
     const handleSort = (field: string) => {
       let newSortDirection;
-    
+
       if (sortField === field) {
         // Ciclo de ordenação: ASC -> DESC -> Padrão (null)
         if (sortDirection === 'ASC') {
@@ -150,12 +150,12 @@
         // Se um novo campo de ordenação for clicado, começar em ASC
         newSortDirection = 'ASC';
       }
-    
+
       setSortField(field);
       setSortDirection(newSortDirection);
-    
+
       let sortedData;
-    
+
       if (newSortDirection === null) {
         sortedData = [...originalData]; // Voltar à ordem original
       } else {
@@ -167,7 +167,7 @@
             : valueB.localeCompare(valueA);
         });
       }
-    
+
       setData(sortedData);
     };
 

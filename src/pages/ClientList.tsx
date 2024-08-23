@@ -8,10 +8,10 @@
   import { CgArrowsVAlt } from "react-icons/cg";
 
 
-  // Função utilitária para tratar valores inválidos
+  // funçao tratar valores inválidos
     const parseValue = (value) => {
       if (value === null || value === undefined || value === Infinity || value === -Infinity || Number.isNaN(parseFloat(value))) {
-        return 0; // Tratar como valor inexistente ou inválido
+        return 0; // inexistente ou invalido
       }
       return parseFloat(value);
     };
@@ -19,11 +19,11 @@
 
   const ClientList: React.FC = () => {
     const [data, setData] = useState<any[]>([]);
-    const [originalData, setOriginalData] = useState<any[]>([]); // Armazenar dados na ordem original
+    const [originalData, setOriginalData] = useState<any[]>([]); // ordem original
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [clientsPerPage, setClientsPerPage] = useState(25);
-    const [sortField, setSortField] = useState<string | null>('nome'); // Inicializa com 'nome' para ordenar por nome ao carregar
+    const [sortField, setSortField] = useState<string | null>('nome'); 
     const [sortDirection, setSortDirection] = useState(null);
     const [sortFieldNumber, setSortFieldNumber] = useState<string | null>(null);
     const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
@@ -74,14 +74,14 @@
       if (sortFieldNumber === field && sortDirectionNumber === 'DESC') {
         newSortDirection = 'ASC';
       } else if (sortFieldNumber === field && sortDirectionNumber === 'ASC') {
-        newSortDirection = null; // Reseta a ordenação
+        newSortDirection = null; // reset da ordenaçao
       }
     
       setSortFieldNumber(field);
       setSortDirectionNumber(newSortDirection);
     
       if (newSortDirection === null) {
-        setData(originalData); // Volta para a ordem original
+        setData(originalData);
       } else {
         setData((prevData) => {
           return [...prevData].sort((a, b) => {
@@ -105,7 +105,7 @@
       if (filterSeverity === severity) {
         setFilterSeverity(null);
         setFilterActive(false);
-        setData(originalData); // Retorna à visualização padrão
+        setData(originalData); 
       } else {
         setFilterSeverity(severity);
         setFilterActive(true);
@@ -147,7 +147,6 @@
           newSortDirection = 'ASC';
         }
       } else {
-        // Se um novo campo de ordenação for clicado, começar em ASC
         newSortDirection = 'ASC';
       }
 
@@ -157,7 +156,7 @@
       let sortedData;
 
       if (newSortDirection === null) {
-        sortedData = [...originalData]; // Voltar à ordem original
+        sortedData = [...originalData]; 
       } else {
         sortedData = [...data].sort((a, b) => {
           const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
@@ -241,7 +240,7 @@
     const handleResetFilter = () => {
       setFilterSeverity(null);
       setFilterActive(false);
-      setData(originalData); // Retorna à visualização padrão
+      setData(originalData); 
     };
     
     const getBackgroundColor = (value) => {

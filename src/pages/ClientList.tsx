@@ -1,5 +1,4 @@
   import React, { useEffect, useState } from 'react';
-  import { useNavigate } from 'react-router-dom';
   import { consultaEventos } from '../services/api';
   import DefaultLayout from '../layout/DefautLayout';
   import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight} from 'react-icons/hi2';
@@ -29,9 +28,6 @@
     const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
     const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
     const [filterActive, setFilterActive] = useState(false);
-
-
-    const navigate = useNavigate();
     
     useEffect(() => {
       const fetchData = async () => {
@@ -99,8 +95,6 @@
       }
     };
     
-          
-
     const handleSeverityFilter = (severity: string) => {
       if (filterSeverity === severity) {
         setFilterSeverity(null);
@@ -173,15 +167,11 @@
     
     if (loading) {
       return (
-        <div className="flex h-screen items-center justify-center bg-white dark:bg-gray-">
-          <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" />
+        <div className="flex h-screen items-center justify-center dark:bg-loadingcor bg-white">
+          <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid borde r-primary border-t-transparent" />
         </div>
       );
-    }
-    
-    const handleClick = (clientId: number) => {
-      navigate('/', { state: { clientId } });
-    };
+    }   
 
     const handlePageChange = (newPage: number) => {
       setCurrentPage(newPage);
@@ -339,7 +329,7 @@
                     </th>
                       <th
                     className="py-2 px-4 border cursor-pointer"
-                    onClick={() => handleSortNumber('sobra380')}
+                    onClick={() => handleSortNumber('sobra380')} 
                     >
                     Sobra / Falta 380 
                         {sortFieldNumber === 'sobra380' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}

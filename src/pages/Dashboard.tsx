@@ -6,20 +6,15 @@ import DefaultLayout from "../layout/DefautLayout.js";
 import ChartEvento379e380 from "../components/ChartEvento379e380.tsx";
 import {
   CakeIcon,
-  CheckIcon,
-  CircleStackIcon,
   UserGroupIcon,
   UserPlusIcon,
   ArrowRightIcon,
   ArrowLeftIcon,
   ListBulletIcon,
   UserCircleIcon
-
 }
   from "@heroicons/react/24/solid";
-import ComboChart from "../components/ComboChart.tsx";
 import LucroChart from "../components/LucroChart.tsx";
-import CalendarComponent from "../components/CalendarComponent.tsx";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 
@@ -32,7 +27,7 @@ const Dashboard: React.FC = () => {
   const [eventos, setEventos] = useState<any[]>([]);
   const [contador, setContador] = useState(0);
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     if (location.state && location.state.clientId) {
@@ -66,8 +61,7 @@ const Dashboard: React.FC = () => {
   const currentMonthName = monthNames[currentMonth - 1];
   const filteredData = data.filter((item: any) => {
     if (!item.data_cadastro) { // nao tinha nada definido manha toda fazendo isso aaaaa
-      return false; // Se data_cadastro for null ou undefined, exclua o item
-    }
+      return false;}
     const [day, month, year] = item.data_cadastro.split('/').map(Number);
     return month === currentMonth && year === currentYear;
   });
@@ -118,7 +112,6 @@ const Dashboard: React.FC = () => {
       try {
         const data = await consultaEventos();
         const organizedData = data.sort((a, b) => {
-          // Calcular o máximo entre valor379 e valor380 para cada item
           const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
             ? Math.max(parseValue(a.valor379), parseValue(a.valor380))
             : -Infinity;
@@ -126,11 +119,9 @@ const Dashboard: React.FC = () => {
             ? Math.max(parseValue(b.valor379), parseValue(b.valor380))
             : -Infinity;
 
-          // Tratar casos específicos de Infinity e NaN
           if (maxA === -Infinity && maxB !== -Infinity) return 1;
           if (maxB === -Infinity && maxA !== -Infinity) return -1;
 
-          // Tratar casos específicos de Infinity
           if (maxA === Infinity) return 1;
           if (maxB === Infinity) return -1;
 
@@ -193,7 +184,7 @@ const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
-        <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" />
+        <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"/>
       </div>
     );
   }
@@ -230,7 +221,7 @@ const Dashboard: React.FC = () => {
         />
       </div>
 
-      <div className=" mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-3 2xl:mt-7.5 2xl:gap-7.5">
+      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-3 2xl:mt-7.5 2xl:gap-7.5">
         <div className="col-span-2 rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="flex items-center justify-between max-w-200  p-1 bg-gray-100 rounded-md">
 

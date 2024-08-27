@@ -132,11 +132,10 @@
       let newSortDirection;
 
       if (sortField === field) {
-        // Ciclo de ordenação: ASC -> DESC -> Padrão (null)
         if (sortDirection === 'ASC') {
           newSortDirection = 'DESC';
         } else if (sortDirection === 'DESC') {
-          newSortDirection = null; // Volta à ordem padrão
+          newSortDirection = null; 
         } else {
           newSortDirection = 'ASC';
         }

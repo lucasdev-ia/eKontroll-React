@@ -333,7 +333,6 @@ const ClientList: React.FC = () => {
                 className="dark:bg-gray-800 rounded border p-1"
               >
                 <option value="2024">2024</option>
-                <option value="2023">2023</option>
               </select>
               <h1 className="text-2xl font-bold text-black dark:text-white">
                 Mês

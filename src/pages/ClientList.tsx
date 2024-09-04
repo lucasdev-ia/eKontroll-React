@@ -35,7 +35,6 @@
       const fetchData = async () => {
         try {
           const response = await consultaEventos();
-
           const organizedData = response.sort((a, b) => {
             const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
               ? Math.max(parseValue(a.valor379), parseValue(a.valor380))

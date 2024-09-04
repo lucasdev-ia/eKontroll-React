@@ -1,5 +1,5 @@
   import React, { useEffect, useState } from 'react';
-  import { consultaEventos } from '../services/api';
+  import { consultaEventos, consultaEventosPorData } from '../services/api';
   import DefaultLayout from '../layout/DefautLayout';
   import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight} from 'react-icons/hi2';
   import { IoArrowUpOutline, IoArrowDown } from "react-icons/io5";
@@ -28,6 +28,8 @@
     const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
     const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
     const [filterActive, setFilterActive] = useState(false);
+    const [monthsEvents, setMonthsEvents] = useState<any[]>([]);
+    const [months, setMonths] = useState([]);
     
     useEffect(() => {
       const fetchData = async () => {
@@ -62,7 +64,35 @@
       };
 
       fetchData();
-    }, []);
+    }, [monthsEvents]);
+    
+    const fetchMonths = async (month) => {
+      try {
+        console.log("Valor de mês -> ",month);
+        const response = await consultaEventosPorData(month); // Chama a função de serviço API com o mês
+        setData(response.data); // Atualiza os dados com os eventos retornados para o mês selecionado
+        console.log("Retorno do backEnd consultaEventosPorData: ", response);
+      } catch (error) {
+        console.error('Erro ao consultar', error);
+      }
+    };
+  
+    const handleMonthsEvents = (event) => {
+      const selectedMonth = event.target.value;
+      setMonthsEvents(selectedMonth);
+      // Chama a função para buscar os dados do mês selecionado
+    };  
+
+    const generateMonths = (year) => {
+      const monthsNames = [
+        'january', 'february', 'march', 'april', 'may', 'june',
+        'july', 'august', 'september', 'october', 'november', 'december'
+      ];
+      return monthsNames.map(month => ({
+        value: `${month}${year}`,
+        label: `${month.charAt(0).toUpperCase() + month.slice(1)} ${year}`
+      }));
+    };
 
     const handleSortNumber = (field: string) => {
       let newSortDirection: string | null = 'DESC';
@@ -182,13 +212,15 @@
   };
 
 
-  const indexOfLastClient = currentPage * clientsPerPage;
-  const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-  const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
+    const indexOfLastClient = currentPage * clientsPerPage;
+    const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+    const currentClients = data ? data.slice(indexOfFirstClient, indexOfLastClient) : [];
+   // problema     
 
 
-    const totalPages = Math.ceil(data.length / clientsPerPage);
+   const totalPages = Array.isArray(data) ? Math.ceil(data.length / clientsPerPage) : 0;
 
+  
     const getPageNumbers = () => {
       const pageNumbers: number[] = [];
       const maxVisiblePages = 5;
@@ -246,6 +278,8 @@
       }
       return ''; // Cor padrão
     };
+    
+    const monthsList = generateMonths(2024);
 
     return (
       <DefaultLayout>
@@ -265,6 +299,18 @@
                   <option value="50">50</option>
                   <option value="100">100</option>
                 </select>
+                <select
+                id="monthsEvents"
+                value={monthsEvents}
+                onChange={handleMonthsEvents}
+                className="border rounded p-1 dark:bg-gray-800"
+              >
+                {monthsList.map((month, index) => (
+                  <option key={index} value={month.value}>
+                    {month.label}
+                  </option>
+                ))}
+              </select>
               </div>
             </div>
           </div>

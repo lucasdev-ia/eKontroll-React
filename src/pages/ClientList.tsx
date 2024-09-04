@@ -64,7 +64,7 @@
       };
 
       fetchData();
-    }, [monthsEvents]);
+    }, []);
     
     const fetchMonths = async (month) => {
       try {
@@ -80,8 +80,8 @@
     const handleMonthsEvents = (event) => {
       const selectedMonth = event.target.value;
       setMonthsEvents(selectedMonth);
-      // Chama a função para buscar os dados do mês selecionado
-    };  
+      fetchMonths(selectedMonth); // Chama a função para buscar os dados do mês selecionado
+    };
 
     const generateMonths = (year) => {
       const monthsNames = [
@@ -218,7 +218,7 @@
    // problema     
 
 
-   const totalPages = Array.isArray(data) ? Math.ceil(data.length / clientsPerPage) : 0;
+    const totalPages = Array.isArray(data) ? Math.ceil(data.length / clientsPerPage) : 0;
 
   
     const getPageNumbers = () => {
@@ -311,6 +311,7 @@
                   </option>
                 ))}
               </select>
+
               </div>
             </div>
           </div>

@@ -8,7 +8,7 @@ import {
 import { IoArrowUpOutline, IoArrowDown } from "react-icons/io5";
 import { LuArrowRightToLine, LuArrowLeftToLine } from "react-icons/lu";
 import { CgArrowsVAlt } from "react-icons/cg";
-import { format, getYear, getMonth } from "date-fns";
+import { format, getYear, getMonth, subMonths } from "date-fns";
 
 // funçao tratar valores inválidos
 const parseValue = (value) => {
@@ -24,8 +24,10 @@ const parseValue = (value) => {
   return parseFloat(value);
 };
 const hoje = new Date();
-const anoAtual = getYear(hoje)
-const mesAtual = getMonth(hoje)
+const anoAtual = getYear(hoje);
+const dataPassada = subMonths(hoje, 1);
+const nomeMesPassado = format(dataPassada, "MMMM");
+
 const ClientList: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [originalData, setOriginalData] = useState<any[]>([]); // ordem original
@@ -38,7 +40,7 @@ const ClientList: React.FC = () => {
   const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(
     null,
   );
-  const [MesSelecionado, setMesSelecionado] = useState<string>(`${mesAtual}`);
+  const [MesSelecionado, setMesSelecionado] = useState<string>(`${nomeMesPassado}`);
   const [AnoSelecionado, setAnoSelecionado] = useState<string>(`${anoAtual}`);
 
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);

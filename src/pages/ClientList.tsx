@@ -29,7 +29,7 @@
     const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
     const [filterActive, setFilterActive] = useState(false);
     const [monthsEvents, setMonthsEvents] = useState<any[]>([]);
-    const [months, setMonths] = useState([]);
+  
     
     useEffect(() => {
       const fetchData = async () => {
@@ -67,14 +67,13 @@
     
     const fetchMonths = async (month) => {
       try {
-        console.log("Valor de mês -> ",month);
-        const response = await consultaEventosPorData(month); // Chama a função de serviço API com o mês
-        setData(response.data); // Atualiza os dados com os eventos retornados para o mês selecionado
-        console.log("Retorno do backEnd consultaEventosPorData: ", response);
+        const response = await consultaEventosPorData(month);
+        setData(response); //erro de nao aparecer os dados
+        setCurrentPage(1); // Resetar para a primeira página ao carregar novos dados
       } catch (error) {
         console.error('Erro ao consultar', error);
       }
-    };
+    };  
   
     const handleMonthsEvents = (event) => {
       const selectedMonth = event.target.value;
@@ -214,6 +213,7 @@
     const indexOfLastClient = currentPage * clientsPerPage;
     const indexOfFirstClient = indexOfLastClient - clientsPerPage;
     const currentClients = data ? data.slice(indexOfFirstClient, indexOfLastClient) : [];
+
    // problema     
 
 
@@ -232,7 +232,7 @@
         endPage = Math.min(totalPages, maxVisiblePages);
       } else if (currentPage + halfMaxVisible >= totalPages) {
         startPage = Math.max(1, totalPages - maxVisiblePages + 1);
-      }
+      } 
 
       for (let i = startPage; i <= endPage; i++) {
         pageNumbers.push(i);
@@ -301,7 +301,7 @@
                 <select
                 id="monthsEvents"
                 value={monthsEvents}
-                onChange={handleMonthsEvents}
+                onChange={handleMonthsEvents}                           
                 className="border rounded p-1 dark:bg-gray-800"
               >
                 {monthsList.map((month, index) => (

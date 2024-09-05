@@ -68,13 +68,23 @@
     const fetchMonths = async (month) => {
       try {
         const response = await consultaEventosPorData(month);
-        setData(response); //erro de nao aparecer os dados
-        setCurrentPage(1); // Resetar para a primeira página ao carregar novos dados
+    
+        if (Array.isArray(response)) { 
+          if (response.length === 0) {
+            setData([]);
+          } else {
+            setData(response); 
+          }
+          setCurrentPage(1); 
+        } else {
+          console.error('deu errado', response);
+          setData([]); 
+        }
       } catch (error) {
-        console.error('Erro ao consultar', error);
+        console.error('erro ao consultar', error);
       }
-    };  
-  
+    };
+    
     const handleMonthsEvents = (event) => {
       const selectedMonth = event.target.value;
       setMonthsEvents(selectedMonth);
@@ -213,8 +223,6 @@
     const indexOfLastClient = currentPage * clientsPerPage;
     const indexOfFirstClient = indexOfLastClient - clientsPerPage;
     const currentClients = data ? data.slice(indexOfFirstClient, indexOfLastClient) : [];
-
-   // problema     
 
 
     const totalPages = Array.isArray(data) ? Math.ceil(data.length / clientsPerPage) : 0;

@@ -60,11 +60,11 @@ module.exports = {
         laranjalogo: "#FD5201",
         laranjahover: '#C73D00',// Cor mais escura para hover
         verdecalendario: '#008000',
-        redempresas: '#FF6666',
-        yellowempresas: '#FFFF66',
+        redempresas: '#e06666',
+        yellowempresas: '#ffd966',
         vermelhoescuro: '#FF000033',
-        amareloescuro: '#FFFF0066',
-        greenempresas: '#66FF66',
+        amareloescuro: '#FFFF0066', 
+        greenempresas: '#339933',
         verdeescuro: '#00FF004D',
         blackseveridade:'#010e21',
         loadingcor: '#1e2b37;'

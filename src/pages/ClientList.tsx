@@ -28,8 +28,9 @@
     const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
     const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
     const [filterActive, setFilterActive] = useState(false);
-    const [monthsEvents, setMonthsEvents] = useState<any[]>([]);
-  
+    const [monthsEvents, setMonthsEvents] = useState<string>(''); 
+    const [selectedYear, setSelectedYear] = useState<string>('2024');
+    
     
     useEffect(() => {
       const fetchData = async () => {
@@ -85,22 +86,49 @@
       }
     };
     
-    const handleMonthsEvents = (event) => {
-      const selectedMonth = event.target.value;
-      setMonthsEvents(selectedMonth);
-      fetchMonths(selectedMonth); // Chama a função para buscar os dados do mês selecionado
-    };
+    // Função para lidar com a mudança do mês selecionado
+  const handleMonthsEvents = (event) => {
+    const selectedMonth = event.target.value;
+    console.log(selectedMonth);
+    setMonthsEvents(selectedMonth);
+    fetchMonths(`${selectedMonth}`); // Chama a função para buscar os dados do mês e ano selecionados
+  };
 
-    const generateMonths = (year) => {
-      const monthsNames = [
-        'january', 'february', 'march', 'april', 'may', 'june',
-        'july', 'august', 'september', 'october', 'november', 'december'
-      ];
-      return monthsNames.map(month => ({
-        value: `${month}${year}`,
-        label: `${month.charAt(0).toUpperCase() + month.slice(1)} ${year}`
-      }));
-    };
+
+  // Arrays de meses e anos
+  const monthsNames = [
+    { en: 'january', pt: 'janeiro' },
+    { en: 'february', pt: 'fevereiro' },
+    { en: 'march', pt: 'março' },
+    { en: 'april', pt: 'abril' },
+    { en: 'may', pt: 'maio' },
+    { en: 'june', pt: 'junho' },
+    { en: 'july', pt: 'julho' },
+    { en: 'august', pt: 'agosto' },
+    { en: 'september', pt: 'setembro' },
+    { en: 'october', pt: 'outubro' },
+    { en: 'november', pt: 'novembro' },
+    { en: 'december', pt: 'dezembro' }
+  ];
+
+  const generateMonths = (year) => {
+    return monthsNames.map((month) => ({
+      value: `${month.en}${year}`,
+      label: month.pt.charAt(0).toUpperCase() + month.pt.slice(1) // Mostra apenas o nome do mês em português
+    }));
+  };
+
+  const generateYears = (startYear, endYear) => {
+    let years: number[] = [];
+    for (let year = startYear; year <= endYear; year++) {
+      years.push(year);
+    }
+    return years;
+  };
+
+  const monthsList = generateMonths(selectedYear);
+  const yearsList = generateYears(2020, 2025);
+    
 
     const handleSortNumber = (field: string) => {
       let newSortDirection: string | null = 'DESC';
@@ -132,7 +160,7 @@
         });
       }
     };
-    
+
     const handleSeverityFilter = (severity: string) => {
       if (filterSeverity === severity) {
         setFilterSeverity(null);
@@ -286,7 +314,7 @@
       return ''; // Cor padrão
     };
     
-    const monthsList = generateMonths(2024);
+    
 
     return (
       <DefaultLayout>
@@ -307,17 +335,29 @@
                   <option value="100">100</option>
                 </select>
                 <select
-                id="monthsEvents"
-                value={monthsEvents}
-                onChange={handleMonthsEvents}                           
-                className="border rounded p-1 dark:bg-gray-800"
-              >
-                {monthsList.map((month, index) => (
-                  <option key={index} value={month.value}>
-                    {month.label}
-                  </option>
-                ))}
-              </select>
+                  id="monthsEvents"
+                  value={monthsEvents}
+                  onChange={handleMonthsEvents}                           
+                  className="border rounded p-1 dark:bg-gray-800"
+                >
+                  {monthsList.map((month, index) => (
+                    <option key={index} value={month.value}>
+                      {month.label}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  id="yearsEvents"
+                  value={selectedYear}
+                  onChange={(event) => setSelectedYear(event.target.value)}
+                  className="border rounded p-1 dark:bg-gray-800"
+                >
+                  {yearsList.map((year, index) => (
+                    <option key={index} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
 
               </div>
             </div>

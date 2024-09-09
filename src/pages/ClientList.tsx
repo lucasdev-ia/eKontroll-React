@@ -30,7 +30,7 @@
     const [filterActive, setFilterActive] = useState(false);
     const [monthsEvents, setMonthsEvents] = useState<string>(''); 
     const [selectedYear, setSelectedYear] = useState<string>('2024');
-    
+    const [noDataMessage, setNoDataMessage] = useState<string | null>(null);
     
     useEffect(() => {
       const fetchData = async () => {
@@ -66,25 +66,31 @@
       fetchData();
     }, []);
     
-    const fetchMonths = async (month) => {
+    const fetchMonths = async (month: string) => {
       try {
         const response = await consultaEventosPorData(month);
     
         if (Array.isArray(response)) { 
           if (response.length === 0) {
             setData([]);
+            setNoDataMessage('Sem informações'); // Define a mensagem de ausência de dados
           } else {
-            setData(response); 
+            setData(response);
+            setNoDataMessage(null); // Limpa a mensagem quando há dados
           }
-          setCurrentPage(1); 
+          setCurrentPage(1); // Reinicia para a primeira página
         } else {
-          console.error('deu errado', response);
-          setData([]); 
+          console.error('Erro inesperado', response);
+          setData([]);
+          setNoDataMessage('Sem informações para este mês/ano'); // Define a mensagem de ausência de dados
         }
       } catch (error) {
-        console.error('erro ao consultar', error);
+        console.error('Erro ao consultar', error);
+        setData([]);
+        setNoDataMessage('Sem informações'); // Define a mensagem de ausência de dados
       }
     };
+    
     
     // Função para lidar com a mudança do mês selecionado
   const handleMonthsEvents = (event) => {
@@ -110,6 +116,7 @@
     { en: 'november', pt: 'novembro' },
     { en: 'december', pt: 'dezembro' }
   ];
+  
 
   const generateMonths = (year) => {
     return monthsNames.map((month) => ({
@@ -301,21 +308,13 @@
     
     const getBackgroundColor = (value) => {
       const numericValue = parseValue(value);
-      if (numericValue === Infinity || numericValue === -Infinity) {
-        return ''; // Sem cor especial
-      } else if (numericValue > 80) {
-        return 'bg-redempresas dark:bg-vermelhoescuro bg-opacity-20 dark:text-black'; // Vermelho
-      } else if (numericValue >50) {
-        return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-20  dark:text-black'; // Amarelo
-      }
-      else if (numericValue > 20) {
-        return 'bg-greenempresas bg-opacity-20  dark:bg-verdeescuro dark:text-black' // verde
-      }
-      return ''; // Cor padrão
-    };
+      if (!isFinite(numericValue)) return '';
+      if (numericValue > 80) return 'bg-redempresas dark:bg-vermelhoescuro bg-opacity-20 dark:text-black';
+      if (numericValue > 50) return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-20 dark:text-black';
+      if (numericValue > 20) return 'bg-greenempresas bg-opacity-20 dark:bg-verdeescuro dark:text-black';
+      return '';
+   };   
     
-    
-
     return (
       <DefaultLayout>
         <div className="container mx-auto p-4">
@@ -323,7 +322,7 @@
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-black dark:text-white">Lista de Clientes</h1>
               <div className="flex items-center space-x-2 ml-2">
-                <label htmlFor="clientsPerPage" className="text-black dark:text-white"></label>
+                <label htmlFor="clientsPerPage" className="text-black dark:text-white"></label> 
                 <select
                   id="clientsPerPage"
                   value={clientsPerPage}
@@ -352,7 +351,7 @@
                   onChange={(event) => setSelectedYear(event.target.value)}
                   className="border rounded p-1 dark:bg-gray-800"
                 >
-                  {yearsList.map((year, index) => (
+                  {yearsList.map((year, index) =>     (
                     <option key={index} value={year}>
                       {year}
                     </option>
@@ -441,35 +440,47 @@
                 </tr>
               </thead>
               <tbody>
-                {currentClients.map((cliente) => (
-                  <tr   
-                    key={cliente.codi_emp}
-                    className="hover:bg-gray-100 dark:hover:bg-black-700"                 
-                  >
-                    <td className="py-2 px-4 border text-black-900 dark:text-white">{cliente.nome}</td>
-                    <td className="py-2 px-4 border text-black-900 dark:text-white">
-                      {parseValue(cliente.sobra379) === 0
-                        ? 'Sem informações'
-                        : parseValue(cliente.sobra379) < 0
-                          ? `Passou R$ ${(parseValue(cliente.sobra379))}`
-                          : `Faltam R$ ${parseValue(cliente.sobra379)}`}
-                    </td>
-                    <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
-                      {isNaN(parseValue(cliente.valor379)) || parseValue(cliente.valor379) === Infinity || parseValue(cliente.valor379) === -Infinity ? '0 %' : `${parseValue(cliente.valor379)} %`}
-                    </td>
-                    <td className="py-2 px-4 border text-black-900 dark:text-white">
-                      {parseValue(cliente.sobra380) === 0
-                        ? 'Sem informações'
-                        : parseValue(cliente.sobra380) < 0
-                          ? `Passou R$ ${(parseValue(cliente.sobra380))}`
-                          : `Faltam R$ ${parseValue(cliente.sobra380)}`}
+              {currentClients.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-2 px-4 border text-center">
+                    {noDataMessage || 'Sem informações'}
+                  </td>
+                </tr>
+                ) : (
+              currentClients.map((cliente) => (
+                <tr
+                  key={cliente.codi_emp}
+                  className="hover:bg-gray-100 dark:hover:bg-black-700"
+                    >
+                 <td className="py-2 px-4 border text-black-900 dark:text-white">{cliente.nome}</td>
+                 <td className="py-2 px-4 border text-black-900 dark:text-white">
+                   {parseValue(cliente.sobra379) === 0
+                   ? 'Sem informações'
+                   : parseValue(cliente.sobra379) < 0
+                   ? `Passou R$ ${parseValue(cliente.sobra379)}`
+                  : `Faltam R$ ${parseValue(cliente.sobra379)}`}
+                  </td>
+                  <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
+                   {isNaN(parseValue(cliente.valor379)) || parseValue(cliente.valor379) === Infinity || parseValue(cliente.valor379) === -Infinity
+                     ? '0 %'
+                     : `${parseValue(cliente.valor379)} %`}
+                   </td>
+                   <td className="py-2 px-4 border text-black-900 dark:text-white">
+                    {parseValue(cliente.sobra380) === 0
+                      ? 'Sem informações'
+                      : parseValue(cliente.sobra380) < 0
+                      ? `Passou R$ ${parseValue(cliente.sobra380)}`
+                      : `Faltam R$ ${parseValue(cliente.sobra380)}`}
                     </td>
                     <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
-                      {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity ? '0 %' : `${parseValue(cliente.valor380)} %`}
+                      {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity
+                        ? '0 %'
+                        : `${parseValue(cliente.valor380)} %`}
                     </td>
-                  </tr>
-                ))}
-              </tbody>
+                   </tr>
+                      ))
+                    )}
+                </tbody>
             </table>
           </div>
 

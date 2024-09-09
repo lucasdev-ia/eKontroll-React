@@ -28,7 +28,14 @@
     const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
     const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
     const [filterActive, setFilterActive] = useState(false);
-    const [monthsEvents, setMonthsEvents] = useState<string>(''); 
+    const [monthsEvents, setMonthsEvents] = useState<string>(() => {
+      const currentMonthIndex = new Date().getMonth(); // Retorna o índice do mês (0 = janeiro, 11 = dezembro)
+      const monthsNames = [
+        'january', 'february', 'march', 'april', 'may', 'june',
+        'july', 'august', 'september', 'october', 'november', 'december'
+      ];
+      return monthsNames[currentMonthIndex]; // Define o mês atual baseado no índice
+    });
     const [selectedYear, setSelectedYear] = useState<string>('2024');
     const [noDataMessage, setNoDataMessage] = useState<string | null>(null);
     
@@ -65,41 +72,49 @@
 
       fetchData();
     }, []);
+
+    // Atualizar os dados quando o mês ou o ano mudar
+  useEffect(() => {
+    if (monthsEvents && selectedYear) {
+      fetchMonths(monthsEvents, selectedYear);
+    }
+  }, [monthsEvents, selectedYear]);
     
-    const fetchMonths = async (month: string) => {
-      try {
-        const response = await consultaEventosPorData(month);
-    
-        if (Array.isArray(response)) { 
-          if (response.length === 0) {
-            setData([]);
-            setNoDataMessage('Sem informações'); // Define a mensagem de ausência de dados
-          } else {
-            setData(response);
-            setNoDataMessage(null); // Limpa a mensagem quando há dados
-          }
-          setCurrentPage(1); // Reinicia para a primeira página
-        } else {
-          console.error('Erro inesperado', response);
+  const fetchMonths = async (month: string, year: string) => {
+    try {
+      const response = await consultaEventosPorData(`${month}${year}`);
+      if (Array.isArray(response)) { 
+        if (response.length === 0) {
           setData([]);
-          setNoDataMessage('Sem informações para este mês/ano'); // Define a mensagem de ausência de dados
+          setNoDataMessage('Sem informações'); // Define a mensagem de ausência de dados
+        } else {
+          setData(response);
+          setNoDataMessage(null); // Limpa a mensagem quando há dados
         }
-      } catch (error) {
-        console.error('Erro ao consultar', error);
+        setCurrentPage(1); // Reinicia para a primeira página
+      } else {
+        console.error('Erro inesperado', response);
         setData([]);
-        setNoDataMessage('Sem informações'); // Define a mensagem de ausência de dados
+        setNoDataMessage('Sem informações para este mês / ano'); // Define a mensagem de ausência de dados
       }
-    };
-    
-    
-    // Função para lidar com a mudança do mês selecionado
-  const handleMonthsEvents = (event) => {
-    const selectedMonth = event.target.value;
-    console.log(selectedMonth);
-    setMonthsEvents(selectedMonth);
-    fetchMonths(`${selectedMonth}`); // Chama a função para buscar os dados do mês e ano selecionados
+    } catch (error) {
+      console.error('Erro ao consultar', error);
+      setData([]);
+      setNoDataMessage('Sem informações'); // Define a mensagem de ausência de dados
+    }
   };
 
+  // Função para lidar com a mudança do mês selecionado
+  const handleMonthsEvents = (event) => {
+    const selectedMonth = event.target.value;
+    setMonthsEvents(selectedMonth);
+  };
+
+  // Função para lidar com a mudança do ano selecionado
+  const handleYearChange = (event) => {
+    const selectedYear = event.target.value;
+    setSelectedYear(selectedYear);
+  };
 
   // Arrays de meses e anos
   const monthsNames = [
@@ -116,11 +131,10 @@
     { en: 'november', pt: 'novembro' },
     { en: 'december', pt: 'dezembro' }
   ];
-  
 
   const generateMonths = (year) => {
     return monthsNames.map((month) => ({
-      value: `${month.en}${year}`,
+      value: `${month.en}`,
       label: month.pt.charAt(0).toUpperCase() + month.pt.slice(1) // Mostra apenas o nome do mês em português
     }));
   };
@@ -200,7 +214,6 @@
       }
     };
 
-
     const handleSort = (field: string) => {
       let newSortDirection;
 
@@ -236,7 +249,6 @@
       setData(sortedData);
     };
 
-    
     if (loading) {
       return (
         <div className="flex h-screen items-center justify-center dark:bg-loadingcor bg-white">
@@ -258,8 +270,6 @@
     const indexOfLastClient = currentPage * clientsPerPage;
     const indexOfFirstClient = indexOfLastClient - clientsPerPage;
     const currentClients = data ? data.slice(indexOfFirstClient, indexOfLastClient) : [];
-
-
     const totalPages = Array.isArray(data) ? Math.ceil(data.length / clientsPerPage) : 0;
 
   
@@ -357,7 +367,6 @@
                     </option>
                   ))}
                 </select>
-
               </div>
             </div>
           </div>
@@ -483,7 +492,6 @@
                 </tbody>
             </table>
           </div>
-
           <div className="flex justify-center mt-4 space-x-2">
             <button
               onClick={handleFirstPage}

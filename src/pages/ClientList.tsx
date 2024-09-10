@@ -1,539 +1,539 @@
-  import React, { useEffect, useState } from 'react';
-  import { consultaEventos, consultaEventosPorData } from '../services/api';
-  import DefaultLayout from '../layout/DefautLayout';
-  import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight} from 'react-icons/hi2';
-  import { IoArrowUpOutline, IoArrowDown } from "react-icons/io5";
-  import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
-  import { CgArrowsVAlt } from "react-icons/cg";
+  // import React, { useEffect, useState } from 'react';
+  // import { consultaEventos, consultaEventosPorData } from '../services/api';
+  // import DefaultLayout from '../layout/DefautLayout';
+  // import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight} from 'react-icons/hi2';
+  // import { IoArrowUpOutline, IoArrowDown } from "react-icons/io5";
+  // import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
+  // import { CgArrowsVAlt } from "react-icons/cg";
 
 
-  // funçao tratar valores inválidos
-    const parseValue = (value) => {
-      if (value === null || value === undefined || value === Infinity || value === -Infinity || Number.isNaN(parseFloat(value))) {
-        return 0; // inexistente ou invalido
-      }
-      return parseFloat(value);
-    };
+  // // funçao tratar valores inválidos
+  //   const parseValue = (value) => {
+  //     if (value === null || value === undefined || value === Infinity || value === -Infinity || Number.isNaN(parseFloat(value))) {
+  //       return 0; // inexistente ou invalido
+  //     }
+  //     return parseFloat(value);
+  //   };
 
 
-  const ClientList: React.FC = () => {
-    const [data, setData] = useState<any[]>([]);
-    const [originalData, setOriginalData] = useState<any[]>([]); // ordem original
-    const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [clientsPerPage, setClientsPerPage] = useState(25);
-    const [sortField, setSortField] = useState<string | null>('nome'); 
-    const [sortDirection, setSortDirection] = useState(null);
-    const [sortFieldNumber, setSortFieldNumber] = useState<string | null>(null);
-    const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
-    const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
-    const [filterActive, setFilterActive] = useState(false);
-    const [monthsEvents, setMonthsEvents] = useState<string>(() => {
-      const currentMonthIndex = new Date().getMonth(); // Retorna o índice do mês (0 = janeiro, 11 = dezembro)
-      const monthsNames = [
-        'january', 'february', 'march', 'april', 'may', 'june',
-        'july', 'august', 'september', 'october', 'november', 'december'
-      ];
-      return monthsNames[currentMonthIndex]; // Define o mês atual baseado no índice
-    });
-    const [selectedYear, setSelectedYear] = useState<string>('2024');
-    const [noDataMessage, setNoDataMessage] = useState<string | null>(null);
+  // const ClientList: React.FC = () => {
+  //   const [data, setData] = useState<any[]>([]);
+  //   const [originalData, setOriginalData] = useState<any[]>([]); // ordem original
+  //   const [loading, setLoading] = useState(true);
+  //   const [currentPage, setCurrentPage] = useState(1);
+  //   const [clientsPerPage, setClientsPerPage] = useState(25);
+  //   const [sortField, setSortField] = useState<string | null>('nome'); 
+  //   const [sortDirection, setSortDirection] = useState(null);
+  //   const [sortFieldNumber, setSortFieldNumber] = useState<string | null>(null);
+  //   const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
+  //   const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
+  //   const [filterActive, setFilterActive] = useState(false);
+  //   const [monthsEvents, setMonthsEvents] = useState<string>(() => {
+  //     const currentMonthIndex = new Date().getMonth(); // Retorna o índice do mês (0 = janeiro, 11 = dezembro)
+  //     const monthsNames = [
+  //       'january', 'february', 'march', 'april', 'may', 'june',
+  //       'july', 'august', 'september', 'october', 'november', 'december'
+  //     ];
+  //     return monthsNames[currentMonthIndex]; // Define o mês atual baseado no índice
+  //   });
+  //   const [selectedYear, setSelectedYear] = useState<string>('2024');
+  //   const [noDataMessage, setNoDataMessage] = useState<string | null>(null);
     
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await consultaEventos();
-          const organizedData = response.sort((a, b) => {
-            const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
-              ? Math.max(parseValue(a.valor379), parseValue(a.valor380))
-              : -Infinity;
-            const maxB = (b.valor379 !== undefined || b.valor380 !== undefined)
-              ? Math.max(parseValue(b.valor379), parseValue(b.valor380))
-              : -Infinity;
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       try {
+  //         const response = await consultaEventos();
+  //         const organizedData = response.sort((a, b) => {
+  //           const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
+  //             ? Math.max(parseValue(a.valor379), parseValue(a.valor380))
+  //             : -Infinity;
+  //           const maxB = (b.valor379 !== undefined || b.valor380 !== undefined)
+  //             ? Math.max(parseValue(b.valor379), parseValue(b.valor380))
+  //             : -Infinity;
 
-            if (maxA === -Infinity && maxB !== -Infinity) return 1;
-            if (maxB === -Infinity && maxA !== -Infinity) return -1;
+  //           if (maxA === -Infinity && maxB !== -Infinity) return 1;
+  //           if (maxB === -Infinity && maxA !== -Infinity) return -1;
 
-            if (maxA === Infinity) return 1;
-            if (maxB === Infinity) return -1;
+  //           if (maxA === Infinity) return 1;
+  //           if (maxB === Infinity) return -1;
 
-            // Ordem decrescente
-            return maxB - maxA;
-          });
+  //           // Ordem decrescente
+  //           return maxB - maxA;
+  //         });
 
-          setData(organizedData);
-          setOriginalData(organizedData); 
-          setLoading(false);
-        } catch (error) {
-          console.error("Erro ao buscar dados da API", error);
-          setLoading(false);
-        }
-      };
+  //         setData(organizedData);
+  //         setOriginalData(organizedData); 
+  //         setLoading(false);
+  //       } catch (error) {
+  //         console.error("Erro ao buscar dados da API", error);
+  //         setLoading(false);
+  //       }
+  //     };
 
-      fetchData();
-    }, []);
+  //     fetchData();
+  //   }, []);
 
-    // Atualizar os dados quando o mês ou o ano mudar
-  useEffect(() => {
-    if (monthsEvents && selectedYear) {
-      fetchMonths(monthsEvents, selectedYear);
-    }
-  }, [monthsEvents, selectedYear]);
+  //   // Atualizar os dados quando o mês ou o ano mudar
+  // useEffect(() => {
+  //   if (monthsEvents && selectedYear) {
+  //     fetchMonths(monthsEvents, selectedYear);
+  //   }
+  // }, [monthsEvents, selectedYear]);
     
-  const fetchMonths = async (month: string, year: string) => {
-    try {
-      const response = await consultaEventosPorData(`${month}${year}`);
-      if (Array.isArray(response)) { 
-        if (response.length === 0) {
-          setData([]);
-          setNoDataMessage('Sem informações'); // Define a mensagem de ausência de dados
-        } else {
-          setData(response);
-          setNoDataMessage(null); // Limpa a mensagem quando há dados
-        }
-        setCurrentPage(1); // Reinicia para a primeira página
-      } else {
-        console.error('Erro inesperado', response);
-        setData([]);
-        setNoDataMessage('Sem informações para este mês / ano'); // Define a mensagem de ausência de dados
-      }
-    } catch (error) {
-      console.error('Erro ao consultar', error);
-      setData([]);
-      setNoDataMessage('Sem informações'); // Define a mensagem de ausência de dados
-    }
-  };
+  // const fetchMonths = async (month: string, year: string) => {
+  //   try {
+  //     const response = await consultaEventosPorData(`${month}${year}`);
+  //     if (Array.isArray(response)) { 
+  //       if (response.length === 0) {
+  //         setData([]);
+  //         setNoDataMessage('Sem informações'); // Define a mensagem de ausência de dados
+  //       } else {
+  //         setData(response);
+  //         setNoDataMessage(null); // Limpa a mensagem quando há dados
+  //       }
+  //       setCurrentPage(1); // Reinicia para a primeira página
+  //     } else {
+  //       console.error('Erro inesperado', response);
+  //       setData([]);
+  //       setNoDataMessage('Sem informações para este mês / ano'); // Define a mensagem de ausência de dados
+  //     }
+  //   } catch (error) {
+  //     console.error('Erro ao consultar', error);
+  //     setData([]);
+  //     setNoDataMessage('Sem informações'); // Define a mensagem de ausência de dados
+  //   }
+  // };
 
-  // Função para lidar com a mudança do mês selecionado
-  const handleMonthsEvents = (event) => {
-    const selectedMonth = event.target.value;
-    setMonthsEvents(selectedMonth);
-  };
+  // // Função para lidar com a mudança do mês selecionado
+  // const handleMonthsEvents = (event) => {
+  //   const selectedMonth = event.target.value;
+  //   setMonthsEvents(selectedMonth);
+  // };
 
-  // Função para lidar com a mudança do ano selecionado
-  const handleYearChange = (event) => {
-    const selectedYear = event.target.value;
-    setSelectedYear(selectedYear);
-  };
+  // // Função para lidar com a mudança do ano selecionado
+  // const handleYearChange = (event) => {
+  //   const selectedYear = event.target.value;
+  //   setSelectedYear(selectedYear);
+  // };
 
-  // Arrays de meses e anos
-  const monthsNames = [
-    { en: 'january', pt: 'janeiro' },
-    { en: 'february', pt: 'fevereiro' },
-    { en: 'march', pt: 'março' },
-    { en: 'april', pt: 'abril' },
-    { en: 'may', pt: 'maio' },
-    { en: 'june', pt: 'junho' },
-    { en: 'july', pt: 'julho' },
-    { en: 'august', pt: 'agosto' },
-    { en: 'september', pt: 'setembro' },
-    { en: 'october', pt: 'outubro' },
-    { en: 'november', pt: 'novembro' },
-    { en: 'december', pt: 'dezembro' }
-  ];
+  // // Arrays de meses e anos
+  // const monthsNames = [
+  //   { en: 'january', pt: 'janeiro' },
+  //   { en: 'february', pt: 'fevereiro' },
+  //   { en: 'march', pt: 'março' },
+  //   { en: 'april', pt: 'abril' },
+  //   { en: 'may', pt: 'maio' },
+  //   { en: 'june', pt: 'junho' },
+  //   { en: 'july', pt: 'julho' },
+  //   { en: 'august', pt: 'agosto' },
+  //   { en: 'september', pt: 'setembro' },
+  //   { en: 'october', pt: 'outubro' },
+  //   { en: 'november', pt: 'novembro' },
+  //   { en: 'december', pt: 'dezembro' }
+  // ];
 
-  const generateMonths = (year) => {
-    return monthsNames.map((month) => ({
-      value: `${month.en}`,
-      label: month.pt.charAt(0).toUpperCase() + month.pt.slice(1) // Mostra apenas o nome do mês em português
-    }));
-  };
+  // const generateMonths = (year) => {
+  //   return monthsNames.map((month) => ({
+  //     value: `${month.en}`,
+  //     label: month.pt.charAt(0).toUpperCase() + month.pt.slice(1) // Mostra apenas o nome do mês em português
+  //   }));
+  // };
 
-  const generateYears = (startYear, endYear) => {
-    let years: number[] = [];
-    for (let year = startYear; year <= endYear; year++) {
-      years.push(year);
-    }
-    return years;
-  };
+  // const generateYears = (startYear, endYear) => {
+  //   let years: number[] = [];
+  //   for (let year = startYear; year <= endYear; year++) {
+  //     years.push(year);
+  //   }
+  //   return years;
+  // };
 
-  const monthsList = generateMonths(selectedYear);
-  const yearsList = generateYears(2020, 2025);
+  // const monthsList = generateMonths(selectedYear);
+  // const yearsList = generateYears(2020, 2025);
     
 
-    const handleSortNumber = (field: string) => {
-      let newSortDirection: string | null = 'DESC';
+  //   const handleSortNumber = (field: string) => {
+  //     let newSortDirection: string | null = 'DESC';
     
-      if (sortFieldNumber === field && sortDirectionNumber === 'DESC') {
-        newSortDirection = 'ASC';
-      } else if (sortFieldNumber === field && sortDirectionNumber === 'ASC') {
-        newSortDirection = null; // reset da ordenaçao
-      }
+  //     if (sortFieldNumber === field && sortDirectionNumber === 'DESC') {
+  //       newSortDirection = 'ASC';
+  //     } else if (sortFieldNumber === field && sortDirectionNumber === 'ASC') {
+  //       newSortDirection = null; // reset da ordenaçao
+  //     }
     
-      setSortFieldNumber(field);
-      setSortDirectionNumber(newSortDirection);
+  //     setSortFieldNumber(field);
+  //     setSortDirectionNumber(newSortDirection);
     
-      if (newSortDirection === null) {
-        setData(originalData);
-      } else {
-        setData((prevData) => {
-          return [...prevData].sort((a, b) => {
-            const valueA = parseValue(a[field]);
-            const valueB = parseValue(b[field]);
+  //     if (newSortDirection === null) {
+  //       setData(originalData);
+  //     } else {
+  //       setData((prevData) => {
+  //         return [...prevData].sort((a, b) => {
+  //           const valueA = parseValue(a[field]);
+  //           const valueB = parseValue(b[field]);
     
-            if (valueA === Infinity) return 1;
-            if (valueB === Infinity) return -1;
-            if (valueA === -Infinity) return 1;
-            if (valueB === -Infinity) return -1;
+  //           if (valueA === Infinity) return 1;
+  //           if (valueB === Infinity) return -1;
+  //           if (valueA === -Infinity) return 1;
+  //           if (valueB === -Infinity) return -1;
     
-            return newSortDirection === 'DESC' ? valueB - valueA : valueA - valueB;
-          });
-        });
-      }
-    };
+  //           return newSortDirection === 'DESC' ? valueB - valueA : valueA - valueB;
+  //         });
+  //       });
+  //     }
+  //   };
 
-    const handleSeverityFilter = (severity: string) => {
-      if (filterSeverity === severity) {
-        setFilterSeverity(null);
-        setFilterActive(false);
-        setData(originalData); 
-      } else {
-        setFilterSeverity(severity);
-        setFilterActive(true);
+  //   const handleSeverityFilter = (severity: string) => {
+  //     if (filterSeverity === severity) {
+  //       setFilterSeverity(null);
+  //       setFilterActive(false);
+  //       setData(originalData); 
+  //     } else {
+  //       setFilterSeverity(severity);
+  //       setFilterActive(true);
     
-        const filterValidValues = (valor: number) => {
-          return valor !== Infinity && valor !== -Infinity && !isNaN(valor);
-        };
+  //       const filterValidValues = (valor: number) => {
+  //         return valor !== Infinity && valor !== -Infinity && !isNaN(valor);
+  //       };
     
-        if (severity === 'Alto') {
-          setData(originalData.filter(cliente => 
-            filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 80 ||
-            filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 80
-          ));
-        } else if (severity === 'Medio') {
-          setData(originalData.filter(cliente => 
-            filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 50 && parseValue(cliente.valor379) <= 80 ||
-            filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 50 && parseValue(cliente.valor380) <= 80
-          ));
-        } else if (severity === 'Baixo') {
-          setData(originalData.filter(cliente => 
-            filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 20 && parseValue(cliente.valor379) <= 50 ||
-            filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 20 && parseValue(cliente.valor380) <= 50
-          ));
-        }
-      }
-    };
+  //       if (severity === 'Alto') {
+  //         setData(originalData.filter(cliente => 
+  //           filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 80 ||
+  //           filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 80
+  //         ));
+  //       } else if (severity === 'Medio') {
+  //         setData(originalData.filter(cliente => 
+  //           filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 50 && parseValue(cliente.valor379) <= 80 ||
+  //           filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 50 && parseValue(cliente.valor380) <= 80
+  //         ));
+  //       } else if (severity === 'Baixo') {
+  //         setData(originalData.filter(cliente => 
+  //           filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 20 && parseValue(cliente.valor379) <= 50 ||
+  //           filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 20 && parseValue(cliente.valor380) <= 50
+  //         ));
+  //       }
+  //     }
+  //   };
 
-    const handleSort = (field: string) => {
-      let newSortDirection;
+  //   const handleSort = (field: string) => {
+  //     let newSortDirection;
 
-      if (sortField === field) {
-        if (sortDirection === 'ASC') {
-          newSortDirection = 'DESC';
-        } else if (sortDirection === 'DESC') {
-          newSortDirection = null; 
-        } else {
-          newSortDirection = 'ASC';
-        }
-      } else {
-        newSortDirection = 'ASC';
-      }
+  //     if (sortField === field) {
+  //       if (sortDirection === 'ASC') {
+  //         newSortDirection = 'DESC';
+  //       } else if (sortDirection === 'DESC') {
+  //         newSortDirection = null; 
+  //       } else {
+  //         newSortDirection = 'ASC';
+  //       }
+  //     } else {
+  //       newSortDirection = 'ASC';
+  //     }
 
-      setSortField(field);
-      setSortDirection(newSortDirection);
+  //     setSortField(field);
+  //     setSortDirection(newSortDirection);
 
-      let sortedData;
+  //     let sortedData;
 
-      if (newSortDirection === null) {
-        sortedData = [...originalData]; 
-      } else {
-        sortedData = [...data].sort((a, b) => {
-          const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
-          const valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
-          return newSortDirection === 'ASC'
-            ? valueA.localeCompare(valueB)
-            : valueB.localeCompare(valueA);
-        });
-      }
+  //     if (newSortDirection === null) {
+  //       sortedData = [...originalData]; 
+  //     } else {
+  //       sortedData = [...data].sort((a, b) => {
+  //         const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
+  //         const valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
+  //         return newSortDirection === 'ASC'
+  //           ? valueA.localeCompare(valueB)
+  //           : valueB.localeCompare(valueA);
+  //       });
+  //     }
 
-      setData(sortedData);
-    };
+  //     setData(sortedData);
+  //   };
 
-    if (loading) {
-      return (
-        <div className="flex h-screen items-center justify-center dark:bg-loadingcor bg-white">
-          <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid borde r-primary border-t-transparent" />
-        </div>
-      );
-    }   
+  //   if (loading) {
+  //     return (
+  //       <div className="flex h-screen items-center justify-center dark:bg-loadingcor bg-white">
+  //         <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid borde r-primary border-t-transparent" />
+  //       </div>
+  //     );
+  //   }   
 
-    const handlePageChange = (newPage: number) => {
-      setCurrentPage(newPage);
-    };
+  //   const handlePageChange = (newPage: number) => {
+  //     setCurrentPage(newPage);
+  //   };
 
-    const handleClientsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setClientsPerPage(parseInt(event.target.value, 10));
-      setCurrentPage(1); // Reinicia para a primeira página
-  };
+  //   const handleClientsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  //     setClientsPerPage(parseInt(event.target.value, 10));
+  //     setCurrentPage(1); // Reinicia para a primeira página
+  // };
 
 
-    const indexOfLastClient = currentPage * clientsPerPage;
-    const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-    const currentClients = data ? data.slice(indexOfFirstClient, indexOfLastClient) : [];
-    const totalPages = Array.isArray(data) ? Math.ceil(data.length / clientsPerPage) : 0;
+  //   const indexOfLastClient = currentPage * clientsPerPage;
+  //   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+  //   const currentClients = data ? data.slice(indexOfFirstClient, indexOfLastClient) : [];
+  //   const totalPages = Array.isArray(data) ? Math.ceil(data.length / clientsPerPage) : 0;
 
   
-    const getPageNumbers = () => {
-      const pageNumbers: number[] = [];
-      const maxVisiblePages = 5;
-      const halfMaxVisible = Math.floor(maxVisiblePages / 2);
+  //   const getPageNumbers = () => {
+  //     const pageNumbers: number[] = [];
+  //     const maxVisiblePages = 5;
+  //     const halfMaxVisible = Math.floor(maxVisiblePages / 2);
 
-      let startPage = Math.max(1, currentPage - halfMaxVisible);
-      let endPage = Math.min(totalPages, currentPage + halfMaxVisible);
+  //     let startPage = Math.max(1, currentPage - halfMaxVisible);
+  //     let endPage = Math.min(totalPages, currentPage + halfMaxVisible);
 
-      if (currentPage <= halfMaxVisible) {
-        endPage = Math.min(totalPages, maxVisiblePages);
-      } else if (currentPage + halfMaxVisible >= totalPages) {
-        startPage = Math.max(1, totalPages - maxVisiblePages + 1);
-      } 
+  //     if (currentPage <= halfMaxVisible) {
+  //       endPage = Math.min(totalPages, maxVisiblePages);
+  //     } else if (currentPage + halfMaxVisible >= totalPages) {
+  //       startPage = Math.max(1, totalPages - maxVisiblePages + 1);
+  //     } 
 
-      for (let i = startPage; i <= endPage; i++) {
-        pageNumbers.push(i);
-      }
+  //     for (let i = startPage; i <= endPage; i++) {
+  //       pageNumbers.push(i);
+  //     }
 
-      return pageNumbers;
-    };
+  //     return pageNumbers;
+  //   };
 
-    const handleFirstPage = () => {
-      setCurrentPage(1);
-    };
+  //   const handleFirstPage = () => {
+  //     setCurrentPage(1);
+  //   };
 
-    const handleLastPage = () => {
-      setCurrentPage(totalPages);
-    };
+  //   const handleLastPage = () => {
+  //     setCurrentPage(totalPages);
+  //   };
 
-    const handlePreviousPage = () => {
-      setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
-    };
+  //   const handlePreviousPage = () => {
+  //     setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+  //   };
 
-    const handleNextPage = () => {
-      setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
-    };
+  //   const handleNextPage = () => {
+  //     setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
+  //   };
 
-    const handleResetFilter = () => {
-      setFilterSeverity(null);
-      setFilterActive(false);
-      setData(originalData); 
-    };
+  //   const handleResetFilter = () => {
+  //     setFilterSeverity(null);
+  //     setFilterActive(false);
+  //     setData(originalData); 
+  //   };
     
-    const getBackgroundColor = (value) => {
-      const numericValue = parseValue(value);
-      if (!isFinite(numericValue)) return '';
-      if (numericValue > 80) return 'bg-redempresas dark:bg-vermelhoescuro bg-opacity-20 dark:text-black';
-      if (numericValue > 50) return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-20 dark:text-black';
-      if (numericValue > 20) return 'bg-greenempresas bg-opacity-20 dark:bg-verdeescuro dark:text-black';
-      return '';
-   };   
+  //   const getBackgroundColor = (value) => {
+  //     const numericValue = parseValue(value);
+  //     if (!isFinite(numericValue)) return '';
+  //     if (numericValue > 80) return 'bg-redempresas dark:bg-vermelhoescuro bg-opacity-20 dark:text-black';
+  //     if (numericValue > 50) return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-20 dark:text-black';
+  //     if (numericValue > 20) return 'bg-greenempresas bg-opacity-20 dark:bg-verdeescuro dark:text-black';
+  //     return '';
+  //  };   
     
-    return (
-      <DefaultLayout>
-        <div className="container mx-auto p-4">
-          <div className="flex items-center justify-between mb-">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-black dark:text-white">Lista de Clientes</h1>
-              <div className="flex items-center space-x-2 ml-2">
-                <label htmlFor="clientsPerPage" className="text-black dark:text-white"></label> 
-                <select
-                  id="clientsPerPage"
-                  value={clientsPerPage}
-                  onChange={handleClientsPerPageChange}
-                  className="border rounded p-1 dark:bg-gray-800"
-                >
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-                <select
-                  id="monthsEvents"
-                  value={monthsEvents}
-                  onChange={handleMonthsEvents}                           
-                  className="border rounded p-1 dark:bg-gray-800"
-                >
-                  {monthsList.map((month, index) => (
-                    <option key={index} value={month.value}>
-                      {month.label}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  id="yearsEvents"
-                  value={selectedYear}
-                  onChange={(event) => setSelectedYear(event.target.value)}
-                  className="border rounded p-1 dark:bg-gray-800"
-                >
-                  {yearsList.map((year, index) =>     (
-                    <option key={index} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-end mb-4">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-              <span 
-                className="inline-block px-3 py-1 text-white dark:bg-blackseveridade bg-black rounded-full text-sm font-semibold cursor-pointer"
-                onClick={handleResetFilter}>
-                Severidade:
-              </span>            
-              </div>
-              <div className="flex items-center space-x-2">
-              <span className={`inline-block px-3 py-1 text-white bg-red-700 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-red-800`}
-              onClick={() =>  handleSeverityFilter('Alto')}>
-                  Alto
-              </span>
-              </div>
-              <div className="flex items-center space-x-2">
-              <span className={`inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Medio' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-yellow-800`}
-                onClick={() => handleSeverityFilter('Medio')}>
-                  Medio
-              </span>
-              </div>    
-              <div className="flex items-center space-x-2">
-              <span className={`inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-green-900`}
-                onClick={() => handleSeverityFilter('Baixo')}>
-                  Baixo
-              </span>
-              </div>
-            </div>
-          </div>
+  //   return (
+  //     <DefaultLayout>
+  //       <div className="container mx-auto p-4">
+  //         <div className="flex items-center justify-between mb-">
+  //           <div className="flex items-center">
+  //             <h1 className="text-2xl font-bold text-black dark:text-white">Lista de Clientes</h1>
+  //             <div className="flex items-center space-x-2 ml-2">
+  //               <label htmlFor="clientsPerPage" className="text-black dark:text-white"></label> 
+  //               <select
+  //                 id="clientsPerPage"
+  //                 value={clientsPerPage}
+  //                 onChange={handleClientsPerPageChange}
+  //                 className="border rounded p-1 dark:bg-gray-800"
+  //               >
+  //                 <option value="25">25</option>
+  //                 <option value="50">50</option>
+  //                 <option value="100">100</option>
+  //               </select>
+  //               <select
+  //                 id="monthsEvents"
+  //                 value={monthsEvents}
+  //                 onChange={handleMonthsEvents}                           
+  //                 className="border rounded p-1 dark:bg-gray-800"
+  //               >
+  //                 {monthsList.map((month, index) => (
+  //                   <option key={index} value={month.value}>
+  //                     {month.label}
+  //                   </option>
+  //                 ))}
+  //               </select>
+  //               <select
+  //                 id="yearsEvents"
+  //                 value={selectedYear}
+  //                 onChange={(event) => setSelectedYear(event.target.value)}
+  //                 className="border rounded p-1 dark:bg-gray-800"
+  //               >
+  //                 {yearsList.map((year, index) =>     (
+  //                   <option key={index} value={year}>
+  //                     {year}
+  //                   </option>
+  //                 ))}
+  //               </select>
+  //             </div>
+  //           </div>
+  //         </div>
+  //         <div className="flex justify-end mb-4">
+  //           <div className="flex items-center space-x-4">
+  //             <div className="flex items-center space-x-2">
+  //             <span 
+  //               className="inline-block px-3 py-1 text-white dark:bg-blackseveridade bg-black rounded-full text-sm font-semibold cursor-pointer"
+  //               onClick={handleResetFilter}>
+  //               Severidade:
+  //             </span>            
+  //             </div>
+  //             <div className="flex items-center space-x-2">
+  //             <span className={`inline-block px-3 py-1 text-white bg-red-700 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-red-800`}
+  //             onClick={() =>  handleSeverityFilter('Alto')}>
+  //                 Alto
+  //             </span>
+  //             </div>
+  //             <div className="flex items-center space-x-2">
+  //             <span className={`inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Medio' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-yellow-800`}
+  //               onClick={() => handleSeverityFilter('Medio')}>
+  //                 Medio
+  //             </span>
+  //             </div>    
+  //             <div className="flex items-center space-x-2">
+  //             <span className={`inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-green-900`}
+  //               onClick={() => handleSeverityFilter('Baixo')}>
+  //                 Baixo
+  //             </span>
+  //             </div>
+  //           </div>
+  //         </div>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white text-black dark:text-white border dark:bg-[#1e2a38] dark:border-gray-700">
-              <thead>
-                <tr>
-                  <th
-                    className="py-2 px-4 border cursor-pointer"
-                    onClick={() => handleSort('nome')}
-                    >
-                    Nome {sortField === 'nome' && (sortDirection === 'ASC' ? <IoArrowUpOutline className="inline-block ml-2" /> : sortDirection === 'DESC' ? <IoArrowDown className="inline-block ml-2" /> : <CgArrowsVAlt className="inline-block ml-2" />)}
-                    </th>
-                    <th
-                    className="py-2 px-4 border cursor-pointer"
-                    onClick={() => handleSortNumber('sobra379')}
-                    >
-                    Sobra / Falta 379 
-                        {sortFieldNumber === 'sobra379' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
-                        {sortFieldNumber === 'sobra379' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
-                        {(sortFieldNumber !== 'sobra379' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
-                    </th>
-                  <th
-                    className="py-2 px-4 border cursor-pointer"
-                    onClick={() => handleSortNumber('valor379')}
-                    >
-                    Evento 379 
-                        {sortFieldNumber === 'valor379' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
-                        {sortFieldNumber === 'valor379' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
-                        {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
-                    </th>
-                      <th
-                    className="py-2 px-4 border cursor-pointer"
-                    onClick={() => handleSortNumber('sobra380')} 
-                    >
-                    Sobra / Falta 380 
-                        {sortFieldNumber === 'sobra380' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
-                        {sortFieldNumber === 'sobra380' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
-                        {(sortFieldNumber !== 'sobra380' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
-                    </th>
-                  <th
-                    className="py-2 px-4 border cursor-pointer"
-                    onClick={() => handleSortNumber('valor380')}
-                    >
-                    Evento 380 
-                          {sortFieldNumber === 'valor380' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
-                          {sortFieldNumber === 'valor380' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
-                          {(sortFieldNumber !== 'valor380' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
-                      </th>
-                </tr>
-              </thead>
-              <tbody>
-              {currentClients.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="py-2 px-4 border text-center">
-                    {noDataMessage || 'Sem informações'}
-                  </td>
-                </tr>
-                ) : (
-              currentClients.map((cliente) => (
-                <tr
-                  key={cliente.codi_emp}
-                  className="hover:bg-gray-100 dark:hover:bg-black-700"
-                    >
-                 <td className="py-2 px-4 border text-black-900 dark:text-white">{cliente.nome}</td>
-                 <td className="py-2 px-4 border text-black-900 dark:text-white">
-                   {parseValue(cliente.sobra379) === 0
-                   ? 'Sem informações'
-                   : parseValue(cliente.sobra379) < 0
-                   ? `Passou R$ ${parseValue(cliente.sobra379)}`
-                  : `Faltam R$ ${parseValue(cliente.sobra379)}`}
-                  </td>
-                  <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
-                   {isNaN(parseValue(cliente.valor379)) || parseValue(cliente.valor379) === Infinity || parseValue(cliente.valor379) === -Infinity
-                     ? '0 %'
-                     : `${parseValue(cliente.valor379)} %`}
-                   </td>
-                   <td className="py-2 px-4 border text-black-900 dark:text-white">
-                    {parseValue(cliente.sobra380) === 0
-                      ? 'Sem informações'
-                      : parseValue(cliente.sobra380) < 0
-                      ? `Passou R$ ${parseValue(cliente.sobra380)}`
-                      : `Faltam R$ ${parseValue(cliente.sobra380)}`}
-                    </td>
-                    <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
-                      {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity
-                        ? '0 %'
-                        : `${parseValue(cliente.valor380)} %`}
-                    </td>
-                   </tr>
-                      ))
-                    )}
-                </tbody>
-            </table>
-          </div>
-          <div className="flex justify-center mt-4 space-x-2">
-            <button
-              onClick={handleFirstPage}
-              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-              disabled={currentPage === 1}
-            >
-              <LuArrowLeftToLine className="inline-block text-gray-700 dark:text-white" />
-            </button>
-            <button
-              onClick={handlePreviousPage}
-              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-              disabled={currentPage === 1}
-            >
-              <HiOutlineArrowSmallLeft className="inline-block text-gray-700 dark:text-white" />
-            </button>
-            {getPageNumbers().map((pageNumber) => (
-              <button
-                key={pageNumber}
-                onClick={() => handlePageChange(pageNumber)}
-                className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-azullogo dark:bg-azullogo text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
-              >
-                {pageNumber}
-              </button>
-            ))}
-            <button
-              onClick={handleNextPage}  
-              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-              disabled={currentPage === totalPages}
-            >
-              <HiOutlineArrowSmallRight className="inline-block text-gray-700 dark:text-white" />
-            </button>
-            <button
-              onClick={handleLastPage}
-              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-              disabled={currentPage === totalPages}
-            >
-              <LuArrowRightToLine className="inline-block text-gray-700 dark:text-white" />
-            </button>
-          </div>
-        </div>
-      </DefaultLayout>
-    );
-  };
+  //         <div className="overflow-x-auto">
+  //           <table className="min-w-full bg-white text-black dark:text-white border dark:bg-[#1e2a38] dark:border-gray-700">
+  //             <thead>
+  //               <tr>
+  //                 <th
+  //                   className="py-2 px-4 border cursor-pointer"
+  //                   onClick={() => handleSort('nome')}
+  //                   >
+  //                   Nome {sortField === 'nome' && (sortDirection === 'ASC' ? <IoArrowUpOutline className="inline-block ml-2" /> : sortDirection === 'DESC' ? <IoArrowDown className="inline-block ml-2" /> : <CgArrowsVAlt className="inline-block ml-2" />)}
+  //                   </th>
+  //                   <th
+  //                   className="py-2 px-4 border cursor-pointer"
+  //                   onClick={() => handleSortNumber('sobra379')}
+  //                   >
+  //                   Sobra / Falta 379 
+  //                       {sortFieldNumber === 'sobra379' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
+  //                       {sortFieldNumber === 'sobra379' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
+  //                       {(sortFieldNumber !== 'sobra379' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
+  //                   </th>
+  //                 <th
+  //                   className="py-2 px-4 border cursor-pointer"
+  //                   onClick={() => handleSortNumber('valor379')}
+  //                   >
+  //                   Evento 379 
+  //                       {sortFieldNumber === 'valor379' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
+  //                       {sortFieldNumber === 'valor379' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
+  //                       {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
+  //                   </th>
+  //                     <th
+  //                   className="py-2 px-4 border cursor-pointer"
+  //                   onClick={() => handleSortNumber('sobra380')} 
+  //                   >
+  //                   Sobra / Falta 380 
+  //                       {sortFieldNumber === 'sobra380' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
+  //                       {sortFieldNumber === 'sobra380' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
+  //                       {(sortFieldNumber !== 'sobra380' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
+  //                   </th>
+  //                 <th
+  //                   className="py-2 px-4 border cursor-pointer"
+  //                   onClick={() => handleSortNumber('valor380')}
+  //                   >
+  //                   Evento 380 
+  //                         {sortFieldNumber === 'valor380' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
+  //                         {sortFieldNumber === 'valor380' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
+  //                         {(sortFieldNumber !== 'valor380' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
+  //                     </th>
+  //               </tr>
+  //             </thead>
+  //             <tbody>
+  //             {currentClients.length === 0 ? (
+  //               <tr>
+  //                 <td colSpan={5} className="py-2 px-4 border text-center">
+  //                   {noDataMessage || 'Sem informações'}
+  //                 </td>
+  //               </tr>
+  //               ) : (
+  //             currentClients.map((cliente) => (
+  //               <tr
+  //                 key={cliente.codi_emp}
+  //                 className="hover:bg-gray-100 dark:hover:bg-black-700"
+  //                   >
+  //                <td className="py-2 px-4 border text-black-900 dark:text-white">{cliente.nome}</td>
+  //                <td className="py-2 px-4 border text-black-900 dark:text-white">
+  //                  {parseValue(cliente.sobra379) === 0
+  //                  ? 'Sem informações'
+  //                  : parseValue(cliente.sobra379) < 0
+  //                  ? `Passou R$ ${parseValue(cliente.sobra379)}`
+  //                 : `Faltam R$ ${parseValue(cliente.sobra379)}`}
+  //                 </td>
+  //                 <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
+  //                  {isNaN(parseValue(cliente.valor379)) || parseValue(cliente.valor379) === Infinity || parseValue(cliente.valor379) === -Infinity
+  //                    ? '0 %'
+  //                    : `${parseValue(cliente.valor379)} %`}
+  //                  </td>
+  //                  <td className="py-2 px-4 border text-black-900 dark:text-white">
+  //                   {parseValue(cliente.sobra380) === 0
+  //                     ? 'Sem informações'
+  //                     : parseValue(cliente.sobra380) < 0
+  //                     ? `Passou R$ ${parseValue(cliente.sobra380)}`
+  //                     : `Faltam R$ ${parseValue(cliente.sobra380)}`}
+  //                   </td>
+  //                   <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
+  //                     {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity
+  //                       ? '0 %'
+  //                       : `${parseValue(cliente.valor380)} %`}
+  //                   </td>
+  //                  </tr>
+  //                     ))
+  //                   )}
+  //               </tbody>
+  //           </table>
+  //         </div>
+  //         <div className="flex justify-center mt-4 space-x-2">
+  //           <button
+  //             onClick={handleFirstPage}
+  //             className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+  //             disabled={currentPage === 1}
+  //           >
+  //             <LuArrowLeftToLine className="inline-block text-gray-700 dark:text-white" />
+  //           </button>
+  //           <button
+  //             onClick={handlePreviousPage}
+  //             className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+  //             disabled={currentPage === 1}
+  //           >
+  //             <HiOutlineArrowSmallLeft className="inline-block text-gray-700 dark:text-white" />
+  //           </button>
+  //           {getPageNumbers().map((pageNumber) => (
+  //             <button
+  //               key={pageNumber}
+  //               onClick={() => handlePageChange(pageNumber)}
+  //               className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-azullogo dark:bg-azullogo text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
+  //             >
+  //               {pageNumber}
+  //             </button>
+  //           ))}
+  //           <button
+  //             onClick={handleNextPage}  
+  //             className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+  //             disabled={currentPage === totalPages}
+  //           >
+  //             <HiOutlineArrowSmallRight className="inline-block text-gray-700 dark:text-white" />
+  //           </button>
+  //           <button
+  //             onClick={handleLastPage}
+  //             className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+  //             disabled={currentPage === totalPages}
+  //           >
+  //             <LuArrowRightToLine className="inline-block text-gray-700 dark:text-white" />
+  //           </button>
+  //         </div>
+  //       </div>
+  //     </DefaultLayout>
+  //   );
+  // };
 
-  export default ClientList;
+  // export default ClientList;

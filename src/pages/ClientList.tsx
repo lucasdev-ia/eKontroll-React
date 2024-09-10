@@ -29,12 +29,14 @@
     const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
     const [filterActive, setFilterActive] = useState(false);
     const [monthsEvents, setMonthsEvents] = useState<string>(() => {
-    const currentMonthIndex = new Date().getMonth();// Retorna o índice do mês (0 = janeiro, 11 = dezembro)
-    const monthsNames = [
+      const now = new Date(); 
+      const currentMonthIndex = now.getMonth();// Retorna o índice do mês (0 = janeiro, 11 = dezembro)
+      const monthsNames = [
         'january', 'february', 'march', 'april', 'may', 'june',
         'july', 'august', 'september', 'october', 'november', 'december'
       ];
-      return monthsNames[currentMonthIndex]; // Define o mês atual baseado no índice
+      const previousMonthIndex = (currentMonthIndex - 1 + 12) % 12;
+      return monthsNames[previousMonthIndex]; // Define o mês atual baseado no índice
     });
     const [selectedYear, setSelectedYear] = useState<string>('2024');
     const [noDataMessage, setNoDataMessage] = useState<string | null>(null);

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from "./pages/Dashboard";
 import ClientList from './pages/ClientList'; 
 import Calendar from './pages/Calendar'; 
-import Calendar2 from './pages/Calendar2'
+import Calendar2 from './pages/Calendar2';
 function App() {
   return (
     <Router>

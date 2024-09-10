@@ -44,12 +44,14 @@ const Header = () => {
               <div className="absolute mt-2 py-2 w-48 bg-gray-800 dark:bg-boxdark rounded-lg shadow-xl dark:bg-gray-800">
                 <button
                   className="block px-4 py-2 text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105 transition-transform duration-100 w-full text-left"
+                  style={{ width: '250px', paddingLeft: '25px' }} 
                   onClick={() => navigate('/calendario')}
                 >
                   Calendário Empresas
                 </button>
                 <button
                   className="block px-4 py-2 text-black dark:text-white hover:bg-gray-900 dark:hover:bg-gray-600 hover:scale-105 transition-transform duration-100 w-full text-left"
+                  style={{ width: '250px', paddingLeft: '25px' }} 
                   onClick={() => navigate('/calendarioSocios')}
                 >
                   Calendário Sócios

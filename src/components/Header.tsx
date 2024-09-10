@@ -41,7 +41,7 @@ const Header = () => {
             
             {/* Dropdown para escolher Calendário ou Calendário dos Sócios */}
             {showDropdown && (
-              <div className="absolute mt-2 py-2 w-48 bg-gray-800 dark:bg-boxdark rounded-lg shadow-xl dark:bg-gray-800">
+              <div className="absolute mt-2 py-2 w-48 bg-gray-800 dark:bg-boxdark bg-white rounded-lg shadow-xl dark:bg-gray-800">
                 <button
                   className="block px-4 py-2 text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105 transition-transform duration-100 w-full text-left"
                   style={{ width: '250px', paddingLeft: '25px' }} 

@@ -16,7 +16,7 @@
     };
 
 
-  const ClientList: React.FC = () => {
+  const ClientList: React.FC = () => {  
     const [data, setData] = useState<any[]>([]);
     const [originalData, setOriginalData] = useState<any[]>([]); // ordem original
     const [loading, setLoading] = useState(true);
@@ -29,8 +29,8 @@
     const [filterSeverity, setFilterSeverity] = useState<string | null> (null);
     const [filterActive, setFilterActive] = useState(false);
     const [monthsEvents, setMonthsEvents] = useState<string>(() => {
-      const currentMonthIndex = new Date().getMonth(); // Retorna o índice do mês (0 = janeiro, 11 = dezembro)
-      const monthsNames = [
+    const currentMonthIndex = new Date().getMonth();// Retorna o índice do mês (0 = janeiro, 11 = dezembro)
+    const monthsNames = [
         'january', 'february', 'march', 'april', 'may', 'june',
         'july', 'august', 'september', 'october', 'november', 'december'
       ];

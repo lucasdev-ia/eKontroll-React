@@ -30,7 +30,6 @@ const Header = () => {
             Inicio
           </button>
 
-          {/* Botão de Calendário com Dropdown */}
           <div className="relative">
             <button
               className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3"
@@ -39,7 +38,6 @@ const Header = () => {
               Calendário
             </button>
             
-            {/* Dropdown para escolher Calendário ou Calendário dos Sócios */}
             {showDropdown && (
               <div className="absolute mt-2 py-2 w-48 bg-gray-800 dark:bg-boxdark bg-white rounded-lg shadow-xl dark:bg-gray-800">
                 <button

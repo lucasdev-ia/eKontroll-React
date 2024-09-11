@@ -5,7 +5,7 @@ import CalendarComponent2 from '../components/calendarComponent2';
 const Calendar: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
-  
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);

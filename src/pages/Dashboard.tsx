@@ -32,7 +32,6 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     if (location.state && location.state.clientId) {
       const clientId = location.state.clientId;
-      console.log('ID do cliente selecionado:', clientId);
       // Aqui recebe o ID selecionado na rota /clientes
     }
   }, [location.state]);

@@ -67,7 +67,8 @@ module.exports = {
         greenempresas: '#339933',
         verdeescuro: '#00FF004D',
         blackseveridade:'#010e21',
-        loadingcor: '#1e2b37;'
+        corFiltros: '#2d3748',
+        borderFiltros: '#4a5568'
       },
       fontSize: {
         "title-xxl": ["44px", "55px"],

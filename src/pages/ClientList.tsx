@@ -336,20 +336,10 @@
               <div className="flex items-center space-x-2 ml-2">
                 <label htmlFor="clientsPerPage" className="text-black dark:text-white"></label> 
                 <select
-                  id="clientsPerPage"
-                  value={clientsPerPage}
-                  onChange={handleClientsPerPageChange}
-                  className="border rounded p-1 dark:bg-gray-800"
-                >
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-                <select
                   id="monthsEvents"
                   value={monthsEvents}
                   onChange={handleMonthsEvents}                           
-                  className="border rounded p-1 dark:bg-gray-800"
+                  className="border-borderFiltros rounded p-1 dark:bg-corFiltros dark:text-white"
                 >
                   {monthsList.map((month, index) => (
                     <option key={index} value={month.value}>
@@ -361,7 +351,7 @@
                   id="yearsEvents"
                   value={selectedYear}
                   onChange={(event) => setSelectedYear(event.target.value)}
-                  className="border rounded p-1 dark:bg-gray-800"
+                  className="border-borderFiltros rounded p-1 dark:bg-corFiltros dark:text-white"
                 >
                   {yearsList.map((year, index) =>     (
                     <option key={index} value={year}>
@@ -494,44 +484,56 @@
                 </tbody>
             </table>
           </div>
-          <div className="flex justify-center mt-4 space-x-2">
-            <button
-              onClick={handleFirstPage}
-              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-              disabled={currentPage === 1}
-            >
-              <LuArrowLeftToLine className="inline-block text-gray-700 dark:text-white" />
-            </button>
-            <button
-              onClick={handlePreviousPage}
-              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-              disabled={currentPage === 1}
-            >
-              <HiOutlineArrowSmallLeft className="inline-block text-gray-700 dark:text-white" />
-            </button>
-            {getPageNumbers().map((pageNumber) => (
+          <div className="flex justify-between items-center mt-4">
+            <div className="flex flex-1 justify-center space-x-2">
               <button
-                key={pageNumber}
-                onClick={() => handlePageChange(pageNumber)}
-                className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-azullogo dark:bg-azullogo text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
+                onClick={handleFirstPage}
+                className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+                disabled={currentPage === 1}
               >
-                {pageNumber}
+                <LuArrowLeftToLine className="inline-block text-gray-700 dark:text-white" />
               </button>
-            ))}
-            <button
-              onClick={handleNextPage}  
-              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-              disabled={currentPage === totalPages}
+              <button
+                onClick={handlePreviousPage}
+                className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+                disabled={currentPage === 1}
+              >
+                <HiOutlineArrowSmallLeft className="inline-block text-gray-700 dark:text-white" />
+              </button>
+              {getPageNumbers().map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageChange(pageNumber)}
+                  className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-azullogo dark:bg-azullogo text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+              <button
+                onClick={handleNextPage}  
+                className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+                disabled={currentPage === totalPages}
+              >
+                <HiOutlineArrowSmallRight className="inline-block text-gray-700 dark:text-white" />
+              </button>
+              <button
+                onClick={handleLastPage}
+                className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+                disabled={currentPage === totalPages}
+              >
+                <LuArrowRightToLine className="inline-block text-gray-700 dark:text-white" />
+              </button>
+            </div>
+            <select
+              id="clientsPerPage"
+              value={clientsPerPage}
+              onChange={handleClientsPerPageChange}
+              className="border-borderFiltros rounded p-1 dark:bg-corFiltros dark:text-white"
             >
-              <HiOutlineArrowSmallRight className="inline-block text-gray-700 dark:text-white" />
-            </button>
-            <button
-              onClick={handleLastPage}
-              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-              disabled={currentPage === totalPages}
-            >
-              <LuArrowRightToLine className="inline-block text-gray-700 dark:text-white" />
-            </button>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
           </div>
         </div>
       </DefaultLayout>

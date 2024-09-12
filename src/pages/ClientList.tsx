@@ -1,20 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { consultaEventos, consultaEventosPorData } from '../services/api';
-import DefaultLayout from '../layout/DefautLayout';
-import { HiOutlineArrowSmallLeft, HiOutlineArrowSmallRight } from 'react-icons/hi2';
+import React, { useEffect, useState } from "react";
+import { consultaEventos, consultaEventosPorData } from "../services/api";
+import DefaultLayout from "../layout/DefautLayout";
+import {
+  HiOutlineArrowSmallLeft,
+  HiOutlineArrowSmallRight,
+} from "react-icons/hi2";
 import { IoArrowUpOutline, IoArrowDown } from "react-icons/io5";
-import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
+import { LuArrowRightToLine, LuArrowLeftToLine } from "react-icons/lu";
 import { CgArrowsVAlt } from "react-icons/cg";
-
+import { format, getYear, getMonth, subMonths } from "date-fns";
 
 // funçao tratar valores inválidos
 const parseValue = (value) => {
-  if (value === null || value === undefined || value === Infinity || value === -Infinity || Number.isNaN(parseFloat(value))) {
-    return 0;
+  if (
+    value === null ||
+    value === undefined ||
+    value === Infinity ||
+    value === -Infinity ||
+    Number.isNaN(parseFloat(value))
+  ) {
+    return 0; // inexistente ou invalido
   }
   return parseFloat(value);
 };
-
+const hoje = new Date();
+const anoAtual = getYear(hoje);
+const dataPassada = subMonths(hoje, 1);
+const nomeMesPassado = format(dataPassada, "MMMM");
 
 const ClientList: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
@@ -22,36 +34,33 @@ const ClientList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [clientsPerPage, setClientsPerPage] = useState(25);
-  const [sortField, setSortField] = useState<string | null>('nome');
+  const [sortField, setSortField] = useState<string | null>("nome");
   const [sortDirection, setSortDirection] = useState(null);
   const [sortFieldNumber, setSortFieldNumber] = useState<string | null>(null);
-  const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(null);
+  const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(
+    null,
+  );
+  const [MesSelecionado, setMesSelecionado] = useState<string>(`${nomeMesPassado}`);
+  const [AnoSelecionado, setAnoSelecionado] = useState<string>(`${anoAtual}`);
+
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState(false);
-  const [monthsEvents, setMonthsEvents] = useState<string>(() => {
-    const now = new Date();
-    const currentMonthIndex = now.getMonth();
-    const monthsNames = [
-      'january', 'february', 'march', 'april', 'may', 'june',
-      'july', 'august', 'september', 'october', 'november', 'december'
-    ];
-    const previousMonthIndex = (currentMonthIndex - 1 + 12) % 12;
-    return monthsNames[previousMonthIndex];
-  });
-  const [selectedYear, setSelectedYear] = useState<string>('2024');
-  const [noDataMessage, setNoDataMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await consultaEventos();
+        const data = `${MesSelecionado}${AnoSelecionado}`
+        const response = await consultaEventosPorData(data);
+
         const organizedData = response.sort((a, b) => {
-          const maxA = (a.valor379 !== undefined || a.valor380 !== undefined)
-            ? Math.max(parseValue(a.valor379), parseValue(a.valor380))
-            : -Infinity;
-          const maxB = (b.valor379 !== undefined || b.valor380 !== undefined)
-            ? Math.max(parseValue(b.valor379), parseValue(b.valor380))
-            : -Infinity;
+          const maxA =
+            a.valor379 !== undefined || a.valor380 !== undefined
+              ? Math.max(parseValue(a.valor379), parseValue(a.valor380))
+              : -Infinity;
+          const maxB =
+            b.valor379 !== undefined || b.valor380 !== undefined
+              ? Math.max(parseValue(b.valor379), parseValue(b.valor380))
+              : -Infinity;
 
           if (maxA === -Infinity && maxB !== -Infinity) return 1;
           if (maxB === -Infinity && maxA !== -Infinity) return -1;
@@ -73,92 +82,29 @@ const ClientList: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [MesSelecionado, AnoSelecionado]);
 
-  // Atualizar os dados quando o mês ou o ano mudar
+  const selecionarMes = (mes) => {
+    setMesSelecionado(mes.target.value);
+  }
   useEffect(() => {
-    if (monthsEvents && selectedYear) {
-      fetchMonths(monthsEvents, selectedYear);
-    }
-  }, [monthsEvents, selectedYear]);
+    console.log(MesSelecionado);
+  }, [MesSelecionado]);
 
-  const fetchMonths = async (month: string, year: string) => {
-    try {
-      const response = await consultaEventosPorData(`${month}${year}`);
-      if (Array.isArray(response)) {
-        if (response.length === 0) {
-          setData([]);
-          setNoDataMessage('Sem informações');
-        } else {
-          setData(response);
-          setNoDataMessage(null);
-        }
-        setCurrentPage(1); // Reinicia para a primeira página
-      } else {
-        console.error('Erro inesperado', response);
-        setData([]);
-        setNoDataMessage('Sem informações para este mês / ano');
-      }
-    } catch (error) {
-      console.error('Erro ao consultar', error);
-      setData([]);
-      setNoDataMessage('Sem informações');
-    }
-  };
-
-  // Função para lidar com a mudança do mês selecionado
-  const handleMonthsEvents = (event) => {
-    const selectedMonth = event.target.value;
-    setMonthsEvents(selectedMonth);
-  };
-
-  // Função para lidar com a mudança do ano selecionado
-  const handleYearChange = (event) => {
-    const selectedYear = event.target.value;
-    setSelectedYear(selectedYear);
-  };
-
-  // Arrays de meses e anos
-  const monthsNames = [
-    { en: 'january', pt: 'janeiro' },
-    { en: 'february', pt: 'fevereiro' },
-    { en: 'march', pt: 'março' },
-    { en: 'april', pt: 'abril' },
-    { en: 'may', pt: 'maio' },
-    { en: 'june', pt: 'junho' },
-    { en: 'july', pt: 'julho' },
-    { en: 'august', pt: 'agosto' },
-    { en: 'september', pt: 'setembro' },
-    { en: 'october', pt: 'outubro' },
-    { en: 'november', pt: 'novembro' },
-    { en: 'december', pt: 'dezembro' }
-  ];
-
-  const generateMonths = (year) => {
-    return monthsNames.map((month) => ({
-      value: `${month.en}`,
-      label: month.pt.charAt(0).toUpperCase() + month.pt.slice(1) // Mostra apenas o nome do mês em português
-    }));
-  };
-
-  const generateYears = (startYear, endYear) => {
-    let years: number[] = [];
-    for (let year = startYear; year <= endYear; year++) {
-      years.push(year);
-    }
-    return years;
-  };
-
-  const monthsList = generateMonths(selectedYear);
-  const yearsList = generateYears(2020, 2025);
+  const selecionarAno = (ano) => {
+    setAnoSelecionado(ano.target.value);
+  }
+  useEffect(() => {
+    console.log(AnoSelecionado);
+  }, [AnoSelecionado]);
 
 
   const handleSortNumber = (field: string) => {
-    let newSortDirection: string | null = 'DESC';
+    let newSortDirection: string | null = "DESC";
 
-    if (sortFieldNumber === field && sortDirectionNumber === 'DESC') {
-      newSortDirection = 'ASC';
-    } else if (sortFieldNumber === field && sortDirectionNumber === 'ASC') {
+    if (sortFieldNumber === field && sortDirectionNumber === "DESC") {
+      newSortDirection = "ASC";
+    } else if (sortFieldNumber === field && sortDirectionNumber === "ASC") {
       newSortDirection = null; // reset da ordenaçao
     }
 
@@ -178,7 +124,9 @@ const ClientList: React.FC = () => {
           if (valueA === -Infinity) return 1;
           if (valueB === -Infinity) return -1;
 
-          return newSortDirection === 'DESC' ? valueB - valueA : valueA - valueB;
+          return newSortDirection === "DESC"
+            ? valueB - valueA
+            : valueA - valueB;
         });
       });
     }
@@ -197,21 +145,40 @@ const ClientList: React.FC = () => {
         return valor !== Infinity && valor !== -Infinity && !isNaN(valor);
       };
 
-      if (severity === 'Alto') {
-        setData(originalData.filter(cliente =>
-          filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 80 ||
-          filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 80
-        ));
-      } else if (severity === 'Medio') {
-        setData(originalData.filter(cliente =>
-          filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 50 && parseValue(cliente.valor379) <= 80 ||
-          filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 50 && parseValue(cliente.valor380) <= 80
-        ));
-      } else if (severity === 'Baixo') {
-        setData(originalData.filter(cliente =>
-          filterValidValues(parseValue(cliente.valor379)) && parseValue(cliente.valor379) > 20 && parseValue(cliente.valor379) <= 50 ||
-          filterValidValues(parseValue(cliente.valor380)) && parseValue(cliente.valor380) > 20 && parseValue(cliente.valor380) <= 50
-        ));
+      if (severity === "Alto") {
+        setData(
+          originalData.filter(
+            (cliente) =>
+              (filterValidValues(parseValue(cliente.valor379)) &&
+                parseValue(cliente.valor379) > 80) ||
+              (filterValidValues(parseValue(cliente.valor380)) &&
+                parseValue(cliente.valor380) > 80),
+          ),
+        );
+      } else if (severity === "Medio") {
+        setData(
+          originalData.filter(
+            (cliente) =>
+              (filterValidValues(parseValue(cliente.valor379)) &&
+                parseValue(cliente.valor379) > 50 &&
+                parseValue(cliente.valor379) <= 80) ||
+              (filterValidValues(parseValue(cliente.valor380)) &&
+                parseValue(cliente.valor380) > 50 &&
+                parseValue(cliente.valor380) <= 80),
+          ),
+        );
+      } else if (severity === "Baixo") {
+        setData(
+          originalData.filter(
+            (cliente) =>
+              (filterValidValues(parseValue(cliente.valor379)) &&
+                parseValue(cliente.valor379) > 20 &&
+                parseValue(cliente.valor379) <= 50) ||
+              (filterValidValues(parseValue(cliente.valor380)) &&
+                parseValue(cliente.valor380) > 20 &&
+                parseValue(cliente.valor380) <= 50),
+          ),
+        );
       }
     }
   };
@@ -220,15 +187,15 @@ const ClientList: React.FC = () => {
     let newSortDirection;
 
     if (sortField === field) {
-      if (sortDirection === 'ASC') {
-        newSortDirection = 'DESC';
-      } else if (sortDirection === 'DESC') {
+      if (sortDirection === "ASC") {
+        newSortDirection = "DESC";
+      } else if (sortDirection === "DESC") {
         newSortDirection = null;
       } else {
-        newSortDirection = 'ASC';
+        newSortDirection = "ASC";
       }
     } else {
-      newSortDirection = 'ASC';
+      newSortDirection = "ASC";
     }
 
     setSortField(field);
@@ -240,9 +207,9 @@ const ClientList: React.FC = () => {
       sortedData = [...originalData];
     } else {
       sortedData = [...data].sort((a, b) => {
-        const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
-        const valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
-        return newSortDirection === 'ASC'
+        const valueA = a[field] ? a[field].toString().toLowerCase().trim() : "";
+        const valueB = b[field] ? b[field].toString().toLowerCase().trim() : "";
+        return newSortDirection === "ASC"
           ? valueA.localeCompare(valueB)
           : valueB.localeCompare(valueA);
       });
@@ -253,8 +220,8 @@ const ClientList: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center dark:bg-loadingcor bg-white">
-        <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid borde r-primary border-t-transparent" />
+      <div className="flex h-screen items-center justify-center bg-white dark:bg-loadingcor">
+        <div className="borde r-primary h-16 w-16 animate-spin rounded-full border-4 border-solid border-t-transparent" />
       </div>
     );
   }
@@ -263,17 +230,18 @@ const ClientList: React.FC = () => {
     setCurrentPage(newPage);
   };
 
-  const handleClientsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleClientsPerPageChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     setClientsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1); // Reinicia para a primeira página
   };
 
-
   const indexOfLastClient = currentPage * clientsPerPage;
   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-  const currentClients = data ? data.slice(indexOfFirstClient, indexOfLastClient) : [];
-  const totalPages = Array.isArray(data) ? Math.ceil(data.length / clientsPerPage) : 0;
+  const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
 
+  const totalPages = Math.ceil(data.length / clientsPerPage);
 
   const getPageNumbers = () => {
     const pageNumbers: number[] = [];
@@ -305,11 +273,11 @@ const ClientList: React.FC = () => {
   };
 
   const handlePreviousPage = () => {
-    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
   const handleNextPage = () => {
-    setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
   };
 
   const handleResetFilter = () => {
@@ -320,72 +288,92 @@ const ClientList: React.FC = () => {
 
   const getBackgroundColor = (value) => {
     const numericValue = parseValue(value);
-    if (!isFinite(numericValue)) return '';
-    if (numericValue > 80) return 'bg-redempresas dark:bg-vermelhoescuro bg-opacity-20 dark:text-black';
-    if (numericValue > 50) return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-20 dark:text-black';
-    if (numericValue > 20) return 'bg-greenempresas bg-opacity-20 dark:bg-verdeescuro dark:text-black';
-    return '';
+    if (numericValue === Infinity || numericValue === -Infinity) {
+      return ""; // Sem cor especial
+    } else if (numericValue > 80) {
+      return "bg-redempresas dark:bg-vermelhoescuro bg-opacity-20 dark:text-black"; // Vermelho
+    } else if (numericValue > 50) {
+      return "bg-yellowempresas dark:bg-amareloescuro bg-opacity-20  dark:text-black"; // Amarelo
+    } else if (numericValue > 20) {
+      return "bg-greenempresas bg-opacity-20  dark:bg-verdeescuro dark:text-black"; // verde
+    }
+    return ""; // Cor padrão
   };
 
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
-        <div className="flex items-center justify-between mb-">
+        <div className="mb- flex items-center justify-between">
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-black dark:text-white">Lista de Clientes</h1>
-            <div className="flex items-center space-x-2 ml-2">
-              <label htmlFor="clientsPerPage" className="text-black dark:text-white"></label>
+            <h1 className="text-2xl font-bold text-black dark:text-white">
+              Lista de Clientes
+            </h1>
+            <div className="ml-2 flex items-center space-x-2">
+              <label
+                htmlFor="clientsPerPage"
+                className="text-black dark:text-white"
+              ></label>
               <select
-                id="monthsEvents"
-                value={monthsEvents}
-                onChange={handleMonthsEvents}
+                id="MonthClient"
+                value={MesSelecionado}
+                onChange={selecionarMes}
                 className="border-borderFiltros rounded p-1 dark:bg-corFiltros dark:text-white"
               >
-                {monthsList.map((month, index) => (
-                  <option key={index} value={month.value}>
-                    {month.label}
-                  </option>
-                ))}
+                <option value="january">Janeiro</option>
+                <option value="february">Fevereiro</option>
+                <option value="march">Março</option>
+                <option value="april">Abril</option>
+                <option value="may">Maio</option>
+                <option value="june">Junho</option>
+                <option value="july">Julho</option>
+                <option value="august">Agosto</option>
+                <option value="september">Setembro</option>
+                <option value="october">Outubro</option>
+                <option value="november">Novembro</option>
+                <option value="december">Dezembro</option>
               </select>
               <select
-                id="yearsEvents"
-                value={selectedYear}
-                onChange={(event) => setSelectedYear(event.target.value)}
+                id="YearClient"
+                value={AnoSelecionado}
+                onChange={selecionarAno}
                 className="border-borderFiltros rounded p-1 dark:bg-corFiltros dark:text-white"
               >
-                {yearsList.map((year, index) => (
-                  <option key={index} value={year}>
-                    {year}
-                  </option>
-                ))}
+                <option value="2024">2024</option>
               </select>
             </div>
           </div>
         </div>
-        <div className="flex justify-end mb-4">
+        <div className="mb-4 flex justify-end">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <span
-                className="inline-block px-3 py-1 text-white dark:bg-blackseveridade bg-black rounded-full text-sm font-semibold cursor-pointer"
-                onClick={handleResetFilter}>
+                className="inline-block cursor-pointer rounded-full bg-black px-3 py-1 text-sm font-semibold text-white dark:bg-blackseveridade"
+                onClick={handleResetFilter}
+              >
                 Severidade:
               </span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className={`inline-block px-3 py-1 text-white bg-red-700 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-red-800`}
-                onClick={() => handleSeverityFilter('Alto')}>
+              <span
+                className={`inline-block cursor-pointer rounded-full bg-red-700 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Alto" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-red-800`}
+                onClick={() => handleSeverityFilter("Alto")}
+              >
                 Alto
               </span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className={`inline-block px-3 py-1 text-white bg-yellow-500 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Medio' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-yellow-800`}
-                onClick={() => handleSeverityFilter('Medio')}>
+              <span
+                className={`inline-block cursor-pointer rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Medio" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-yellow-800`}
+                onClick={() => handleSeverityFilter("Medio")}
+              >
                 Medio
               </span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className={`inline-block px-3 py-1 text-white bg-green-600 rounded-full text-sm font-semibold cursor-pointer ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'} hover:bg-green-900`}
-                onClick={() => handleSeverityFilter('Baixo')}>
+              <span
+                className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Baixo" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-green-900`}
+                onClick={() => handleSeverityFilter("Baixo")}
+              >
                 Baixo
               </span>
             </div>
@@ -393,97 +381,144 @@ const ClientList: React.FC = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white text-black dark:text-white border dark:bg-[#1e2a38] dark:border-gray-700">
+          <table className="dark:border-gray-700 min-w-full border bg-white text-black dark:bg-[#1e2a38] dark:text-white">
             <thead>
               <tr>
                 <th
-                  className="py-2 px-4 border cursor-pointer"
-                  onClick={() => handleSort('nome')}
+                  className="cursor-pointer border px-4 py-2"
+                  onClick={() => handleSort("nome")}
                 >
-                  Nome {sortField === 'nome' && (sortDirection === 'ASC' ? <IoArrowUpOutline className="inline-block ml-2" /> : sortDirection === 'DESC' ? <IoArrowDown className="inline-block ml-2" /> : <CgArrowsVAlt className="inline-block ml-2" />)}
+                  Nome{" "}
+                  {sortField === "nome" &&
+                    (sortDirection === "ASC" ? (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    ) : sortDirection === "DESC" ? (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    ) : (
+                      <CgArrowsVAlt className="ml-2 inline-block" />
+                    ))}
                 </th>
                 <th
-                  className="py-2 px-4 border cursor-pointer"
-                  onClick={() => handleSortNumber('sobra379')}
+                  className="cursor-pointer border px-4 py-2"
+                  onClick={() => handleSortNumber("sobra379")}
                 >
                   Sobra / Falta 379
-                  {sortFieldNumber === 'sobra379' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
-                  {sortFieldNumber === 'sobra379' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
-                  {(sortFieldNumber !== 'sobra379' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
+                  {sortFieldNumber === "sobra379" &&
+                    sortDirectionNumber === "ASC" && (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    )}
+                  {sortFieldNumber === "sobra379" &&
+                    sortDirectionNumber === "DESC" && (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    )}
+                  {(sortFieldNumber !== "sobra379" ||
+                    sortDirectionNumber === null) && (
+                      <CgArrowsVAlt className="ml-2 inline-block" />
+                    )}
                 </th>
                 <th
-                  className="py-2 px-4 border cursor-pointer"
-                  onClick={() => handleSortNumber('valor379')}
+                  className="cursor-pointer border px-4 py-2"
+                  onClick={() => handleSortNumber("valor379")}
                 >
                   Evento 379
-                  {sortFieldNumber === 'valor379' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
-                  {sortFieldNumber === 'valor379' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
-                  {(sortFieldNumber !== 'valor379' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
+                  {sortFieldNumber === "valor379" &&
+                    sortDirectionNumber === "ASC" && (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    )}
+                  {sortFieldNumber === "valor379" &&
+                    sortDirectionNumber === "DESC" && (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    )}
+                  {(sortFieldNumber !== "valor379" ||
+                    sortDirectionNumber === null) && (
+                      <CgArrowsVAlt className="ml-2 inline-block" />
+                    )}
                 </th>
                 <th
-                  className="py-2 px-4 border cursor-pointer"
-                  onClick={() => handleSortNumber('sobra380')}
+                  className="cursor-pointer border px-4 py-2"
+                  onClick={() => handleSortNumber("sobra380")}
                 >
                   Sobra / Falta 380
-                  {sortFieldNumber === 'sobra380' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
-                  {sortFieldNumber === 'sobra380' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
-                  {(sortFieldNumber !== 'sobra380' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
+                  {sortFieldNumber === "sobra380" &&
+                    sortDirectionNumber === "ASC" && (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    )}
+                  {sortFieldNumber === "sobra380" &&
+                    sortDirectionNumber === "DESC" && (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    )}
+                  {(sortFieldNumber !== "sobra380" ||
+                    sortDirectionNumber === null) && (
+                      <CgArrowsVAlt className="ml-2 inline-block" />
+                    )}
                 </th>
                 <th
-                  className="py-2 px-4 border cursor-pointer"
-                  onClick={() => handleSortNumber('valor380')}
+                  className="cursor-pointer border px-4 py-2"
+                  onClick={() => handleSortNumber("valor380")}
                 >
                   Evento 380
-                  {sortFieldNumber === 'valor380' && sortDirectionNumber === 'ASC' && <IoArrowUpOutline className="inline-block ml-2" />}
-                  {sortFieldNumber === 'valor380' && sortDirectionNumber === 'DESC' && <IoArrowDown className="inline-block ml-2" />}
-                  {(sortFieldNumber !== 'valor380' || sortDirectionNumber === null) && <CgArrowsVAlt className="inline-block ml-2" />}
+                  {sortFieldNumber === "valor380" &&
+                    sortDirectionNumber === "ASC" && (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    )}
+                  {sortFieldNumber === "valor380" &&
+                    sortDirectionNumber === "DESC" && (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    )}
+                  {(sortFieldNumber !== "valor380" ||
+                    sortDirectionNumber === null) && (
+                      <CgArrowsVAlt className="ml-2 inline-block" />
+                    )}
                 </th>
               </tr>
             </thead>
             <tbody>
-              {currentClients.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="py-2 px-4 border text-center">
-                    {noDataMessage || 'Sem informações'}
+              {currentClients.map((cliente) => (
+                <tr
+                  key={cliente.codi_emp}
+                  className="hover:bg-gray-100 dark:hover:bg-black-700"
+                >
+                  <td className="text-black-900 border px-4 py-2 dark:text-white">
+                    {cliente.nome}
+                  </td>
+                  <td className="text-black-900 border px-4 py-2 dark:text-white">
+                    {parseValue(cliente.sobra379) === 0
+                      ? "Sem informações"
+                      : parseValue(cliente.sobra379) < 0
+                        ? `Passou R$ ${parseValue(cliente.sobra379)}`
+                        : `Faltam R$ ${parseValue(cliente.sobra379)}`}
+                  </td>
+                  <td
+                    className={`text-black-900 border px-4 py-2 dark:text-white ${getBackgroundColor(cliente.valor379)}`}
+                  >
+                    {isNaN(parseValue(cliente.valor379)) ||
+                      parseValue(cliente.valor379) === Infinity ||
+                      parseValue(cliente.valor379) === -Infinity
+                      ? "0 %"
+                      : `${parseValue(cliente.valor379)} %`}
+                  </td>
+                  <td className="text-black-900 border px-4 py-2 dark:text-white">
+                    {parseValue(cliente.sobra380) === 0
+                      ? "Sem informações"
+                      : parseValue(cliente.sobra380) < 0
+                        ? `Passou R$ ${parseValue(cliente.sobra380)}`
+                        : `Faltam R$ ${parseValue(cliente.sobra380)}`}
+                  </td>
+                  <td
+                    className={`text-black-900 border px-4 py-2 dark:text-white ${getBackgroundColor(cliente.valor380)}`}
+                  >
+                    {isNaN(parseValue(cliente.valor380)) ||
+                      parseValue(cliente.valor380) === Infinity ||
+                      parseValue(cliente.valor380) === -Infinity
+                      ? "0 %"
+                      : `${parseValue(cliente.valor380)} %`}
                   </td>
                 </tr>
-              ) : (
-                currentClients.map((cliente) => (
-                  <tr
-                    key={cliente.codi_emp}
-                    className="hover:bg-gray-100 dark:hover:bg-black-700"
-                  >
-                    <td className="py-2 px-4 border text-black-900 dark:text-white">{cliente.nome}</td>
-                    <td className="py-2 px-4 border text-black-900 dark:text-white">
-                      {parseValue(cliente.sobra379) === 0
-                        ? 'Sem informações'
-                        : parseValue(cliente.sobra379) < 0
-                          ? `Passou R$ ${parseValue(cliente.sobra379)}`
-                          : `Faltam R$ ${parseValue(cliente.sobra379)}`}
-                    </td>
-                    <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
-                      {isNaN(parseValue(cliente.valor379)) || parseValue(cliente.valor379) === Infinity || parseValue(cliente.valor379) === -Infinity
-                        ? '0 %'
-                        : `${parseValue(cliente.valor379)} %`}
-                    </td>
-                    <td className="py-2 px-4 border text-black-900 dark:text-white">
-                      {parseValue(cliente.sobra380) === 0
-                        ? 'Sem informações'
-                        : parseValue(cliente.sobra380) < 0
-                          ? `Passou R$ ${parseValue(cliente.sobra380)}`
-                          : `Faltam R$ ${parseValue(cliente.sobra380)}`}
-                    </td>
-                    <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
-                      {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity
-                        ? '0 %'
-                        : `${parseValue(cliente.valor380)} %`}
-                    </td>
-                  </tr>
-                ))
-              )}
+              ))}
             </tbody>
           </table>
         </div>
+
         <div className="flex justify-between items-center mt-4">
           <div className="flex flex-1 justify-center space-x-2">
             <button
@@ -536,6 +571,7 @@ const ClientList: React.FC = () => {
           </select>
         </div>
       </div>
+
     </DefaultLayout>
   );
 };

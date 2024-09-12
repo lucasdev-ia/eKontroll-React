@@ -47,6 +47,14 @@ const ClientList: React.FC = () => {
   const [filterActive, setFilterActive] = useState(false);
 
   useEffect(() => {
+
+    const hoje = new Date();
+    const anoAtual = getYear(hoje);
+    const dataPassada = subMonths(hoje, 1);
+    const nomeMesPassado = format(dataPassada, "MMMM");
+    setMesSelecionado(nomeMesPassado.toLowerCase());
+    setAnoSelecionado(anoAtual.toString());
+
     const fetchData = async () => {
       try {
         const data = `${MesSelecionado}${AnoSelecionado}`

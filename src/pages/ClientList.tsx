@@ -46,15 +46,7 @@ const ClientList: React.FC = () => {
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState(false);
 
-  useEffect(() => {
-
-    const hoje = new Date();
-    const anoAtual = getYear(hoje);
-    const dataPassada = subMonths(hoje, 1);
-    const nomeMesPassado = format(dataPassada, "MMMM");
-    setMesSelecionado(nomeMesPassado.toLowerCase());
-    setAnoSelecionado(anoAtual.toString());
-
+  useEffect(() => { 
     const fetchData = async () => {
       try {
         const data = `${MesSelecionado}${AnoSelecionado}`
@@ -91,6 +83,19 @@ const ClientList: React.FC = () => {
 
     fetchData();
   }, [MesSelecionado, AnoSelecionado]);
+
+
+  useEffect(() => {
+    // Definir o mês e ano inicial baseado na data atual
+    const hoje = new Date();
+    const anoAtual = getYear(hoje);
+    const dataPassada = subMonths(hoje, 1);
+    const nomeMesPassado = format(dataPassada, "MMMM").toLowerCase();
+
+    // Definir o mês e ano selecionado para o mês passado
+    setMesSelecionado(nomeMesPassado);
+    setAnoSelecionado(anoAtual.toString());
+  }, []);
 
   const selecionarMes = (mes) => {
     setMesSelecionado(mes.target.value);
@@ -327,7 +332,7 @@ const ClientList: React.FC = () => {
                 onChange={selecionarMes}
                 className="border-borderFiltros rounded p-1 dark:bg-corFiltros dark:text-white"
               >
-                <option value="january">Janeiro</option>
+                <option value="january">Janeiro</option>                                              
                 <option value="february">Fevereiro</option>
                 <option value="march">Março</option>
                 <option value="april">Abril</option>

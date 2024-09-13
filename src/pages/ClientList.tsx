@@ -45,6 +45,7 @@ const ClientList: React.FC = () => {
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState<string | null>(null);
+  const [goHome, setGoHome] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,7 +99,6 @@ const ClientList: React.FC = () => {
     fetchData();
   }, [MesSelecionado, AnoSelecionado]);
 
-
   useEffect(() => {
     const hoje = new Date();
     const anoAtual = getYear(hoje);
@@ -113,16 +113,13 @@ const ClientList: React.FC = () => {
     setMesSelecionado(mes.target.value);
   }
   useEffect(() => {
-    console.log(MesSelecionado);
   }, [MesSelecionado]);
 
   const selecionarAno = (ano) => {
     setAnoSelecionado(ano.target.value);
   }
   useEffect(() => {
-    console.log(AnoSelecionado);
   }, [AnoSelecionado]);
-
 
   const handleSortNumber = (field: string) => {
     let newSortDirection: string | null = "DESC";
@@ -404,7 +401,6 @@ const ClientList: React.FC = () => {
             </div>
           </div>
         </div>
-
         <div className="overflow-x-auto">
           <table className="dark:border-gray-700 min-w-full border bg-white text-black dark:bg-[#1e2a38] dark:text-white">
             <thead>

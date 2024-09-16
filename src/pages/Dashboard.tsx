@@ -72,7 +72,6 @@ const Dashboard: React.FC = () => {
     const BirthdayData = async () => {
       try {
         const data = await consultaAniversario();
-        console.log(data)
         setBirthday(data);
       } catch (error) {
         console.error("Erro ao buscar dados da API", error);
@@ -85,7 +84,6 @@ const Dashboard: React.FC = () => {
     const AniversarioSocios = async () => {
       try {
         const data = await consultaAniversarioSocio();
-        console.log(data)
         setSocio(data);
       } catch (error) {
         console.error("Erro ao buscar dados da API", error);
@@ -128,7 +126,6 @@ const Dashboard: React.FC = () => {
           // Ordem decrescente
           return maxB - maxA;
         });
-        console.log(organizedData)
         setEventos(organizedData);
       } catch (error) {
         console.error("Erro ao buscar dados da API", error);

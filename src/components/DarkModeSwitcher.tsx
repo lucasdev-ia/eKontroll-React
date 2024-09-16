@@ -25,7 +25,7 @@ const DarkModeSwitcher = () => {
             colorMode === "dark" && "!right-[3px] !translate-x-full"
           }`}
         >
-          <span className="dark:hidden">
+          <span className="dark:hidden"> 
             <svg
               width="16"
               height="16"

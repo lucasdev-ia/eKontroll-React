@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
   const [contador, setContador] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     if (location.state && location.state.clientId) {
       const clientId = location.state.clientId;
@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
   const currentYear = currentDate.getFullYear();
   const monthNames = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"  
   ];
   const currentMonthName = monthNames[currentMonth - 1];
   const filteredData = data.filter((item: any) => {
@@ -183,7 +183,7 @@ const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-white">
+      <div className="flex h-screen items-center justify-center bg-white dark:bg-corFiltros">
         <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" />
       </div>
     );
@@ -194,7 +194,7 @@ const Dashboard: React.FC = () => {
         <Card
           value={filtro.length} // para ver o total é so colocar data
           title="Total de clientes"
-          Cardimg={logo(1)}
+          Cardimg={logo(1)} 
           dataCadastro=""
           online={true}
         />

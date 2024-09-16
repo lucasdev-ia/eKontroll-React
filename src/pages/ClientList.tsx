@@ -242,8 +242,8 @@ const ClientList: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-white dark:bg-loadingcor">
-        <div className="borde r-primary h-16 w-16 animate-spin rounded-full border-4 border-solid border-t-transparent" />
+      <div className="flex h-screen items-center justify-center bg-white dark:bg-corFiltros">
+        <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent" />
       </div>
     );
   }
@@ -288,7 +288,7 @@ const ClientList: React.FC = () => {
 
   const handleFirstPage = () => {
     setCurrentPage(1);
-  };
+  };  
 
   const handleLastPage = () => {
     setCurrentPage(totalPages);

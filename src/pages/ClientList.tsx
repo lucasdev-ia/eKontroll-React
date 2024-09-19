@@ -421,42 +421,6 @@ const ClientList: React.FC = () => {
                 </th>
                 <th
                   className="cursor-pointer border px-4 py-2"
-                  onClick={() => handleSortNumber("sobra379")}
-                >
-                  Sobra / Falta 379
-                  {sortFieldNumber === "sobra379" &&
-                    sortDirectionNumber === "ASC" && (
-                      <IoArrowUpOutline className="ml-2 inline-block" />
-                    )}
-                  {sortFieldNumber === "sobra379" &&
-                    sortDirectionNumber === "DESC" && (
-                      <IoArrowDown className="ml-2 inline-block" />
-                    )}
-                  {(sortFieldNumber !== "sobra379" ||
-                    sortDirectionNumber === null) && (
-                      <CgArrowsVAlt className="ml-2 inline-block" />
-                    )}
-                </th>
-                <th
-                  className="cursor-pointer border px-4 py-2"
-                  onClick={() => handleSortNumber("valor379")}
-                >
-                  Evento 379
-                  {sortFieldNumber === "valor379" &&
-                    sortDirectionNumber === "ASC" && (
-                      <IoArrowUpOutline className="ml-2 inline-block" />
-                    )}
-                  {sortFieldNumber === "valor379" &&
-                    sortDirectionNumber === "DESC" && (
-                      <IoArrowDown className="ml-2 inline-block" />
-                    )}
-                  {(sortFieldNumber !== "valor379" ||
-                    sortDirectionNumber === null) && (
-                      <CgArrowsVAlt className="ml-2 inline-block" />
-                    )}
-                </th>
-                <th
-                  className="cursor-pointer border px-4 py-2"
                   onClick={() => handleSortNumber("sobra380")}
                 >
                   Sobra / Falta 380
@@ -508,23 +472,16 @@ const ClientList: React.FC = () => {
                   >
                     <td className="py-2 px-4 border text-black-900 dark:text-white">{cliente.nome}</td>
                     <td className="py-2 px-4 border text-black-900 dark:text-white">
-                      {parseValue(cliente.sobra379) === 0
-                        ? 'Sem informações'
-                        : parseValue(cliente.sobra379) < 0
-                          ? `Passou R$ ${parseValue(cliente.sobra379)}`
-                          : `Faltam R$ ${parseValue(cliente.sobra379)}`}
-                    </td>
-                    <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor379)}`}>
-                      {isNaN(parseValue(cliente.valor379)) || parseValue(cliente.valor379) === Infinity || parseValue(cliente.valor379) === -Infinity
-                        ? '0 %'
-                        : `${parseValue(cliente.valor379)} %`}
-                    </td>
-                    <td className="py-2 px-4 border text-black-900 dark:text-white">
                       {parseValue(cliente.sobra380) === 0
                         ? 'Sem informações'
-                        : parseValue(cliente.sobra380) < 0
-                          ? `Passou R$ ${parseValue(cliente.sobra380)}`
-                          : `Faltam R$ ${parseValue(cliente.sobra380)}`}
+                        : (
+                          <div className="flex justify-between">
+                            <span>R$</span>
+                            <span className="text-right">
+                              {parseValue(cliente.sobra380)}
+                            </span>
+                          </div>
+                        )}
                     </td>
                     <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
                       {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity

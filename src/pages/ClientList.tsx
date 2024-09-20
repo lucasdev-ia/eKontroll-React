@@ -45,7 +45,6 @@ const ClientList: React.FC = () => {
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState<string | null>(null);
-  const [goHome, setGoHome] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,6 +104,7 @@ const ClientList: React.FC = () => {
     const dataPassada = subMonths(hoje, 1);
     const nomeMesPassado = format(dataPassada, "MMMM").toLowerCase();
 
+
     setMesSelecionado(nomeMesPassado);
     setAnoSelecionado(anoAtual.toString());
   }, []);
@@ -117,6 +117,7 @@ const ClientList: React.FC = () => {
 
   const selecionarAno = (ano) => {
     setAnoSelecionado(ano.target.value);
+
   }
   useEffect(() => {
   }, [AnoSelecionado]);
@@ -153,7 +154,6 @@ const ClientList: React.FC = () => {
       });
     }
   };
-
   const handleSeverityFilter = (severity: string) => {
     if (filterSeverity === severity) {
       setFilterSeverity(null);
@@ -162,49 +162,40 @@ const ClientList: React.FC = () => {
     } else {
       setFilterSeverity(severity);
       setFilterActive(true);
-
+  
       const filterValidValues = (valor: number) => {
         return valor !== Infinity && valor !== -Infinity && !isNaN(valor);
       };
-
+  
       if (severity === "Alto") {
         setData(
           originalData.filter(
             (cliente) =>
-              (filterValidValues(parseValue(cliente.valor379)) &&
-                parseValue(cliente.valor379) > 80) ||
-              (filterValidValues(parseValue(cliente.valor380)) &&
-                parseValue(cliente.valor380) > 80),
-          ),
+              filterValidValues(parseValue(cliente.valor380)) &&
+              parseValue(cliente.valor380) > 80
+          )
         );
       } else if (severity === "Medio") {
         setData(
           originalData.filter(
             (cliente) =>
-              (filterValidValues(parseValue(cliente.valor379)) &&
-                parseValue(cliente.valor379) > 50 &&
-                parseValue(cliente.valor379) <= 80) ||
-              (filterValidValues(parseValue(cliente.valor380)) &&
-                parseValue(cliente.valor380) > 50 &&
-                parseValue(cliente.valor380) <= 80),
-          ),
+              filterValidValues(parseValue(cliente.valor380)) &&
+              parseValue(cliente.valor380) > 50 &&
+              parseValue(cliente.valor380) <= 80
+          )
         );
       } else if (severity === "Baixo") {
         setData(
           originalData.filter(
             (cliente) =>
-              (filterValidValues(parseValue(cliente.valor379)) &&
-                parseValue(cliente.valor379) > 20 &&
-                parseValue(cliente.valor379) <= 50) ||
-              (filterValidValues(parseValue(cliente.valor380)) &&
-                parseValue(cliente.valor380) > 20 &&
-                parseValue(cliente.valor380) <= 50),
-          ),
+              filterValidValues(parseValue(cliente.valor380)) &&
+              parseValue(cliente.valor380) > 20 &&
+              parseValue(cliente.valor380) <= 50
+          )
         );
       }
     }
   };
-
   const handleSort = (field: string) => {
     let newSortDirection;
 
@@ -285,7 +276,6 @@ const ClientList: React.FC = () => {
 
     return pageNumbers;
   };
-
   const handleFirstPage = () => {
     setCurrentPage(1);
   };  
@@ -324,8 +314,8 @@ const ClientList: React.FC = () => {
 
   return (
     <DefaultLayout>
-      <div className="container mx-auto p-4">
-        <div className="mb- flex items-center justify-between">
+      <div className="container mx-auto p-2">
+        <div className="mb-2 flex items-center justify-between">
           <div className="flex items-center">
             <h1 className="text-2xl font-bold text-black dark:text-white">
               Lista de Clientes
@@ -470,26 +460,26 @@ const ClientList: React.FC = () => {
                     key={cliente.codi_emp}
                     className="hover:bg-gray-100 dark:hover:bg-black-700"
                   >
-                    <td className="py-2 px-4 border text-black-900 dark:text-white">{cliente.nome}</td>
-                    <td className="py-2 px-4 border text-black-900 dark:text-white">
+                    <td className="py-2 px-4 w-1/4 truncate border text-black-900 dark:text-white font-mono">{cliente.nome}</td>
+                    <td className="py-2 px-4 w-1/6 border text-black-900 dark:text-white">
                       {parseValue(cliente.sobra380) === 0
                         ? 'Sem informações'
                         : (
                           <div className="flex justify-between">
-                            <span>R$</span>
+                            <span>R$</span> 
                             <span className="text-right">
                               {parseValue(cliente.sobra380)}
                             </span>
                           </div>
                         )}
                     </td>
-                    <td className={`py-2 px-4 border text-black-900 dark:text-white ${getBackgroundColor(cliente.valor380)}`}>
+                    <td className={`py-2 px-4 w-1/6 border text-black-900 dark:text-white font-mono ${getBackgroundColor(cliente.valor380)}`}>
                       {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity
                         ? '0 %'
                         : `${parseValue(cliente.valor380)} %`}
                     </td>
                   </tr>
-                ))
+                ))         
               )}
             </tbody>
           </table>
@@ -497,7 +487,7 @@ const ClientList: React.FC = () => {
         <div className="flex justify-between items-center mt-4">
           <div className="flex flex-1 justify-center space-x-2">
             <button
-              onClick={handleFirstPage}
+              onClick={handleFirstPage} 
               className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
               disabled={currentPage === 1}
             >
@@ -508,6 +498,7 @@ const ClientList: React.FC = () => {
               className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
               disabled={currentPage === 1}
             >
+            
               <HiOutlineArrowSmallLeft className="inline-block text-gray-700 dark:text-white" />
             </button>
             {getPageNumbers().map((pageNumber) => (

@@ -40,8 +40,7 @@ const ClientList: React.FC = () => {
   const [sortDirectionNumber, setSortDirectionNumber] = useState<string | null>(
     null,
   );
-  const [MesSelecionado, setMesSelecionado] = useState<string>(`${nomeMesPassado}`);
-  const [AnoSelecionado, setAnoSelecionado] = useState<string>(`${anoAtual}`);
+
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState<string | null>(null);
@@ -49,8 +48,7 @@ const ClientList: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = `${MesSelecionado}${AnoSelecionado}`;
-        const response = await consultaEventosPorData(data);
+        const response = await consultaEventos()
 
         if (Array.isArray(response)) {
           if (response.length === 0) {
@@ -96,31 +94,10 @@ const ClientList: React.FC = () => {
     };
 
     fetchData();
-  }, [MesSelecionado, AnoSelecionado]);
-
-  useEffect(() => {
-    const hoje = new Date();
-    const anoAtual = getYear(hoje);
-    const dataPassada = subMonths(hoje, 1);
-    const nomeMesPassado = format(dataPassada, "MMMM").toLowerCase();
-
-
-    setMesSelecionado(nomeMesPassado);
-    setAnoSelecionado(anoAtual.toString());
   }, []);
 
-  const selecionarMes = (mes) => {
-    setMesSelecionado(mes.target.value);
-  }
-  useEffect(() => {
-  }, [MesSelecionado]);
 
-  const selecionarAno = (ano) => {
-    setAnoSelecionado(ano.target.value);
-
-  }
-  useEffect(() => {
-  }, [AnoSelecionado]);
+  
 
   const handleSortNumber = (field: string) => {
     let newSortDirection: string | null = "DESC";
@@ -325,33 +302,6 @@ const ClientList: React.FC = () => {
                 htmlFor="clientsPerPage"
                 className="text-black dark:text-white"
               ></label>
-              <select
-                id="MonthClient"
-                value={MesSelecionado}
-                onChange={selecionarMes}
-                className="border-borderFiltros rounded p-1 dark:bg-corFiltros dark:text-white"
-              >
-                <option value="january">Janeiro</option>
-                <option value="february">Fevereiro</option>
-                <option value="march">Março</option>
-                <option value="april">Abril</option>
-                <option value="may">Maio</option>
-                <option value="june">Junho</option>
-                <option value="july">Julho</option>
-                <option value="august">Agosto</option>
-                <option value="september">Setembro</option>
-                <option value="october">Outubro</option>
-                <option value="november">Novembro</option>
-                <option value="december">Dezembro</option>
-              </select>
-              <select
-                id="YearClient"
-                value={AnoSelecionado}
-                onChange={selecionarAno}
-                className="border-borderFiltros rounded p-1 dark:bg-corFiltros dark:text-white"
-              >
-                <option value="2024">2024</option>
-              </select>
             </div>
           </div>
         </div>

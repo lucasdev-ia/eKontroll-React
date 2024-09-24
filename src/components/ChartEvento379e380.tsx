@@ -11,7 +11,7 @@ interface ChartProps {
   sobrou380: number;
 }
 function valueToPercent(value1: number, value2: number): number[] {
-  return [Math.round((value2 * 100) / 100)];
+  return [Math.round((value1 * 100) / 100), Math.round((value2 * 100) / 100)];
 }
 
 const ChartEvento379e380: React.FC<ChartProps> = ({ valor1, valor2, empresa, sobrou379, sobrou380 }) => {

@@ -22,7 +22,7 @@ const Calendar: React.FC = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto px-4 -mt-12">
-        <h1 className="text-2xl font-semibold mb-4 mt-4 text-center">Calendário</h1>
+        <h1 className="text-2xl font-semibold mb-4 mt-4 text-center text-white">Calendário</h1>
 
         <div className="bg-white px-10 py-3 text-black-2 shadow-default dark:border-strokedark dark:bg-boxdark dark:text-white">
           <CalendarComponent2 />

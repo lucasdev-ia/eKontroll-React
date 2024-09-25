@@ -218,7 +218,6 @@ const ClientList: React.FC = () => {
     setClientsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1); // Reinicia para a primeira página
   };
-
   
   const formatCurrency = (value) =>  {
     return value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

@@ -7,6 +7,8 @@ module.exports = {
   theme: {
     fontFamily: {
       satoshi: ["Satoshi", "sans-serif"],
+      sans: ['inter', 'Roboto', 'sans-serif'],
+      mono: ['Fira Code', 'monospace'],
     },
     screens: {
       "2xsm": "375px",

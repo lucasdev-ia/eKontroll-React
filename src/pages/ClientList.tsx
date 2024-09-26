@@ -5,7 +5,7 @@ import {
   HiOutlineArrowSmallLeft,
   HiOutlineArrowSmallRight,
 } from "react-icons/hi2";
-import { IoArrowUpOutline, IoArrowDown } from "react-icons/io5";
+import { IoArrowUpOutline, IoArrowDown, IoVolumeOff } from "react-icons/io5";
 import { LuArrowRightToLine, LuArrowLeftToLine } from "react-icons/lu";
 import { CgArrowsVAlt } from "react-icons/cg";
 import { format, getYear, getMonth, subMonths } from "date-fns";
@@ -44,8 +44,7 @@ const ClientList: React.FC = () => {
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState<string | null>(null);
-
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {

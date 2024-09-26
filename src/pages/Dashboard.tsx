@@ -238,7 +238,7 @@ const Dashboard: React.FC = () => {
               </Link>
             </div>
           </div>
-          <div className="mt-4 flex items-center justify-center font-bold">
+          <div className="mt-4 flex items-center justify-center font-bold font-sans">
             <div className="bg-laranjalogo mr-2 h-5 w-5 rounded-full"></div>
             <h1 className="mr-20">EVENTO 379</h1>
             <div className="bg-azullogo mr-2 h-5 w-5 rounded-full"></div>

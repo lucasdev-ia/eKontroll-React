@@ -44,7 +44,7 @@ const ClientList: React.FC = () => {
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState<string | null>(null);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -90,7 +90,7 @@ const ClientList: React.FC = () => {
     fetchData();
   }, []);
 
-    const handleSortNumber = (field: string) => {
+  const handleSortNumber = (field: string) => {
     let newSortDirection: string | null = "DESC";
 
     if (sortFieldNumber === field && sortDirectionNumber === "DESC") {
@@ -217,8 +217,8 @@ const ClientList: React.FC = () => {
     setClientsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1); // Reinicia para a primeira página
   };
-  
-  const formatCurrency = (value) =>  {
+
+  const formatCurrency = (value) => {
     return value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
   const indexOfLastClient = currentPage * clientsPerPage;
@@ -248,7 +248,7 @@ const ClientList: React.FC = () => {
     return pageNumbers;
   };
   const handleFirstPage = () => {
-    setCurrentPage(1);  
+    setCurrentPage(1);
   };
 
   const handleLastPage = () => {
@@ -284,203 +284,203 @@ const ClientList: React.FC = () => {
   };
 
   return (
-<DefaultLayout>
-  <div className="container mx-auto p-0" style={{ marginTop: '0', paddingTop: '0' }}>
-    <div className="flex items-center justify-between" style={{ margin: '0', padding: '0' }}>
-      <div className="flex items-center">
-        <h1 className="text-2xl font-bold text-black dark:text-white text-center font-sans">
-          Lista de Clientes
-        </h1>
-        <div className="ml-2 flex items-center space-x-2">
-          <label
-            htmlFor="clientsPerPage"
-            className="text-black dark:text-white"
-          ></label> 
+    <DefaultLayout>
+      <div className="container mx-auto p-0" style={{ marginTop: '0', paddingTop: '0' }}>
+        <div className="flex items-center justify-between" style={{ margin: '0', padding: '0' }}>
+          <div className="flex items-center">
+            <h1 className="text-2xl font-bold text-black dark:text-white text-center font-sans">
+              Lista de Clientes
+            </h1>
+            <div className="ml-2 flex items-center space-x-2">
+              <label
+                htmlFor="clientsPerPage"
+                className="text-black dark:text-white"
+              ></label>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div className="flex justify-end">
-      <div className="flex items-center space-x-2 mb-2">
-        <div className="flex items-center space-x-2 mb-0">
-          <span
-            className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 text-sm font-semibold text-white dark:bg-blackseveridade font-sans"
-            onClick={handleResetFilter}
-          >
-            Severidade:
-          </span>
-        </div>
-        <div className="flex items-center space-x-2 mb-0">
-          <span
-            className={`inline-block cursor-pointer rounded-full bg-red-700 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Alto" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-red-800 font-sans`}
-            onClick={() => handleSeverityFilter("Alto")}
-          >
-            Alto
-          </span>
-        </div>
-        <div className="flex items-center space-x-2 mb-0">
-          <span
-            className={`inline-block cursor-pointer rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Medio" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-yellow-800 font-sans`}
-            onClick={() => handleSeverityFilter("Medio")}
-          >
-            Medio
-          </span>
-        </div>
-        <div className="flex items-center space-x-2 mb-0">
-          <span
-            className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Baixo" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-green-900 font-sans`}
-            onClick={() => handleSeverityFilter("Baixo")}
-          >
-            Baixo
-          </span>
-        </div>
-      </div>
-    </div>
-    <div className="overflow-x-auto">
-      <table className="dark:border-gray-700 min-w-full border bg-white text-black dark:bg-[#1e2a38] dark:text-white">
-        <thead>
-          <tr>
-            <th
-              className="cursor-pointer border px-4 py-2 font-sans"
-              onClick={() => handleSort("nome")}
-            >
-              Nome{""}
-              {sortField === "nome" &&
-                (sortDirection === "ASC" ? (
-                  <IoArrowUpOutline className="ml-2 inline-block" />
-                ) : sortDirection === "DESC" ? (
-                  <IoArrowDown className="ml-2 inline-block" />
-                ) : (
-                  <CgArrowsVAlt className="ml-2 inline-block" />
-                ))}
-            </th>
-            <th
-              className="cursor-pointer border px-4 py-2 font-sans"
-              onClick={() => handleSortNumber("sobra380")}
-            >
-              Sobra / Falta 380
-              {sortFieldNumber === "sobra380" &&
-                sortDirectionNumber === "ASC" && (
-                  <IoArrowUpOutline className="ml-2 inline-block" />
-                )}
-              {sortFieldNumber === "sobra380" &&
-                sortDirectionNumber === "DESC" && (
-                  <IoArrowDown className="ml-2 inline-block" />
-                )}
-              {(sortFieldNumber !== "sobra380" ||
-                sortDirectionNumber === null) && (
-                  <CgArrowsVAlt className="ml-2 inline-block" />
-                )}
-            </th>
-            <th
-              className="cursor-pointer border px-4 py-2 font-sans"
-              onClick={() => handleSortNumber("valor380")}
-            >
-              Evento 380
-              {sortFieldNumber === "valor380" &&
-                sortDirectionNumber === "ASC" && (
-                  <IoArrowUpOutline className="ml-2 inline-block" />
-                )}
-              {sortFieldNumber === "valor380" &&
-                sortDirectionNumber === "DESC" && (
-                  <IoArrowDown className="ml-2 inline-block" />
-                )}
-              {(sortFieldNumber !== "valor380" ||
-                sortDirectionNumber === null) && (
-                  <CgArrowsVAlt className="ml-2 inline-block" />
-                )}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentClients.length === 0 ? (
-            <tr>
-              <td colSpan={5} className="py-2 px-4 border text-center">
-                {noDataMessage || 'Sem informações'}
-              </td>
-            </tr>
-          ) : (
-            currentClients.map((cliente) => (
-              <tr
-                key={cliente.codi_emp}
-                className="hover:bg-gray-100 dark:hover:bg-black-700"
+        <div className="flex justify-end">
+          <div className="flex items-center space-x-2 mb-2">
+            <div className="flex items-center space-x-2 mb-0">
+              <span
+                className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 text-sm font-semibold text-white dark:bg-blackseveridade font-sans"
+                onClick={handleResetFilter}
               >
-                <td className="py-2 px-4 w-1/4 truncate border text-black-900 dark:text-white font-sans">{cliente.nome}</td>
-                <td className="py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans">
-                  {parseValue(cliente.sobra380) === 0
-                    ? 'Sem informações'
-                    : (
-                      <div className="flex justify-between">
-                        <span>R$</span>
-                        <span className="text-right">
-                        {formatCurrency(parseValue(cliente.sobra380))}
-                        </span>
-                      </div>
+                Severidade:
+              </span>
+            </div>
+            <div className="flex items-center space-x-2 mb-0">
+              <span
+                className={`inline-block cursor-pointer rounded-full bg-red-700 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Alto" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-red-800 font-sans`}
+                onClick={() => handleSeverityFilter("Alto")}
+              >
+                Alto
+              </span>
+            </div>
+            <div className="flex items-center space-x-2 mb-0">
+              <span
+                className={`inline-block cursor-pointer rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Medio" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-yellow-800 font-sans`}
+                onClick={() => handleSeverityFilter("Medio")}
+              >
+                Medio
+              </span>
+            </div>
+            <div className="flex items-center space-x-2 mb-0">
+              <span
+                className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Baixo" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-green-900 font-sans`}
+                onClick={() => handleSeverityFilter("Baixo")}
+              >
+                Baixo
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="dark:border-gray-700 min-w-full border bg-white text-black dark:bg-[#1e2a38] dark:text-white">
+            <thead>
+              <tr>
+                <th
+                  className="cursor-pointer border px-4 py-2 font-sans"
+                  onClick={() => handleSort("nome")}
+                >
+                  Nome{""}
+                  {sortField === "nome" &&
+                    (sortDirection === "ASC" ? (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    ) : sortDirection === "DESC" ? (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    ) : (
+                      <CgArrowsVAlt className="ml-2 inline-block" />
+                    ))}
+                </th>
+                <th
+                  className="cursor-pointer border px-4 py-2 font-sans"
+                  onClick={() => handleSortNumber("sobra380")}
+                >
+                  Sobra / Falta 380
+                  {sortFieldNumber === "sobra380" &&
+                    sortDirectionNumber === "ASC" && (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
                     )}
-                </td>
-                <td className={`py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans ${getBackgroundColor(cliente.valor380)}`}>
-                  {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity
-                    ? '0 %'
-                    : `${formatCurrency(parseValue(cliente.valor380))} %`}
-                </td>
+                  {sortFieldNumber === "sobra380" &&
+                    sortDirectionNumber === "DESC" && (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    )}
+                  {(sortFieldNumber !== "sobra380" ||
+                    sortDirectionNumber === null) && (
+                      <CgArrowsVAlt className="ml-2 inline-block" />
+                    )}
+                </th>
+                <th
+                  className="cursor-pointer border px-4 py-2 font-sans"
+                  onClick={() => handleSortNumber("valor380")}
+                >
+                  Evento 380
+                  {sortFieldNumber === "valor380" &&
+                    sortDirectionNumber === "ASC" && (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    )}
+                  {sortFieldNumber === "valor380" &&
+                    sortDirectionNumber === "DESC" && (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    )}
+                  {(sortFieldNumber !== "valor380" ||
+                    sortDirectionNumber === null) && (
+                      <CgArrowsVAlt className="ml-2 inline-block" />
+                    )}
+                </th>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
-    <div className="flex justify-between items-center mt-2">
-      <div className="flex flex-1 justify-center space-x-2">
-        <button
-          onClick={handleFirstPage}
-          className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-          disabled={currentPage === 1}
-        >
-          <LuArrowLeftToLine className="inline-block text-gray-700 dark:text-white" />
-        </button>
-        <button
-          onClick={handlePreviousPage}
-          className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-          disabled={currentPage === 1}
-        >
-          <HiOutlineArrowSmallLeft className="inline-block text-gray-700 dark:text-white" />
-        </button>
-        {getPageNumbers().map((pageNumber) => (
-          <button
-            key={pageNumber}
-            onClick={() => handlePageChange(pageNumber)}
-            className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-azullogo dark:bg-azullogo text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
+            </thead>
+            <tbody>
+              {currentClients.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-2 px-4 border text-center">
+                    {noDataMessage || 'Sem informações'}
+                  </td>
+                </tr>
+              ) : (
+                currentClients.map((cliente) => (
+                  <tr
+                    key={cliente.codi_emp}
+                    className="hover:bg-gray-100 dark:hover:bg-black-700"
+                  >
+                    <td className="py-2 px-4 w-1/4 truncate border text-black-900 dark:text-white font-sans">{cliente.nome}</td>
+                    <td className="py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans">
+                      {parseValue(cliente.sobra380) === 0
+                        ? 'Sem informações'
+                        : (
+                          <div className="flex justify-between">
+                            <span>R$</span>
+                            <span className="text-right">
+                              {formatCurrency(parseValue(cliente.sobra380))}
+                            </span>
+                          </div>
+                        )}
+                    </td>
+                    <td className={`py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans ${getBackgroundColor(cliente.valor380)}`}>
+                      {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity
+                        ? '0 %'
+                        : `${formatCurrency(parseValue(cliente.valor380))} %`}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex justify-between items-center mt-2">
+          <div className="flex flex-1 justify-center space-x-2">
+            <button
+              onClick={handleFirstPage}
+              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+              disabled={currentPage === 1}
+            >
+              <LuArrowLeftToLine className="inline-block text-gray-700 dark:text-white" />
+            </button>
+            <button
+              onClick={handlePreviousPage}
+              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+              disabled={currentPage === 1}
+            >
+              <HiOutlineArrowSmallLeft className="inline-block text-gray-700 dark:text-white" />
+            </button>
+            {getPageNumbers().map((pageNumber) => (
+              <button
+                key={pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+                className={`px-4 py-2 border rounded ${currentPage === pageNumber ? 'bg-azullogo dark:bg-azullogo text-white' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
+              >
+                {pageNumber}
+              </button>
+            ))}
+            <button
+              onClick={handleNextPage}
+              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+              disabled={currentPage === totalPages}
+            >
+              <HiOutlineArrowSmallRight className="inline-block text-gray-700 dark:text-white" />
+            </button>
+            <button
+              onClick={handleLastPage}
+              className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
+              disabled={currentPage === totalPages}
+            >
+              <LuArrowRightToLine className="inline-block text-gray-700 dark:text-white" />
+            </button>
+          </div>
+          <select
+            id="clientsPerPage"
+            value={clientsPerPage}
+            onChange={handleClientsPerPageChange}
+            className="border-borderFiltros rounded p-1 dark:bg-corFiltros dark:text-white"
           >
-            {pageNumber}
-          </button>
-        ))}
-        <button
-          onClick={handleNextPage}
-          className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-          disabled={currentPage === totalPages}
-        >
-          <HiOutlineArrowSmallRight className="inline-block text-gray-700 dark:text-white" />
-        </button>
-        <button
-          onClick={handleLastPage}
-          className="px-4 py-2 border rounded bg-gray-200 dark:bg-gray-800 dark:border-gray-600"
-          disabled={currentPage === totalPages}
-        >
-          <LuArrowRightToLine className="inline-block text-gray-700 dark:text-white" />
-        </button>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
       </div>
-      <select
-        id="clientsPerPage"
-        value={clientsPerPage}
-        onChange={handleClientsPerPageChange}
-        className="border-borderFiltros rounded p-1 dark:bg-corFiltros dark:text-white"
-      >
-        <option value="25">25</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-      </select>
-    </div>
-  </div>
-</DefaultLayout>
+    </DefaultLayout>
   );
 };
 

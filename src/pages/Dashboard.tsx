@@ -29,8 +29,9 @@ const Dashboard: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  
-  
+
+
+
   useEffect(() => {
     if (location.state && location.state.clientId) {
       const clientId = location.state.clientId;
@@ -57,7 +58,7 @@ const Dashboard: React.FC = () => {
   const currentYear = currentDate.getFullYear();
   const monthNames = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"  
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
   const currentMonthName = monthNames[currentMonth - 1];
   const filteredData = data.filter((item: any) => {
@@ -136,7 +137,6 @@ const Dashboard: React.FC = () => {
     Eventos379e380();
   }, []);
 
-
   /*IMAGENS*/
   const logo = (imagem) => {
     if (imagem == 1)
@@ -171,7 +171,7 @@ const Dashboard: React.FC = () => {
     fetchDataAsync();
   }, []);
 
-  
+
   useEffect(() => {
     const processDataAsync = async () => {
       const dataconv = await processData(data);
@@ -193,7 +193,7 @@ const Dashboard: React.FC = () => {
         <Card
           value={filtro.length} // para ver o total é so colocar data
           title="Total de clientes"
-          Cardimg={logo(1)} 
+          Cardimg={logo(1)}
           dataCadastro=""
           online={true}
         />
@@ -271,7 +271,7 @@ const Dashboard: React.FC = () => {
             title="Mostrando a distribuição atual da base de clientes da office"
             informacao="Resumo de Clientes Ativos/Inativo" />
           <div className="mt-10 text-black-2 dark:text-white">
-            <LucroChart />    
+            <LucroChart />
           </div>
         </div>
       </div>

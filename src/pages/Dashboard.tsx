@@ -18,6 +18,7 @@ import LucroChart from "../components/LucroChart.tsx";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 
+
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [BirhtdayData, setBirthday] = useState<any>();
@@ -29,9 +30,6 @@ const Dashboard: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-
-
-
   useEffect(() => {
     if (location.state && location.state.clientId) {
       const clientId = location.state.clientId;
@@ -58,7 +56,7 @@ const Dashboard: React.FC = () => {
   const currentYear = currentDate.getFullYear();
   const monthNames = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    "Julho", "Ag  osto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
   const currentMonthName = monthNames[currentMonth - 1];
   const filteredData = data.filter((item: any) => {
@@ -106,7 +104,7 @@ const Dashboard: React.FC = () => {
     }
     return parseFloat(value);
   }
-
+  
   useEffect(() => {
 
     const Eventos379e380 = async () => {

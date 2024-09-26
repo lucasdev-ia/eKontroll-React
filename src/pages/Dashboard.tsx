@@ -29,6 +29,8 @@ const Dashboard: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
+  
+  
   useEffect(() => {
     if (location.state && location.state.clientId) {
       const clientId = location.state.clientId;
@@ -169,7 +171,7 @@ const Dashboard: React.FC = () => {
     fetchDataAsync();
   }, []);
 
-
+  
   useEffect(() => {
     const processDataAsync = async () => {
       const dataconv = await processData(data);
@@ -243,7 +245,7 @@ const Dashboard: React.FC = () => {
             <h2>EVENTO 380</h2>
           </div>
 
-          <div className=" place-items-end grid grid-cols-3 text-black-2 dark:text-white">
+          <div className=" place-items-end grid grid-cols-3 text-black-2 dark:text-white font-sans">
             <ChartEvento379e380
               valor1={eventos[contador].valor379}
               valor2={eventos[contador].valor380}
@@ -269,7 +271,7 @@ const Dashboard: React.FC = () => {
             title="Mostrando a distribuição atual da base de clientes da office"
             informacao="Resumo de Clientes Ativos/Inativo" />
           <div className="mt-10 text-black-2 dark:text-white">
-            <LucroChart />
+            <LucroChart />    
           </div>
         </div>
       </div>

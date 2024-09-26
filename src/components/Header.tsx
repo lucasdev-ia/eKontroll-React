@@ -24,7 +24,7 @@ const Header = () => {
           </div>
         
           <button
-            className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3"
+            className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3 font-sans"
             onClick={() => navigate('/')}
           >
             Inicio
@@ -32,7 +32,7 @@ const Header = () => {
 
           <div className="relative">
             <button
-              className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3"
+              className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3 font-sans"
               onClick={handleCalendarioClick}
             >
               Calendário
@@ -41,14 +41,14 @@ const Header = () => {
             {showDropdown && (
               <div className="absolute mt-2 py-2 w-48 bg-gray-800 dark:bg-boxdark bg-white rounded-lg shadow-xl dark:bg-gray-800">
                 <button
-                  className="block px-4 py-2 text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105 transition-transform duration-100 w-full text-left"
+                  className="block px-4 py-2 text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105 transition-transform duration-100 w-full text-left font-sans"
                   style={{ width: '250px', paddingLeft: '25px' }} 
                   onClick={() => navigate('/calendario')}
                 >
                   Calendário Empresas
                 </button>
                 <button
-                  className="block px-4 py-2 text-black dark:text-white hover:bg-gray-900 dark:hover:bg-gray-600 hover:scale-105 transition-transform duration-100 w-full text-left"
+                  className="block px-4 py-2 text-black dark:text-white hover:bg-gray-900 dark:hover:bg-gray-600 hover:scale-105 transition-transform duration-100 w-full text-left font-sans"
                   style={{ width: '250px', paddingLeft: '25px' }} 
                   onClick={() => navigate('/calendarioSocios')}
                 >
@@ -59,7 +59,7 @@ const Header = () => {
           </div>
 
           <button
-            className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3"
+            className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer hover:underline mt-3 font-sans"
             onClick={() => navigate('/clientes')}
           >
             Eventos

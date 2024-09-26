@@ -304,7 +304,7 @@ const ClientList: React.FC = () => {
       <div className="flex items-center space-x-2 mb-2">
         <div className="flex items-center space-x-2 mb-0">
           <span
-            className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 text-sm font-semibold text-white dark:bg-blackseveridade"
+            className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 text-sm font-semibold text-white dark:bg-blackseveridade font-sans"
             onClick={handleResetFilter}
           >
             Severidade:
@@ -312,7 +312,7 @@ const ClientList: React.FC = () => {
         </div>
         <div className="flex items-center space-x-2 mb-0">
           <span
-            className={`inline-block cursor-pointer rounded-full bg-red-700 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Alto" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-red-800`}
+            className={`inline-block cursor-pointer rounded-full bg-red-700 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Alto" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-red-800 font-sans`}
             onClick={() => handleSeverityFilter("Alto")}
           >
             Alto
@@ -320,7 +320,7 @@ const ClientList: React.FC = () => {
         </div>
         <div className="flex items-center space-x-2 mb-0">
           <span
-            className={`inline-block cursor-pointer rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Medio" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-yellow-800`}
+            className={`inline-block cursor-pointer rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Medio" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-yellow-800 font-sans`}
             onClick={() => handleSeverityFilter("Medio")}
           >
             Medio
@@ -328,7 +328,7 @@ const ClientList: React.FC = () => {
         </div>
         <div className="flex items-center space-x-2 mb-0">
           <span
-            className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Baixo" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-green-900`}
+            className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === "Baixo" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-green-900 font-sans`}
             onClick={() => handleSeverityFilter("Baixo")}
           >
             Baixo
@@ -341,7 +341,7 @@ const ClientList: React.FC = () => {
         <thead>
           <tr>
             <th
-              className="cursor-pointer border px-4 py-2"
+              className="cursor-pointer border px-4 py-2 font-sans"
               onClick={() => handleSort("nome")}
             >
               Nome{""}
@@ -355,7 +355,7 @@ const ClientList: React.FC = () => {
                 ))}
             </th>
             <th
-              className="cursor-pointer border px-4 py-2"
+              className="cursor-pointer border px-4 py-2 font-sans"
               onClick={() => handleSortNumber("sobra380")}
             >
               Sobra / Falta 380
@@ -373,7 +373,7 @@ const ClientList: React.FC = () => {
                 )}
             </th>
             <th
-              className="cursor-pointer border px-4 py-2"
+              className="cursor-pointer border px-4 py-2 font-sans"
               onClick={() => handleSortNumber("valor380")}
             >
               Evento 380

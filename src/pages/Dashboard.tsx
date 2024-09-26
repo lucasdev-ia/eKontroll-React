@@ -187,7 +187,7 @@ const Dashboard: React.FC = () => {
   }
   return (
     <DefaultLayout>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-1 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-1 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 font-sans">
         <Card
           value={filtro.length} // para ver o total é so colocar data
           title="Total de clientes"
@@ -218,14 +218,14 @@ const Dashboard: React.FC = () => {
         />
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-3 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="col-span-2 rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
-          <div className="flex items-center justify-between max-w-200  p-1 bg-gray-100 rounded-md">
+      <div className="mt-4 grid grid-cols-1 gap-3 md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-3 2xl:mt-7.5 2xl:gap-7.5 font-sans">
+        <div className="col-span-2 rounded-sm border border-stroke bg-white px-9 py-1 shadow-default dark:border-strokedark dark:bg-boxdark font-sans">
+          <div className="flex items-center justify-between max-w-200  p-1 bg-gray-100 rounded-md font-sans">
 
             <Card2 title="" informacao="EVENTO 379 E 380" />
             <div className="flex justify-end mt-3">
-              <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" onClick={DiminuirContador}><ArrowLeftIcon className="h-5 w-5 mr-1" /></button>
-              <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition" onClick={incrementarContador}><ArrowRightIcon className="h-5 w-5 mr-1" /></button>
+              <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition font-sans" onClick={DiminuirContador}><ArrowLeftIcon className="h-5 w-5 mr-1" /></button>
+              <button className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition font-sans" onClick={incrementarContador}><ArrowRightIcon className="h-5 w-5 mr-1" /></button>
               <Link to="/clientes">
                 <button
                   className="mr-2 flex items-center bg-laranjalogo text-white px-3 py-2 rounded-lg shadow hover:bg-laranjahover transition"
@@ -264,7 +264,7 @@ const Dashboard: React.FC = () => {
               sobrou380={eventos[contador + 2].sobra380} />
           </div>
         </div>
-        <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div className="rounded-sm border border-stroke bg-white px-10 py-1 shadow-default dark:border-strokedark dark:bg-boxdark font-sans">
           <Card2
             title="Mostrando a distribuição atual da base de clientes da office"
             informacao="Resumo de Clientes Ativos/Inativo" />

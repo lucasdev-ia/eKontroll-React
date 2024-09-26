@@ -30,6 +30,7 @@ const Dashboard: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
+  
   useEffect(() => {
     if (location.state && location.state.clientId) {
       const clientId = location.state.clientId;
@@ -154,6 +155,7 @@ const Dashboard: React.FC = () => {
         <UserPlusIcon className="text- size-19 stroke-black dark:stroke-white dark:text-boxdark" />
       );
   };
+
 
   useEffect(() => {
     const fetchDataAsync = async () => {

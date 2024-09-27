@@ -306,7 +306,7 @@ const ClientList: React.FC = () => {
                 className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 text-sm font-semibold text-white dark:bg-blackseveridade font-sans"
                 onClick={handleResetFilter}
               >
-                Severidade:
+                Status:
               </span>
             </div>
             <div className="flex items-center space-x-2 mb-0">
@@ -405,6 +405,11 @@ const ClientList: React.FC = () => {
                     className="hover:bg-gray-100 dark:hover:bg-black-700"
                   >
                     <td className="py-2 px-4 w-1/4 truncate border text-black-900 dark:text-white font-sans">{cliente.nome}</td>
+                    <td className={`py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans ${(cliente.faturamento)}`}>
+                      {isNaN(parseValue(cliente.faturamento)) || parseValue(cliente.faturamento) === Infinity || parseValue(cliente.faturamento) === -Infinity
+                        ? '0'
+                        : `${formatCurrency(parseValue(cliente.faturamento))} `}
+                    </td>
                     <td className="py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans">
                       {parseValue(cliente.sobra380) === 0
                         ? 'Sem informações'
@@ -422,6 +427,7 @@ const ClientList: React.FC = () => {
                         ? '0 %'
                         : `${formatCurrency(parseValue(cliente.valor380))} %`}
                     </td>
+                    
                   </tr>
                 ))
               )}

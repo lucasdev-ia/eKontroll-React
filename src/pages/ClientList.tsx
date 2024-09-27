@@ -224,6 +224,7 @@ const ClientList: React.FC = () => {
   const indexOfLastClient = currentPage * clientsPerPage;
   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
   const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
+  const dinheiro = `R$\u00A0\u00A0`
 
   const totalPages = Math.ceil(data.length / clientsPerPage);
 
@@ -343,7 +344,7 @@ const ClientList: React.FC = () => {
                   className="cursor-pointer border px-4 py-2 font-sans"
                   onClick={() => handleSort("nome")}
                 >
-                  Nome{""}
+                  Nome
                   {sortField === "nome" &&
                     (sortDirection === "ASC" ? (
                       <IoArrowUpOutline className="ml-2 inline-block" />
@@ -355,9 +356,28 @@ const ClientList: React.FC = () => {
                 </th>
                 <th
                   className="cursor-pointer border px-4 py-2 font-sans"
+                  onClick={() => handleSortNumber("faturamento")}
+                >
+                  Faturamento
+                  {sortFieldNumber === "faturamento" &&
+                    sortDirectionNumber === "ASC" && (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    )}
+                  {sortFieldNumber === "faturamento" &&
+                    sortDirectionNumber === "DESC" && (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    )}
+                  {(sortFieldNumber !== "faturamento" ||
+                    sortDirectionNumber === null) && (
+                      <CgArrowsVAlt className="ml-2 inline-block" />
+                    )}
+                </th>
+
+                <th
+                  className="cursor-pointer border px-4 py-2 font-sans"
                   onClick={() => handleSortNumber("sobra380")}
                 >
-                  Sobra / Falta 380
+                  Gastos / Despesas
                   {sortFieldNumber === "sobra380" &&
                     sortDirectionNumber === "ASC" && (
                       <IoArrowUpOutline className="ml-2 inline-block" />
@@ -405,18 +425,18 @@ const ClientList: React.FC = () => {
                     className="hover:bg-gray-100 dark:hover:bg-black-700"
                   >
                     <td className="py-2 px-4 w-1/4 truncate border text-black-900 dark:text-white font-sans">{cliente.nome}</td>
-                    <td className={`py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans ${(cliente.faturamento)}`}>
+                    <td className="py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans">
                       {isNaN(parseValue(cliente.faturamento)) || parseValue(cliente.faturamento) === Infinity || parseValue(cliente.faturamento) === -Infinity
                         ? '0'
-                        : `${formatCurrency(parseValue(cliente.faturamento))} `}
+                        : `R$ ${formatCurrency(parseValue(cliente.faturamento))}`}
                     </td>
                     <td className="py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans">
                       {parseValue(cliente.sobra380) === 0
                         ? 'Sem informações'
                         : (
-                          <div className="flex justify-between">
-                            <span>R$</span>
-                            <span className="text-right">
+                          <div className="flex ">
+                            {dinheiro}  
+                            <span className="">
                               {formatCurrency(parseValue(cliente.sobra380))}
                             </span>
                           </div>
@@ -427,7 +447,6 @@ const ClientList: React.FC = () => {
                         ? '0 %'
                         : `${formatCurrency(parseValue(cliente.valor380))} %`}
                     </td>
-                    
                   </tr>
                 ))
               )}

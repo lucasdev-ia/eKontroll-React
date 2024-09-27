@@ -221,6 +221,9 @@ const ClientList: React.FC = () => {
   const formatCurrency = (value) => {
     return value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
+  const formatCurrency380 = (value) => {
+    return value.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  };
   const indexOfLastClient = currentPage * clientsPerPage;
   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
   const currentClients = data.slice(indexOfFirstClient, indexOfLastClient);
@@ -307,7 +310,7 @@ const ClientList: React.FC = () => {
                 className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 text-sm font-semibold text-white dark:bg-blackseveridade font-sans"
                 onClick={handleResetFilter}
               >
-                Status:
+                Severidade:
               </span>
             </div>
             <div className="flex items-center space-x-2 mb-0">
@@ -372,7 +375,6 @@ const ClientList: React.FC = () => {
                       <CgArrowsVAlt className="ml-2 inline-block" />
                     )}
                 </th>
-
                 <th
                   className="cursor-pointer border px-4 py-2 font-sans"
                   onClick={() => handleSortNumber("sobra380")}
@@ -428,14 +430,14 @@ const ClientList: React.FC = () => {
                     <td className="py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans">
                       {isNaN(parseValue(cliente.faturamento)) || parseValue(cliente.faturamento) === Infinity || parseValue(cliente.faturamento) === -Infinity
                         ? '0'
-                        : `R$ ${formatCurrency(parseValue(cliente.faturamento))}`}
+                        : `${dinheiro} ${formatCurrency(parseValue(cliente.faturamento))}`}
                     </td>
                     <td className="py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans">
                       {parseValue(cliente.sobra380) === 0
                         ? 'Sem informações'
                         : (
                           <div className="flex ">
-                            {dinheiro}  
+                            {dinheiro}
                             <span className="">
                               {formatCurrency(parseValue(cliente.sobra380))}
                             </span>
@@ -445,7 +447,7 @@ const ClientList: React.FC = () => {
                     <td className={`py-2 px-4 w-1/6 border text-black-900 dark:text-white font-sans ${getBackgroundColor(cliente.valor380)}`}>
                       {isNaN(parseValue(cliente.valor380)) || parseValue(cliente.valor380) === Infinity || parseValue(cliente.valor380) === -Infinity
                         ? '0 %'
-                        : `${formatCurrency(parseValue(cliente.valor380))} %`}
+                        : `${formatCurrency380(parseValue(cliente.valor380))} %`}
                     </td>
                   </tr>
                 ))

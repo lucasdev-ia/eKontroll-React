@@ -29,8 +29,8 @@ const Dashboard: React.FC = () => {
   const [contador, setContador] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
-  
-  
+
+
   useEffect(() => {
     if (location.state && location.state.clientId) {
       const clientId = location.state.clientId;
@@ -105,7 +105,7 @@ const Dashboard: React.FC = () => {
     }
     return parseFloat(value);
   }
-  
+
   useEffect(() => {
 
     const Eventos379e380 = async () => {

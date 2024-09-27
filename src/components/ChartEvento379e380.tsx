@@ -1,22 +1,27 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import '../css/satoshi.css'
+import '../css/satoshi.css';
 
-const total = 250;
-const valor1 = 200;
-const valor2 = 140;
-const nomeEmpresa = "Empresa nome para teste"
-function valueToPercent (value1, value2) {
-  return [Math.round((value1 * 100) / total),Math.round((value2 * 100) / total)]
-} 
-const ChartEvento379e380: React.FC = () => {
+interface ChartProps {
+  valor1: number;
+  valor2: number;
+  empresa: string;
+  sobrou379: number;
+  sobrou380: number;
+}
+function valueToPercent(value1: number, value2: number): number[] {
+  return [Math.round((value1 * 100) / 100), Math.round((value2 * 100) / 100)];
+}
+
+const ChartEvento379e380: React.FC<ChartProps> = ({ valor1, valor2, empresa, sobrou379, sobrou380 }) => {
+  const nomeEmpresa = empresa;
   const chartOptions: ApexOptions = {
-    series: valueToPercent(valor1, valor2),
+    series: valueToPercent(valor2, valor1),
 
     chart: {
       height: 350,
-      type: "radialBar",
+      type: 'radialBar',
     },
 
     plotOptions: {
@@ -25,8 +30,8 @@ const ChartEvento379e380: React.FC = () => {
           show: true,
           startAngle: undefined,
           endAngle: undefined,
-          background: "#f2f2f2",
-          strokeWidth: "80%",
+          background: '#f2f2f2',
+          strokeWidth: '80%',
           opacity: 0.5,
           margin: 2,
           dropShadow: {
@@ -40,31 +45,32 @@ const ChartEvento379e380: React.FC = () => {
 
         dataLabels: {
           name: {
-            fontSize: "14px",
+            fontSize: '14px',
           },
           value: {
-            fontSize: "16px",
+            fontSize: '16px',
           },
 
           total: {
             show: true,
-            label: "Eventos",
-            fontSize: "14px",
-            fontFamily: "IMPACT",
+            label: 'Eventos',
+            fontSize: '14px',
+            fontFamily: 'IMPACT',
             fontWeight: 600,
 
             formatter: function (w) {
-              // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-              return "";
+              // Você pode personalizar o valor retornado aqui
+              return '';
             },
           },
         },
       },
     },
-    labels: ["EVENTO 379", "EVENTO 380"],
-    colors: ["#271b79", "#FD5201"],
+    labels: ['EVENTO 380', 'EVENTO 379'],
+    colors: ['#271b79', '#FD5201'],
   };
-
+  const resposta379 = sobrou380 < 0 ? "Passou" : "Faltam";
+  const resposta380 = sobrou379 < 0 ? "Passou" : "Faltam";
   return (
     <div className="">
       <h2 className="mt-5 text-center">{nomeEmpresa}</h2>
@@ -75,10 +81,10 @@ const ChartEvento379e380: React.FC = () => {
         height={350}
       />
       <h3 className="flex items-center justify-center font-satoshi">
-        <p className="mr-2 font-bold">380</p> Faltam: R$:1000,00
+        <p className="mr-2 font-bold">380</p> {resposta379}: R$:{sobrou380}
       </h3>
       <h4 className="flex items-center justify-center font-satoshi">
-        <p className="mr-2 font-bold">379</p> Faltam: R$:1000,00
+        <p className="mr-2 font-bold">379</p> {resposta380}: R$:{sobrou379}
       </h4>
     </div>
   );

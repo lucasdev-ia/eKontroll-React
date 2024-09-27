@@ -7,6 +7,8 @@ module.exports = {
   theme: {
     fontFamily: {
       satoshi: ["Satoshi", "sans-serif"],
+      sans: ['inter', 'Roboto', 'sans-serif'],
+      mono: ['Fira Code', 'monospace'],
     },
     screens: {
       "2xsm": "375px",
@@ -58,6 +60,17 @@ module.exports = {
         azul: "#008080",
         azullogo: "#271b79",
         laranjalogo: "#FD5201",
+        laranjahover: '#C73D00',// Cor mais escura para hover
+        verdecalendario: '#008000',
+        redempresas: '#e06666',
+        yellowempresas: '#ffd966',
+        vermelhoescuro: '#FF000033',
+        amareloescuro: '#FFFF0066', 
+        greenempresas: '#339933',
+        verdeescuro: '#00FF004D',
+        blackseveridade:'#010e21',
+        corFiltros: '#2d3748',
+        borderFiltros: '#4a5568'
       },
       fontSize: {
         "title-xxl": ["44px", "55px"],

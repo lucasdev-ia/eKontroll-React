@@ -113,8 +113,8 @@ const Dashboard: React.FC = () => {
       return -Infinity;
     }
     return parseFloat(value);
-  }
-  
+  };
+
   useEffect(() => {
     const fetchEventos = async () => {
       try {

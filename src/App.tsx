@@ -4,6 +4,8 @@ import Dashboard from "./pages/Dashboard";
 import ClientList from './pages/ClientList'; 
 import Calendar from './pages/Calendar'; 
 import Calendar2 from './pages/Calendar2';
+import EmpresaList from './pages/EmpresaList';
+
 import Faturamento from './pages/Faturamento';
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route path='/' element={<Dashboard />} />
         <Route path='/calendario' element={<Calendar />} />
         <Route path='/clientes' element={<ClientList />} />
+        <Route path='/calendarioSocios' element={<Calendar2 />} />
+        <Route path='/ListaEmpresas' element={<EmpresaList />} />
         <Route path='/calendarioSocios' element={< Calendar2 />} />
         <Route path='/faturamento' element={<Faturamento /> } />
       </Routes> 

@@ -54,6 +54,7 @@ const Header = () => {
                 >
                   Calendário Sócios
                 </button>
+                
               </div>
             )}
           </div>
@@ -63,6 +64,12 @@ const Header = () => {
             onClick={() => navigate('/clientes')}
           >
             Eventos
+          </button>
+          <button
+            className="ml-6 text-black dark:text-white font-semibold text-lg cursor-pointer   hover:underline mt-3 font-sans"
+            onClick={() => navigate('/ListaEmpresas')}
+          >
+           Lista de Empresas
           </button>
         </div>
 

@@ -310,7 +310,7 @@ const ClientList: React.FC = () => {
                 className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 text-sm font-semibold text-white dark:bg-blackseveridade font-sans"
                 onClick={handleResetFilter}
               >
-                Severidade:
+                Status:
               </span>
             </div>
             <div className="flex items-center space-x-2 mb-0">

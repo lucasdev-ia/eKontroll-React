@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/Header';
 import DefaultLayout from "../layout/DefautLayout";
 
 
@@ -16,13 +15,17 @@ const parseValue = (value) => {
   return parseFloat(value);
 };
 
+const Pagination = ({data}) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 25
+}
 
 const SubLimite: React.FC = () => {
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setitem] = useState(25);
   useEffect(() => {
-    // Simulando a chamada à API
     const fetchData = async () => {
       try {
         const response = await fetch('http://192.168.25.83:3000/eventos');
@@ -30,7 +33,6 @@ const SubLimite: React.FC = () => {
         result.sort((a, b) => {
           return b.faturamento - a.faturamento;
         });
-        console.log('resultado', result);
         setData(result);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
@@ -41,6 +43,7 @@ const SubLimite: React.FC = () => {
 
     fetchData();
   }, []);
+  
 
   function formatarParaBRL(valor: number): string {
     return new Intl.NumberFormat('pt-BR', {
@@ -50,6 +53,10 @@ const SubLimite: React.FC = () => {
       maximumFractionDigits: 2, 
     }).format(valor);
   }
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   if (loading) {
     return (

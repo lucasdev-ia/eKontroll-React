@@ -5,6 +5,7 @@ import ClientList from './pages/ClientList';
 import Calendar from './pages/Calendar'; 
 import Calendar2 from './pages/Calendar2';
 import Faturamento from './pages/Faturamento';
+import subLimite from "./pages/sublimite";
 function App() {
   return (
     <Router>
@@ -15,6 +16,7 @@ function App() {
         <Route path='/calendarioSocios' element={<Calendar2 />} />
         <Route path='/calendarioSocios' element={< Calendar2 />} />
         <Route path='/faturamento' element={<Faturamento /> } />
+        <Route path='/sublimite' element={<subLimite/> } />
       </Routes> 
     </Router>
   );

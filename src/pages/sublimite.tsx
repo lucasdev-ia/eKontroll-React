@@ -197,7 +197,7 @@ const SubLimite: React.FC = () => {
         <h2 className="mb-4 text-xl font-bold">Sub limite do simples</h2>
         {data.length > 0 ? (
           <div className="container mx-auto p-0">
-            <div className="mb-2 flex justify-end">
+            <div className="mb-1 flex justify-end">
             <span
                 className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 mr-1 text-sm font-semibold text-white dark:bg-blackseveridade font-sans"
                 onClick={handleResetFilter}

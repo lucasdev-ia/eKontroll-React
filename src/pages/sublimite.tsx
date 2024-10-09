@@ -31,7 +31,7 @@ const SubLimite: React.FC = () => {
   const [sortDirection, setSortDirection] = useState<string | null>(null);
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState(false);
-
+  const [resetPage, setResetPage] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,32 +61,36 @@ const SubLimite: React.FC = () => {
   };
 
   const handleSort = (field: string) => {
-    const newSortDirection =
-      sortField === field && sortDirection === 'ASC' ? 'DESC' : 'ASC';
+    let newSortDirection;
+
+    if (sortField === field) {
+      if (sortDirection === 'ASC') {
+        newSortDirection = 'DESC';
+      } else if (sortDirection === 'DESC') {
+        newSortDirection = null;
+      } else {
+        newSortDirection = 'ASC';
+      }
+    } else {
+      newSortDirection = 'ASC';
+    }
 
     setSortField(field);
     setSortDirection(newSortDirection);
 
-    const sortedData = [...data].sort((a, b) => {
-      const valueA = a[field];
-      const valueB = b[field];
+    let sortedData;
 
-      const numA = parseValue(valueA);
-      const numB = parseValue(valueB);
-
-      if (Number.isNaN(numA) || numA === Infinity || numA === -Infinity)
-        return 1;
-      if (Number.isNaN(numB) || numB === Infinity || numB === -Infinity)
-        return -1;
-
-      if (typeof valueA === 'string' && typeof valueB === 'string') {
+    if (newSortDirection === null) {
+      sortedData = [...originalData];
+    } else {
+      sortedData = [...data].sort((a, b) => {
+        const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
+        const valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
         return newSortDirection === 'ASC'
           ? valueA.localeCompare(valueB)
           : valueB.localeCompare(valueA);
-      } else {
-        return newSortDirection === 'ASC' ? numA - numB : numB - numA;
-      }
-    });
+      });
+    }
 
     setData(sortedData);
   };
@@ -100,11 +104,10 @@ const SubLimite: React.FC = () => {
       setData(
         originalData.filter((cliente) => {
           const porcentagem = (cliente.faturamento / 3600000) * 100;
-          if (severity === 'Alto') return porcentagem > 80;
+          if (severity === 'Alto') return porcentagem > 100;
           if (severity === 'Medio')
-            return porcentagem > 50 && porcentagem <= 80;
-          if (severity === 'Baixo')
-            return porcentagem > 20 && porcentagem <= 50;
+            return porcentagem > 80 && porcentagem <= 99;
+          if (severity === 'Baixo') return porcentagem > 5 && porcentagem <= 79;
           return false;
         }),
       );
@@ -113,11 +116,12 @@ const SubLimite: React.FC = () => {
 
   const getBackgroundColor = (value) => {
     const numericValue = parseValue(value);
-    if (numericValue > 80) {
+    if (numericValue > 100) {
       return 'bg-redempresas dark:bg-vermelhoescuro bg-opacity-20'; // Vermelho
-    } else if (numericValue > 50) {
+    } else if (numericValue > 80) {
+      5;
       return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-200'; // Amarelo
-    } else if (numericValue > 20) {
+    } else if (numericValue > 5) {
       return 'bg-greenempresas bg-opacity-20  dark:bg-verdeescuro '; // Verde
     }
     return ''; // Cor padrão
@@ -134,7 +138,6 @@ const SubLimite: React.FC = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   const handlePageChange = (newPage: number) => {
@@ -150,7 +153,7 @@ const SubLimite: React.FC = () => {
     setFilterActive(false);
     setData(originalData);
   };
-
+  
   const handleLastPage = () => {
     setCurrentPage(totalPages);
   };
@@ -193,141 +196,192 @@ const SubLimite: React.FC = () => {
 
   return (
     <DefaultLayout>
-      <div className="h-full w-full p-4 text-black dark:text-white">
-        <h2 className="mb-4 text-xl font-bold">Sub limite do simples</h2>
-        {data.length > 0 ? (
-          <div className="container mx-auto p-0">
-            <div className="mb-1 flex justify-end">
-            <span
-                className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 mr-1 text-sm font-semibold text-white dark:bg-blackseveridade font-sans"
+      <div
+        className="container mx-auto p-0"
+        style={{ marginTop: '0', paddingTop: '0' }}
+      >
+        <div
+          className="flex items-center justify-between"
+          style={{ margin: '0', padding: '0' }}
+        >
+          <div className="flex items-center">
+            <h1 className="text-center font-sans text-2xl font-bold text-black dark:text-white">
+              Sub limite do simples
+            </h1>
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <div className="mb-2 flex items-center space-x-2">
+            <div className="mb-0 flex items-center space-x-2">
+              <span
+                className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 font-sans text-sm font-semibold text-white dark:bg-blackseveridade"
                 onClick={handleResetFilter}
               >
                 Status:
               </span>
+            </div>
+            <div className="mb-0 flex items-center space-x-2">
               <span
-                className={`inline-block cursor-pointer rounded-full bg-red-700 px-3 py-1 mr-1 text-sm font-semibold text-white ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-red-800`}
+                className={`inline-block cursor-pointer rounded-full bg-red-700 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-red-800`}
                 onClick={() => handleSeverityFilter('Alto')}
               >
                 Alto
               </span>
+            </div>
+            <div className="mb-0 flex items-center space-x-2">
               <span
-                className={`inline-block cursor-pointer rounded-full bg-yellow-500 px-3 py-1 mr-1 text-sm font-semibold text-white ${filterSeverity === "Medio" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-yellow-800 font-sans`}
-                onClick={() => handleSeverityFilter("Medio")}
+                className={`inline-block cursor-pointer rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Medio' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-yellow-800`}
+                onClick={() => handleSeverityFilter('Medio')}
               >
                 Medio
               </span>
+            </div>
+            <div className="mb-0 flex items-center space-x-2">
               <span
-                className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm mr-1 font-semibold text-white ${filterSeverity === "Baixo" ? "bg-opacity-100" : "bg-opacity-60"} hover:bg-green-900 font-sans`}
-                onClick={() => handleSeverityFilter("Baixo")}
+                className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-green-900`}
+                onClick={() => handleSeverityFilter('Baixo')}
               >
                 Baixo
               </span>
             </div>
-            <table className="border-gray-300 min-w-full table-auto border-collapse border">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th
-                    className="cursor-pointer border px-4 py-2"
-                    onClick={() => handleSort('nome')}
-                  >
-                    Nome
-                    {sortField === 'nome' &&
-                      (sortDirection === 'ASC' ? (
-                        <IoArrowUpOutline className="ml-2 inline-block" />
-                      ) : sortDirection === 'DESC' ? (
-                        <IoArrowDown className="ml-2 inline-block" />
-                      ) : (
-                        <CgArrowsVAlt className="ml-2 inline-block" />
-                      ))}
-                  </th>
-                  <th
-                    className="cursor-pointer border px-4 py-2"
-                    onClick={() => handleSort('faturamento')}
-                  >
-                    Faturamento
-                  </th>
-                  <th className="border px-4 py-2">Limite</th>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="dark:border-gray-700 min-w-full border bg-white text-black dark:bg-[#1e2a38] dark:text-white">
+            <thead>
+              <tr>
+                <th
+                  className="cursor-pointer border px-4 py-2 font-sans"
+                  onClick={() => handleSort('nome')}
+                >
+                  Nome
+                  {sortField === 'nome' &&
+                    (sortDirection === 'ASC' ? (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    ) : sortDirection === 'DESC' ? (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    ) : null)}
+                  {sortField !== 'nome' && (
+                    <CgArrowsVAlt className="ml-2 inline-block" />
+                  )}
+                </th>
+                <th
+                  className="cursor-pointer border px-4 py-2 font-sans"
+                  onClick={() => handleSort('faturamento')}
+                >
+                  Faturamento
+                  {sortField === 'faturamento' &&
+                    (sortDirection === 'ASC' ? (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    ) : sortDirection === 'DESC' ? (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    ) : null)}
+                  {sortField !== 'faturamento' && (
+                    <CgArrowsVAlt className="ml-2 inline-block" />
+                  )}
+                </th>
+                <th
+                  className="cursor-pointer border px-4 py-2 font-sans"
+                  onClick={() => handleSort('limite')}
+                >
+                  Limite
+                  {sortField === 'limite' &&
+                    (sortDirection === 'ASC' ? (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    ) : sortDirection === 'DESC' ? (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    ) : null)}
+                  {sortField !== 'limite' && (
+                    <CgArrowsVAlt className="ml-2 inline-block" />
+                  )}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentItems.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="border px-4 py-2 text-center">
+                    Nenhum dado disponível
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((client, index) => {
+              ) : (
+                currentItems.map((client, index) => {
                   const porcentagem = (client.faturamento / 3600000) * 100;
                   const porcentagemFinal = Math.round(porcentagem);
                   return (
-                    <tr key={client.id || index} className="hover:bg-gray-100">
-                      <td className="border px-4 py-2">{client.nome}</td>
-                      <td className="border px-4 py-2">
+                    <tr
+                      key={client.id || index}
+                      className="hover:bg-gray-100 dark:hover:bg-black-700"
+                    >
+                      <td className="text-black-900 w-1/3 truncate border px-4 py-2 font-sans dark:text-white">
+                        {client.nome}
+                      </td>
+                      <td className="text-black-900 w-1/3 border px-4 py-2 font-sans dark:text-white">
                         {formatarParaBRL(parseValue(client.faturamento))}
                       </td>
                       <td
-                        className={`border px-4 py-2 ${getBackgroundColor(porcentagemFinal)}`}
+                        className={`text-black-900 w-1/3 border px-4 py-2 font-sans dark:text-white ${getBackgroundColor(porcentagemFinal)}`}
                       >
                         {parseValue(porcentagemFinal)}%
                       </td>
                     </tr>
                   );
-                })}
-              </tbody>
-            </table>
-            <div className="mt-4 flex items-center justify-between">
-              <div className="flex flex-1 justify-center space-x-2">
-                <button
-                  onClick={handleFirstPage}
-                  className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
-                  disabled={currentPage === 1}
-                >
-                  <LuArrowLeftToLine className="inline-block" />
-                </button>
-                <button
-                  onClick={handlePreviousPage}
-                  className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
-                  disabled={currentPage === 1}
-                >
-                  <HiOutlineArrowSmallLeft className="inline-block" />
-                </button>
-                {getPageNumbers().map((pageNumber) => (
-                  <button
-                    key={pageNumber}
-                    onClick={() => handlePageChange(pageNumber)}
-                    className={`rounded border px-4 py-2 ${
-                      currentPage === pageNumber
-                        ? 'bg-azullogo text-white'
-                        : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'
-                    }`}
-                  >
-                    {pageNumber}
-                  </button>
-                ))}
-                <button
-                  onClick={handleNextPage}
-                  className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
-                  disabled={currentPage === totalPages}
-                >
-                  <HiOutlineArrowSmallRight className="inline-block" />
-                </button>
-                <button
-                  onClick={handleLastPage}
-                  className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
-                  disabled={currentPage === totalPages}
-                >
-                  <LuArrowRightToLine className="inline-block" />
-                </button>
-              </div>
-              <select
-                id="itemsPerPage"
-                value={itemsPerPage}
-                onChange={handleItemsPerPageChange}
-                className="rounded border-borderFiltros p-1 dark:bg-corFiltros dark:text-white"
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-2 flex items-center justify-between">
+          <div className="flex flex-1 justify-center space-x-2">
+            <button
+              onClick={handleFirstPage}
+              className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
+              disabled={currentPage === 1}
+            >
+              <LuArrowLeftToLine className="text-gray-700 inline-block dark:text-white" />
+            </button>
+            <button
+              onClick={handlePreviousPage}
+              className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
+              disabled={currentPage === 1}
+            >
+              <HiOutlineArrowSmallLeft className="text-gray-700 inline-block dark:text-white" />
+            </button>
+            {getPageNumbers().map((pageNumber) => (
+              <button
+                key={pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+                className={`rounded border px-4 py-2 ${currentPage === pageNumber ? 'bg-azullogo text-white dark:bg-azullogo' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
               >
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
+                {pageNumber}
+              </button>
+            ))}
+            <button
+              onClick={handleNextPage}
+              className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
+              disabled={currentPage === totalPages}
+            >
+              <HiOutlineArrowSmallRight className="text-gray-700 inline-block dark:text-white" />
+            </button>
+            <button
+              onClick={handleLastPage}
+              className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
+              disabled={currentPage === totalPages}
+            >
+              <LuArrowRightToLine className="text-gray-700 inline-block dark:text-white" />
+            </button>
           </div>
-        ) : (
-          <p>Nenhum dado disponível</p>
-        )}
+          <select
+            id="itemsPerPage"
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+            className="rounded border-borderFiltros p-1 dark:bg-corFiltros dark:text-white"
+          >
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
       </div>
     </DefaultLayout>
   );

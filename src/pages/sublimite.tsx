@@ -62,36 +62,53 @@ const SubLimite: React.FC = () => {
 
   const handleSort = (field: string) => {
     let newSortDirection;
-
+  
     if (sortField === field) {
       if (sortDirection === 'ASC') {
         newSortDirection = 'DESC';
       } else if (sortDirection === 'DESC') {
         newSortDirection = null;
+        setSortField(null);
       } else {
         newSortDirection = 'ASC';
       }
     } else {
       newSortDirection = 'ASC';
     }
-
-    setSortField(field);
+  
+    setSortField(newSortDirection ? field : null);
     setSortDirection(newSortDirection);
-
+  
     let sortedData;
-
+  
     if (newSortDirection === null) {
       sortedData = [...originalData];
     } else {
       sortedData = [...data].sort((a, b) => {
-        const valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
-        const valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
-        return newSortDirection === 'ASC'
-          ? valueA.localeCompare(valueB)
-          : valueB.localeCompare(valueA);
+        let valueA, valueB;
+  
+        if (field === 'nome') {
+          valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
+          valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
+          return newSortDirection === 'ASC'
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA);
+        } else if (field === 'faturamento') {
+          valueA = parseValue(a[field]);
+          valueB = parseValue(b[field]);
+        } else if (field === 'limite') {
+          valueA = parseValue((a.faturamento / 3600000) * 100);
+          valueB = parseValue((b.faturamento / 3600000) * 100);
+        }
+  
+        if (newSortDirection === 'ASC') {
+          return valueA - valueB;
+        } else {
+          return valueB - valueA;
+        }
       });
     }
-
+  
     setData(sortedData);
   };
 
@@ -107,7 +124,7 @@ const SubLimite: React.FC = () => {
           if (severity === 'Alto') return porcentagem > 100;
           if (severity === 'Medio')
             return porcentagem > 80 && porcentagem <= 99;
-          if (severity === 'Baixo') return porcentagem > 5 && porcentagem <= 79;
+          if (severity === 'Baixo') return porcentagem > 1 && porcentagem <= 79;
           return false;
         }),
       );
@@ -121,7 +138,7 @@ const SubLimite: React.FC = () => {
     } else if (numericValue > 80) {
       5;
       return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-200'; // Amarelo
-    } else if (numericValue > 5) {
+    } else if (numericValue > 1) {
       return 'bg-greenempresas bg-opacity-20  dark:bg-verdeescuro '; // Verde
     }
     return ''; // Cor padrão
@@ -153,7 +170,7 @@ const SubLimite: React.FC = () => {
     setFilterActive(false);
     setData(originalData);
   };
-  
+
   const handleLastPage = () => {
     setCurrentPage(totalPages);
   };
@@ -193,7 +210,6 @@ const SubLimite: React.FC = () => {
 
     return pageNumbers;
   };
-
   return (
     <DefaultLayout>
       <div
@@ -255,43 +271,45 @@ const SubLimite: React.FC = () => {
                   onClick={() => handleSort('nome')}
                 >
                   Nome
-                  {sortField === 'nome' &&
-                    (sortDirection === 'ASC' ? (
+                  {sortField === 'nome' ? (
+                    sortDirection === 'ASC' ? (
                       <IoArrowUpOutline className="ml-2 inline-block" />
-                    ) : sortDirection === 'DESC' ? (
+                    ) : (
                       <IoArrowDown className="ml-2 inline-block" />
-                    ) : null)}
-                  {sortField !== 'nome' && (
+                    )
+                  ) : (
                     <CgArrowsVAlt className="ml-2 inline-block" />
                   )}
                 </th>
+
                 <th
                   className="cursor-pointer border px-4 py-2 font-sans"
                   onClick={() => handleSort('faturamento')}
                 >
                   Faturamento
-                  {sortField === 'faturamento' &&
-                    (sortDirection === 'ASC' ? (
+                  {sortField === 'faturamento' ? (
+                    sortDirection === 'ASC' ? (
                       <IoArrowUpOutline className="ml-2 inline-block" />
-                    ) : sortDirection === 'DESC' ? (
+                    ) : (
                       <IoArrowDown className="ml-2 inline-block" />
-                    ) : null)}
-                  {sortField !== 'faturamento' && (
+                    )
+                  ) : (
                     <CgArrowsVAlt className="ml-2 inline-block" />
                   )}
                 </th>
+
                 <th
                   className="cursor-pointer border px-4 py-2 font-sans"
                   onClick={() => handleSort('limite')}
                 >
                   Limite
-                  {sortField === 'limite' &&
-                    (sortDirection === 'ASC' ? (
+                  {sortField === 'limite' ? (
+                    sortDirection === 'ASC' ? (
                       <IoArrowUpOutline className="ml-2 inline-block" />
-                    ) : sortDirection === 'DESC' ? (
+                    ) : (
                       <IoArrowDown className="ml-2 inline-block" />
-                    ) : null)}
-                  {sortField !== 'limite' && (
+                    )
+                  ) : (
                     <CgArrowsVAlt className="ml-2 inline-block" />
                   )}
                 </th>
@@ -322,7 +340,7 @@ const SubLimite: React.FC = () => {
                       <td
                         className={`text-black-900 w-1/3 border px-4 py-2 font-sans dark:text-white ${getBackgroundColor(porcentagemFinal)}`}
                       >
-                        {parseValue(porcentagemFinal)}%
+                        {parseValue(porcentagemFinal)} %
                       </td>
                     </tr>
                   );

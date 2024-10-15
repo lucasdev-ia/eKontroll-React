@@ -9,7 +9,7 @@ import {
 import Card from "../components/Card.tsx";
 import Card2 from "../components/Card2.tsx";
 import DefaultLayout from "../layout/DefautLayout.tsx";
-import ChartEvento379e380 from "../components/ChartEvento379e380.tsx";
+import ChartFaturamento from "../components/ChartFaturamento.tsx";
 import {
   CakeIcon,
   UserGroupIcon,
@@ -29,6 +29,7 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [dataconv, setDataconv] = useState<any[]>([]);
   const [eventos, setEventos] = useState<any[]>([]);
+  const [originalData, setOriginalData] = useState<any[]>([]);
   const [contador, setContador] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
@@ -108,9 +109,10 @@ const Dashboard: React.FC = () => {
       value === "sem informações" ||
       value === undefined ||
       value === Infinity ||
+      value === -Infinity ||
       Number.isNaN(parseFloat(value))
     ) {
-      return -Infinity;
+      return 0; // Retorna 0 para valores inválidos
     }
     return parseFloat(value);
   };
@@ -119,10 +121,14 @@ const Dashboard: React.FC = () => {
     const fetchEventos = async () => {
       try {
         const data = await consultaEventos();
-        const organizedData = data.sort((a, b) => {
-          const maxA = Math.max(parseValue(a.valor379), parseValue(a.valor380));
-          const maxB = Math.max(parseValue(b.valor379), parseValue(b.valor380));
-          return maxB - maxA;
+        const organizedData = data.map(evento => ({
+          ...evento,
+          valor379: parseValue(evento.valor379),
+          valor380: parseValue(evento.valor380),
+        })).sort((a, b) => {
+          const maxA = Math.max(a.valor379, a.valor380);
+          const maxB = Math.max(b.valor379, b.valor380);
+          return maxB - maxA; // Ordena da maior para a menor
         });
         setEventos(organizedData);
       } catch (error) {
@@ -130,6 +136,24 @@ const Dashboard: React.FC = () => {
       }
     };
     fetchEventos();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://192.168.25.83:3000/eventos');
+        const result = await response.json();
+        result.sort((a, b) => b.faturamento - a.faturamento);
+        setData(result);
+        setOriginalData(result);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const logo = (imagem: number) => {
@@ -269,13 +293,10 @@ const Dashboard: React.FC = () => {
 
           <div className="grid grid-cols-3 place-items-end font-sans text-black-2 dark:text-white">
             {eventos.slice(contador, contador + 3).map((evento, index) => (
-              <ChartEvento379e380
+              <ChartFaturamento
                 key={index}
-                valor1={evento.valor379}
-                valor2={evento.valor380}
+                faturamento={evento.faturamento}
                 empresa={evento.nome}
-                sobrou379={evento.sobra379}
-                sobrou380={evento.sobra380}
               />
             ))}
           </div>

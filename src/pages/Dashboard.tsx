@@ -255,7 +255,7 @@ const Dashboard: React.FC = () => {
       <div className="mt-4 grid grid-cols-1 gap-3 font-sans md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-3 2xl:mt-7.5 2xl:gap-7.5">
         <div className="col-span-2 rounded-sm border border-stroke bg-white px-9 py-1 font-sans shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="max-w-200 bg-gray-100 flex items-center justify-between rounded-md p-1 font-sans">
-            <Card2 title="" informacao="EVENTO 379 E 380" />
+            <Card2 title="" informacao="Sub Limite Do Simples" />
             <div className="mt-3 flex justify-end">
               <button
                 className="mr-2 flex items-center rounded-lg bg-laranjalogo px-3 py-2 font-sans text-white shadow transition hover:bg-laranjahover"
@@ -280,8 +280,6 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
           <div className="mt-4 flex items-center justify-center font-sans font-bold">
-            <div className="mr-2 h-5 w-5 rounded-full bg-laranjalogo"></div>
-            <h1 className="mr-5">Sublimite Do Simples</h1>
           </div>
           <div className="grid grid-cols-3 place-items-end font-sans text-black-2 dark:text-white">
             {eventos.slice(contador, contador + 3).map((evento, index) => (

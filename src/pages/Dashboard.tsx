@@ -125,6 +125,7 @@ const Dashboard: React.FC = () => {
           ...evento,
           valor380: parseValue(evento.valor380),
         }));
+          organizedData.sort((a, b) => b.faturamento - a.faturamento);
         setEventos(organizedData);
       } catch (error) {
         console.error('Erro ao buscar dados da API', error);
@@ -279,7 +280,7 @@ const Dashboard: React.FC = () => {
               </Link>
             </div>
           </div>
-          <div className="mt-4 flex items-center justify-center font-sans font-bold">
+          <div className="mt-12 flex items-center justify-center font-sans font-bold">
           </div>
           <div className="grid grid-cols-3 place-items-end font-sans text-black-2 dark:text-white">
             {eventos.slice(contador, contador + 3).map((evento, index) => (

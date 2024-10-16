@@ -49,7 +49,7 @@ const SimpleChartComponent: React.FC<ChartProps> = ({ faturamento, empresa }) =>
         },
       },
     },
-    labels: ['Sub Limite'],
+    labels: ['Sublimite'],
     colors: ['#271b79'],
   };
 

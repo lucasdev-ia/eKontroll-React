@@ -103,6 +103,7 @@ const Dashboard: React.FC = () => {
     };
     fetchSocioAniversario();
   }, []);
+  
 
   const parseValue = (value: any) => {
     if (
@@ -112,7 +113,7 @@ const Dashboard: React.FC = () => {
       value === -Infinity ||
       Number.isNaN(parseFloat(value))
     ) {
-      return 0; // Retorna 0 para valores inválidos
+      return 0; 
     }
     return parseFloat(value);
   };
@@ -256,7 +257,7 @@ const Dashboard: React.FC = () => {
       <div className="mt-4 grid grid-cols-1 gap-3 font-sans md:mt-6 md:grid-cols-1 md:gap-6 xl:grid-cols-3 2xl:mt-7.5 2xl:gap-7.5">
         <div className="col-span-2 rounded-sm border border-stroke bg-white px-9 py-1 font-sans shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="max-w-200 bg-gray-100 flex items-center justify-between rounded-md p-1 font-sans">
-            <Card2 title="" informacao="Sub Limite Do Simples" />
+            <Card2 title="" informacao="Sublimite Do Simples" />
             <div className="mt-3 flex justify-end">
               <button
                 className="mr-2 flex items-center rounded-lg bg-laranjalogo px-3 py-2 font-sans text-white shadow transition hover:bg-laranjahover"

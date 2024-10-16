@@ -15,20 +15,21 @@ function calculatePercentage(faturamento: number): number {
   return parseValue((faturamento / 3600000) * 100);
 }
 
+const formatarParaBRL = (valor: number): string => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(valor);
+}
+
 const SimpleChartComponent: React.FC<ChartProps> = ({
   faturamento,
   empresa,
 }) => {
   const percentage = calculatePercentage(faturamento);
 
-  const formatarParaBRL = (valor: number): string => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(valor);
-  };
 
   const options: ApexOptions = {
     series: [percentage],
@@ -74,10 +75,10 @@ const SimpleChartComponent: React.FC<ChartProps> = ({
         type="radialBar"
         height={350}
       />
-      <h3 className="flex items-center justify-center font-sans"></h3>
-      <span className="mr-2 font-bold">Faturamento:</span>
+      <h3 className='flex items-center justify-center font-sans'></h3>
+      <span className='mr-2 font-sans'>Faturamento:</span>
       <span>{formatarParaBRL(faturamento)}</span>
-    </div>
+      </div>
   );
 };
 

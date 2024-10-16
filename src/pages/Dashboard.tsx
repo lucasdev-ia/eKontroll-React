@@ -209,6 +209,16 @@ const Dashboard: React.FC = () => {
     (item: any) => item.status_empresa === 'A' && item.data_cadastro != null,
   );
 
+  function limitarPalavras(texto: string, numPalavras: number): string {
+    const palavras = texto.split(' '); // Divide o texto em palavras
+    if (palavras.length <= numPalavras) {
+        return texto; // Retorna o texto completo se já tem menos ou igual ao número de palavras desejado
+    } else {
+        return palavras.slice(0, numPalavras).join(' '); // Retorna apenas as palavras limitadas
+    }
+}
+
+
   return (
     <DefaultLayout>
       <div className="grid grid-cols-2 gap-4 font-sans md:grid-cols-1 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
@@ -288,8 +298,7 @@ const Dashboard: React.FC = () => {
               <ChartFaturamento
                 key={index}
                 faturamento={evento.faturamento}
-                empresa={evento.nome}
-              />
+                empresa={limitarPalavras(evento.nome, 4)}              />
             ))}
           </div>
         </div>

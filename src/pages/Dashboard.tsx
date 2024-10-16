@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   listarEmpresas,
   processData,
   consultaAniversario,
   consultaEventos,
   consultaAniversarioSocio,
-} from "../services/api.tsx";
-import Card from "../components/Card.tsx";
-import Card2 from "../components/Card2.tsx";
-import DefaultLayout from "../layout/DefautLayout.tsx";
-import ChartFaturamento from "../components/ChartFaturamento.tsx";
+} from '../services/api.tsx';
+import Card from '../components/Card.tsx';
+import Card2 from '../components/Card2.tsx';
+import DefaultLayout from '../layout/DefautLayout.tsx';
+import ChartFaturamento from '../components/ChartFaturamento.tsx';
 import {
   CakeIcon,
   UserGroupIcon,
@@ -18,9 +18,9 @@ import {
   ArrowLeftIcon,
   ListBulletIcon,
   UserCircleIcon,
-} from "@heroicons/react/24/solid";
-import LucroChart from "../components/LucroChart.tsx";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+} from '@heroicons/react/24/solid';
+import LucroChart from '../components/LucroChart.tsx';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
@@ -57,25 +57,25 @@ const Dashboard: React.FC = () => {
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
   const monthNames = [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
   ];
   const currentMonthName = monthNames[currentMonth - 1];
   const filteredData = data.filter((item: any) => {
     if (!item.data_cadastro) {
       return false;
     }
-    const [day, month, year] = item.data_cadastro.split("/").map(Number);
+    const [day, month, year] = item.data_cadastro.split('/').map(Number);
     return month === currentMonth && year === currentYear;
   });
   const lastClients = filteredData.map((client) => client.razao_social);
@@ -86,7 +86,7 @@ const Dashboard: React.FC = () => {
         const data = await consultaAniversario();
         setBirthdayData(data);
       } catch (error) {
-        console.error("Erro ao buscar dados da API", error);
+        console.error('Erro ao buscar dados da API', error);
       }
     };
     fetchBirthdayData();
@@ -98,7 +98,7 @@ const Dashboard: React.FC = () => {
         const data = await consultaAniversarioSocio();
         setSocioAniversario(data);
       } catch (error) {
-        console.error("Erro ao buscar dados da API", error);
+        console.error('Erro ao buscar dados da API', error);
       }
     };
     fetchSocioAniversario();
@@ -106,7 +106,7 @@ const Dashboard: React.FC = () => {
 
   const parseValue = (value: any) => {
     if (
-      value === "sem informações" ||
+      value === 'sem informações' ||
       value === undefined ||
       value === Infinity ||
       value === -Infinity ||
@@ -121,18 +121,13 @@ const Dashboard: React.FC = () => {
     const fetchEventos = async () => {
       try {
         const data = await consultaEventos();
-        const organizedData = data.map(evento => ({
+        const organizedData = data.map((evento) => ({
           ...evento,
-          valor379: parseValue(evento.valor379),
           valor380: parseValue(evento.valor380),
-        })).sort((a, b) => {
-          const maxA = Math.max(a.valor379, a.valor380);
-          const maxB = Math.max(b.valor379, b.valor380);
-          return maxB - maxA; // Ordena da maior para a menor
-        });
+        }));
         setEventos(organizedData);
       } catch (error) {
-        console.error("Erro ao buscar dados da API", error);
+        console.error('Erro ao buscar dados da API', error);
       }
     };
     fetchEventos();
@@ -186,7 +181,7 @@ const Dashboard: React.FC = () => {
         setData(data);
         setLoading(false);
       } catch (error) {
-        console.error("Erro ao buscar dados da API", error);
+        console.error('Erro ao buscar dados da API', error);
       }
     };
     fetchDataAsync();
@@ -209,7 +204,7 @@ const Dashboard: React.FC = () => {
   }
 
   const filtro = data.filter(
-    (item: any) => item.status_empresa === "A" && item.data_cadastro != null,
+    (item: any) => item.status_empresa === 'A' && item.data_cadastro != null,
   );
 
   return (
@@ -224,25 +219,25 @@ const Dashboard: React.FC = () => {
         />
         <Card
           value={`${birthdayData.length} ${
-            birthdayData.length === 1 ? "Empresa" : "Empresas"
+            birthdayData.length === 1 ? 'Empresa' : 'Empresas'
           }`}
           dataCadastro=""
           title={`${
             birthdayData.length === 1
-              ? "Completa aniversário hoje"
-              : "Completam aniversário hoje"
+              ? 'Completa aniversário hoje'
+              : 'Completam aniversário hoje'
           }`}
           Cardimg={logo(2)}
           online={false}
         />
         <Card
           value={`${socioAniversario.length} ${
-            socioAniversario.length === 1 ? "Socio" : "Socios"
+            socioAniversario.length === 1 ? 'Socio' : 'Socios'
           }`}
           title={`${
             socioAniversario.length === 1
-              ? "Completa aniversário hoje"
-              : "Completam aniversário hoje"
+              ? 'Completa aniversário hoje'
+              : 'Completam aniversário hoje'
           }`}
           Cardimg={logo(3)}
           dataCadastro=""
@@ -274,10 +269,10 @@ const Dashboard: React.FC = () => {
               >
                 <ArrowRightIcon className="mr-1 h-5 w-5" />
               </button>
-              <Link to="/clientes">
+              <Link to="/SubLimite">
                 <button
                   className="mr-2 flex items-center rounded-lg bg-laranjalogo px-3 py-2 text-white shadow transition hover:bg-laranjahover"
-                  onClick={() => navigate("/clientes")}
+                  onClick={() => navigate('/SubLimite')}
                 >
                   <ListBulletIcon className="mr-1 h-5 w-5" />
                 </button>
@@ -286,11 +281,8 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="mt-4 flex items-center justify-center font-sans font-bold">
             <div className="mr-2 h-5 w-5 rounded-full bg-laranjalogo"></div>
-            <h1 className="mr-20">EVENTO 379</h1>
-            <div className="mr-2 h-5 w-5 rounded-full bg-azullogo"></div>
-            <h2>EVENTO 380</h2>
+            <h1 className="mr-5">Sublimite Do Simples</h1>
           </div>
-
           <div className="grid grid-cols-3 place-items-end font-sans text-black-2 dark:text-white">
             {eventos.slice(contador, contador + 3).map((evento, index) => (
               <ChartFaturamento

@@ -32,6 +32,7 @@ const SubLimite: React.FC = () => {
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState(false);
   const [resetPage, setResetPage] = useState(true);
+  const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,9 +61,26 @@ const SubLimite: React.FC = () => {
     }).format(valor);
   };
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const valor = event.target.value;
+    setSearch(valor);
+
+    if (valor === '') {
+      setData(originalData);
+    } else {
+      setData(
+        originalData.filter(
+          (cliente) =>
+            cliente.nome.toLowerCase().includes(valor.toLowerCase()) ||
+            cliente.cnpj.toLowerCase().includes(valor.toLowerCase()),
+        ),
+      );
+    }
+  };
+
   const handleSort = (field: string) => {
     let newSortDirection;
-  
+
     if (sortField === field) {
       if (sortDirection === 'ASC') {
         newSortDirection = 'DESC';
@@ -75,18 +93,18 @@ const SubLimite: React.FC = () => {
     } else {
       newSortDirection = 'ASC';
     }
-  
+
     setSortField(newSortDirection ? field : null);
     setSortDirection(newSortDirection);
-  
+
     let sortedData;
-  
+
     if (newSortDirection === null) {
       sortedData = [...originalData];
     } else {
       sortedData = [...data].sort((a, b) => {
         let valueA, valueB;
-  
+
         if (field === 'nome') {
           valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
           valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
@@ -100,7 +118,7 @@ const SubLimite: React.FC = () => {
           valueA = parseValue((a.faturamento / 3600000) * 100);
           valueB = parseValue((b.faturamento / 3600000) * 100);
         }
-  
+
         if (newSortDirection === 'ASC') {
           return valueA - valueB;
         } else {
@@ -108,7 +126,7 @@ const SubLimite: React.FC = () => {
         }
       });
     }
-  
+
     setData(sortedData);
   };
 
@@ -216,43 +234,30 @@ const SubLimite: React.FC = () => {
         className="container mx-auto p-0"
         style={{ marginTop: '0', paddingTop: '0' }}
       >
-        <div
-          className="flex items-center justify-between"
-          style={{ margin: '0', padding: '0' }}
-        >
-          <div className="flex items-center">
-            <h1 className="text-center font-sans text-2xl font-bold text-black dark:text-white">
-              Sub limite do simples
-            </h1>
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <div className="mb-2 flex items-center space-x-2">
-            <div className="mb-0 flex items-center space-x-2">
+        <div className="flex flex-col" style={{ margin: '0', padding: '0' }}>
+          <h1 className="font-sans text-2xl font-bold text-black dark:text-white">
+            Sublimite do simples
+          </h1>
+          <div className="my-2 flex items-end justify-between">
+            <div className="flex items-center space-x-2">
               <span
                 className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 font-sans text-sm font-semibold text-white dark:bg-blackseveridade"
                 onClick={handleResetFilter}
               >
                 Status:
               </span>
-            </div>
-            <div className="mb-0 flex items-center space-x-2">
               <span
                 className={`inline-block cursor-pointer rounded-full bg-red-700 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-red-800`}
                 onClick={() => handleSeverityFilter('Alto')}
               >
                 Alto
               </span>
-            </div>
-            <div className="mb-0 flex items-center space-x-2">
               <span
                 className={`inline-block cursor-pointer rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Medio' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-yellow-800`}
                 onClick={() => handleSeverityFilter('Medio')}
               >
                 Medio
               </span>
-            </div>
-            <div className="mb-0 flex items-center space-x-2">
               <span
                 className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-green-900`}
                 onClick={() => handleSeverityFilter('Baixo')}
@@ -260,6 +265,13 @@ const SubLimite: React.FC = () => {
                 Baixo
               </span>
             </div>
+            <input
+              type="text"
+              value={search}
+              onChange={handleSearchChange}
+              placeholder="Pesquisar..."
+              className="border-gray-300 ease-in-ou h-10 w-80 rounded border p-2 px-2 shadow-sm transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-[#1e2a38] dark:text-white dark:placeholder-white"
+            />
           </div>
         </div>
         <div className="overflow-x-auto">

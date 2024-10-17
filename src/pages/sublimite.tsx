@@ -265,7 +265,7 @@ const SubLimite: React.FC = () => {
           >
             <FaFileExport size={20} />
           </button>
-          <div className="my-2 flex items-end justify-between">
+          <div className="my-1 flex items-end justify-between">
             <div className="flex items-center space-x-2">
               <span
                 className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 font-sans text-sm font-semibold text-white dark:bg-blackseveridade"

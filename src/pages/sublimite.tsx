@@ -8,7 +8,7 @@ import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
 import { IoArrowUpOutline, IoArrowDown } from 'react-icons/io5';
 import { CgArrowsVAlt } from 'react-icons/cg';
 import * as XLSX from 'xlsx';
-import { FaFileExport } from 'react-icons/fa';
+import { RiFileExcel2Fill } from 'react-icons/ri';
 
 const parseValue = (value) => {
   if (
@@ -33,7 +33,6 @@ const SubLimite: React.FC = () => {
   const [sortDirection, setSortDirection] = useState<string | null>(null);
   const [filterSeverity, setFilterSeverity] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState(false);
-  const [resetPage, setResetPage] = useState(true);
   const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
@@ -67,14 +66,14 @@ const SubLimite: React.FC = () => {
     const filteredData = data.map((item) => {
       const porcentagem = (item.faturamento / 3600000) * 100;
       const porcentagemFinal = Math.round(porcentagem);
-  
+
       return {
         Nome: item.nome,
         Faturamento: formatarParaBRL(parseValue(item.faturamento)),
-        Limite: `${porcentagemFinal} %`
+        Limite: `${porcentagemFinal} %`,
       };
     });
-  
+
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
@@ -258,13 +257,7 @@ const SubLimite: React.FC = () => {
           <h1 className="font-sans text-2xl font-bold text-black dark:text-white">
             Sublimite do simples
           </h1>
-          <button
-            onClick={() => exportToExcel(data, 'Lista_de_Clientes')}
-            className="text-blue-500 hover:text-blue-700"
-            title="Exportar para Excel"
-          >
-            <FaFileExport size={20} />
-          </button>
+
           <div className="my-1 flex items-end justify-between">
             <div className="flex items-center space-x-2">
               <span
@@ -292,6 +285,14 @@ const SubLimite: React.FC = () => {
                 Baixo
               </span>
             </div>
+            <button
+              onClick={() => exportToExcel(data, 'Lista_de_Clientes')}
+              className="flex items-center justify-center rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-700"
+              title="Exportar para Excel"
+            >
+              <RiFileExcel2Fill size={20} className="mr-2" />
+              <span>EXPORTAR PARA EXCEL</span>
+            </button>
             <input
               type="text"
               value={search}

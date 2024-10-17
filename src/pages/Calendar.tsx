@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import DefaultLayout from '../layout/DefautLayout'; // Verifique se o caminho está correto
+import DefaultLayout from '../layout/DefautLayout'; 
 import CalendarComponent from '../components/CalendarComponent';
 
 const Calendar: React.FC = () => {

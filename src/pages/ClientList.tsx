@@ -10,6 +10,7 @@ import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
 import { CgArrowsVAlt } from 'react-icons/cg';
 import { format, getYear, getMonth, subMonths } from 'date-fns';
 import * as XLSX from 'xlsx';
+import { FaFileExport } from 'react-icons/fa';
 
 // funçao tratar valores inválidos
 const parseValue = (value) => {
@@ -314,6 +315,24 @@ const ClientList: React.FC = () => {
     return ''; // Cor padrão
   };
 
+  const exportToExcel = (data: any[], fileName: string) => {
+    const filteredData = data.map((item) => {
+      const porcentagemEvento380 = (item.valor380 / 100); 
+  
+      return {
+        Nome: item.nome,
+        Faturamento: formatCurrency(parseValue(item.faturamento)),
+        'Gastos / Despesas': formatCurrency(parseValue(item.sobra380)),
+        'Evento 380': `${porcentagemEvento380.toFixed(2)} %`
+      };
+    });
+  
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  };
+
   return (
     <DefaultLayout>
       <div
@@ -324,7 +343,14 @@ const ClientList: React.FC = () => {
           <h1 className="font-sans text-2xl font-bold text-black dark:text-white">
             Lista de clientes
           </h1>
-          <div className="my-2 flex items-end justify-between">
+          <button
+            onClick={() => exportToExcel(data, 'Lista_de_Clientes')}
+            className="text-blue-500 hover:text-blue-700"
+            title="Exportar para Excel"
+          >
+            <FaFileExport size={20} />
+          </button>
+          <div className="my-1 flex items-end justify-between">
             <div className="flex items-center space-x-2">
               <span
                 className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 font-sans text-sm font-semibold text-white dark:bg-blackseveridade"

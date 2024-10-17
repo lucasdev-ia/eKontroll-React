@@ -7,6 +7,8 @@ import {
 import { LuArrowRightToLine, LuArrowLeftToLine } from 'react-icons/lu';
 import { IoArrowUpOutline, IoArrowDown } from 'react-icons/io5';
 import { CgArrowsVAlt } from 'react-icons/cg';
+import * as XLSX from 'xlsx';
+import { FaFileExport } from 'react-icons/fa';
 
 const parseValue = (value) => {
   if (
@@ -59,6 +61,24 @@ const SubLimite: React.FC = () => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(valor);
+  };
+
+  const exportToExcel = (data: any[], fileName: string) => {
+    const filteredData = data.map((item) => {
+      const porcentagem = (item.faturamento / 3600000) * 100;
+      const porcentagemFinal = Math.round(porcentagem);
+  
+      return {
+        Nome: item.nome,
+        Faturamento: formatarParaBRL(parseValue(item.faturamento)),
+        Limite: `${porcentagemFinal} %`
+      };
+    });
+  
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -238,6 +258,13 @@ const SubLimite: React.FC = () => {
           <h1 className="font-sans text-2xl font-bold text-black dark:text-white">
             Sublimite do simples
           </h1>
+          <button
+            onClick={() => exportToExcel(data, 'Lista_de_Clientes')}
+            className="text-blue-500 hover:text-blue-700"
+            title="Exportar para Excel"
+          >
+            <FaFileExport size={20} />
+          </button>
           <div className="my-2 flex items-end justify-between">
             <div className="flex items-center space-x-2">
               <span

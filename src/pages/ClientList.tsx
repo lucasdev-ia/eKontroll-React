@@ -11,8 +11,10 @@ import { CgArrowsVAlt } from 'react-icons/cg';
 import { format, getYear, getMonth, subMonths } from 'date-fns';
 import * as XLSX from 'xlsx';
 import { RiFileExcel2Fill } from 'react-icons/ri';
+import { MdPictureAsPdf } from "react-icons/md";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
-// funçao tratar valores inválidos
 const parseValue = (value) => {
   if (
     value === null ||
@@ -315,6 +317,35 @@ const ClientList: React.FC = () => {
     return ''; // Cor padrão
   };
 
+  const exportToPDF = (data: any[], fileName: string) => {
+    const doc = new jsPDF();
+  
+    const tableData = data.map((item) => {
+      const porcentagemEvento380 = item.valor380 / 100;
+      
+      return [
+        item.nome,
+        formatCurrency(parseValue(item.faturamento)),
+        formatCurrency(parseValue(item.sobra380)),
+        `${porcentagemEvento380.toFixed(2)} %`,
+      ];
+    });
+  
+    const tableHeaders = ['Nome', 'Faturamento', 'Gastos/Despesas', 'Evento 380'];
+  
+    autoTable(doc, {
+      head: [tableHeaders],
+      body: tableData,
+      styles: {
+        fillColor: [255, 255, 255], 
+        textColor: [0, 0, 0],       
+        fontSize: 10,               
+      }
+    });
+    
+    doc.save(`${fileName}.pdf`);
+  };
+
   const exportToExcel = (data: any[], fileName: string) => {
     const filteredData = data.map((item) => {
       const porcentagemEvento380 = item.valor380 / 100;
@@ -379,12 +410,20 @@ const ClientList: React.FC = () => {
               </span>
             </div>
             <button
+              onClick={() => exportToPDF(data, 'Lista_de_Clientes')}
+              className="flex items-center justify-center rounded-lg bg-red-600 px-2 py-1 font-bold text-white hover:bg-red-700"
+              title="Exportar para Excel"
+            >
+              <MdPictureAsPdf size={20} className="mr-2" />
+              <span>PDF</span>
+            </button>
+            <button
               onClick={() => exportToExcel(data, 'Lista_de_Clientes')}
-              className="flex items-center justify-center rounded-lg bg-blue-500 px-2 py-1 font-bold text-white hover:bg-blue-700"
+              className="flex items-center justify-center rounded-lg bg-green-600 px-2 py-1 font-bold text-white hover:bg-green-700"
               title="Exportar para Excel"
             >
               <RiFileExcel2Fill size={20} className="mr-2" />
-              <span>EXPORTAR PARA EXCEL</span>
+              <span>EXCEL</span>
             </button>
             <input
               type="text"

@@ -24,6 +24,8 @@
     "date-fns": "^3.6.0",
     "flowbite": "^2.4.1",
     "heroicons": "^2.1.5",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "localforage": "^1.10.0",
     "luxon": "^3.4.4",
     "match-sorter": "^6.3.4",

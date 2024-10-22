@@ -328,6 +328,13 @@ const ClientList: React.FC = () => {
     });
 
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const colunmWidths = [ 
+      {wch:30}, 
+      {wch:20},
+      {wch:15},
+      {wch:10}
+    ]
+    worksheet['!cols'] = colunmWidths;
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
     XLSX.writeFile(workbook, `${fileName}.xlsx`);

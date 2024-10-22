@@ -67,6 +67,7 @@ const SubLimite: React.FC = () => {
       const porcentagem = (item.faturamento / 3600000) * 100;
       const porcentagemFinal = Math.round(porcentagem);
 
+
       return {
         Nome: item.nome,
         Faturamento: formatarParaBRL(parseValue(item.faturamento)),
@@ -75,6 +76,12 @@ const SubLimite: React.FC = () => {
     });
 
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const colunmWidths = [ 
+      {wch:30}, 
+      {wch:20},
+      {wch:15}
+    ]
+    worksheet['!cols'] = colunmWidths;
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
     XLSX.writeFile(workbook, `${fileName}.xlsx`);

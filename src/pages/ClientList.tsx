@@ -302,6 +302,7 @@ const ClientList: React.FC = () => {
     setFilterActive(false);
     setData(originalData);
   };
+  
 
   const getBackgroundColor = (value) => {
     const numericValue = parseValue(value);
@@ -317,9 +318,8 @@ const ClientList: React.FC = () => {
     return ''; // Cor padrão
   };
 
-  const exportToPDF = (data: any[], fileName: string) => {
+    const exportToPDF = (data: any[], fileName: string) => {
     const doc = new jsPDF();
-  
     const tableData = data.map((item) => {
       const porcentagemEvento380 = item.valor380 / 100;
       

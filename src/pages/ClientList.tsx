@@ -342,7 +342,6 @@ const ClientList: React.FC = () => {
         fontSize: 10,               
       }
     });
-    
     doc.save(`${fileName}.pdf`);
   };
 

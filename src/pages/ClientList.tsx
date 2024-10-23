@@ -11,7 +11,7 @@ import { CgArrowsVAlt } from 'react-icons/cg';
 import { format, getYear, getMonth, subMonths } from 'date-fns';
 import * as XLSX from 'xlsx';
 import { RiFileExcel2Fill } from 'react-icons/ri';
-import { MdPictureAsPdf } from "react-icons/md";
+import { MdPictureAsPdf } from 'react-icons/md';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -302,7 +302,6 @@ const ClientList: React.FC = () => {
     setFilterActive(false);
     setData(originalData);
   };
-  
 
   const getBackgroundColor = (value) => {
     const numericValue = parseValue(value);
@@ -318,11 +317,11 @@ const ClientList: React.FC = () => {
     return ''; // Cor padrão
   };
 
-    const exportToPDF = (data: any[], fileName: string) => {
+  const exportToPDF = (data: any[], fileName: string) => {
     const doc = new jsPDF();
     const tableData = data.map((item) => {
       const porcentagemEvento380 = item.valor380 / 100;
-      
+
       return [
         item.nome,
         formatCurrency(parseValue(item.faturamento)),
@@ -330,17 +329,22 @@ const ClientList: React.FC = () => {
         `${porcentagemEvento380.toFixed(2)} %`,
       ];
     });
-  
-    const tableHeaders = ['Nome', 'Faturamento', 'Gastos/Despesas', 'Evento 380'];
-  
+
+    const tableHeaders = [
+      'Nome',
+      'Faturamento',
+      'Gastos/Despesas',
+      'Evento 380',
+    ];
+
     autoTable(doc, {
       head: [tableHeaders],
       body: tableData,
       styles: {
-        fillColor: [255, 255, 255], 
-        textColor: [0, 0, 0],       
-        fontSize: 10,               
-      }
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontSize: 10,
+      },
     });
     doc.save(`${fileName}.pdf`);
   };
@@ -358,12 +362,7 @@ const ClientList: React.FC = () => {
     });
 
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
-    const colunmWidths = [ 
-      {wch:30}, 
-      {wch:20},
-      {wch:15},
-      {wch:10}
-    ]
+    const colunmWidths = [{ wch: 30 }, { wch: 20 }, { wch: 15 }, { wch: 10 }];
     worksheet['!cols'] = colunmWidths;
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
@@ -376,42 +375,18 @@ const ClientList: React.FC = () => {
         className="container mx-auto p-0"
         style={{ marginTop: '0', paddingTop: '0' }}
       >
-        <div className="flex flex-col" style={{ margin: '0', padding: '0' }}>
+        <div
+          className="mb-4 flex items-center justify-between"
+          style={{ margin: '0', padding: '0' }}
+        >
           <h1 className="font-sans text-2xl font-bold text-black dark:text-white">
             Lista de clientes
           </h1>
-
-          <div className="my-1 flex items-end justify-between">
-            <div className="flex items-center space-x-2">
-              <span
-                className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 font-sans text-sm font-semibold text-white dark:bg-blackseveridade"
-                onClick={handleResetFilter}
-              >
-                Status:
-              </span>
-              <span
-                className={`inline-block cursor-pointer rounded-full bg-red-700 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-red-800`}
-                onClick={() => handleSeverityFilter('Alto')}
-              >
-                Alto
-              </span>
-              <span
-                className={`inline-block cursor-pointer rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Medio' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-yellow-800`}
-                onClick={() => handleSeverityFilter('Medio')}
-              >
-                Medio
-              </span>
-              <span
-                className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-green-900`}
-                onClick={() => handleSeverityFilter('Baixo')}
-              >
-                Baixo
-              </span>
-            </div>
+          <div className="flex space-x-2">
             <button
               onClick={() => exportToPDF(data, 'Lista_de_Clientes')}
               className="flex items-center justify-center rounded-lg bg-red-600 px-2 py-1 font-bold text-white hover:bg-red-700"
-              title="Exportar para Excel"
+              title="Exportar para PDF"
             >
               <MdPictureAsPdf size={20} className="mr-2" />
               <span>PDF</span>
@@ -424,14 +399,42 @@ const ClientList: React.FC = () => {
               <RiFileExcel2Fill size={20} className="mr-2" />
               <span>EXCEL</span>
             </button>
-            <input
-              type="text"
-              value={search}
-              onChange={handleSearchChange}
-              placeholder="Pesquisar..."
-              className="border-gray-300 ease-in-ou h-10 w-80 rounded border p-2 px-2 shadow-sm transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-[#1e2a38] dark:text-white dark:placeholder-white"
-            />
           </div>
+        </div>
+        <div className="my-1 flex items-end justify-between">
+          <div className="flex items-center space-x-2">
+            <span
+              className="inline-block cursor-pointer rounded-full bg-black px-2 py-1 font-sans text-sm font-semibold text-white dark:bg-blackseveridade"
+              onClick={handleResetFilter}
+            >
+              Status:
+            </span>
+            <span
+              className={`inline-block cursor-pointer rounded-full bg-red-700 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Alto' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-red-800`}
+              onClick={() => handleSeverityFilter('Alto')}
+            >
+              Alto
+            </span>
+            <span
+              className={`inline-block cursor-pointer rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Medio' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-yellow-800`}
+              onClick={() => handleSeverityFilter('Medio')}
+            >
+              Medio
+            </span>
+            <span
+              className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-green-900`}
+              onClick={() => handleSeverityFilter('Baixo')}
+            >
+              Baixo
+            </span>
+          </div>
+          <input
+            type="text"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder="Pesquisar..."
+            className="border-gray-300 h-10 w-80 rounded border p-2 px-2 shadow-sm transition duration-300 ease-in-out focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-[#1e2a38] dark:text-white dark:placeholder-white"
+          />
         </div>
         <div className="overflow-x-auto">
           <table className="dark:border-gray-700 min-w-full border bg-white text-black dark:bg-[#1e2a38] dark:text-white">

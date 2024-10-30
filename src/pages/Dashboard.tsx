@@ -185,12 +185,12 @@ const Dashboard: React.FC = () => {
         return (
           <div>
             <UserPlusIcon
-              className="text- size-19 stroke-black dark:stroke-white dark:text-boxdark"
+              className="text- size-19 stroke-black dark:stroke-white dark:text-boxdark cursor-pointer"
               onClick={openModal}
             />
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-              <h2>Novos Clientes</h2>
-              <p style={{ whiteSpace: 'pre-line' }}>{formattedText}</p>
+              
+              <p className='text-black' style={{ whiteSpace: 'pre-line' }}>{formattedText}</p>
             </Modal>
           </div>
         );

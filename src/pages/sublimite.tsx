@@ -45,14 +45,16 @@ const SubLimite: React.FC = () => {
         const response = await fetch('http://192.168.25.83:3000/eventos');
         const result = await response.json();
         
-        // Mantém todos os dados originais
-        setOriginalData(result);
-        
-        // Filtra e ordena apenas para data
         const filteredResult = result
           .filter(item => item.regime === "SIMPLES NACIONAL")
-          .sort((a, b) => b.faturamento - a.faturamento);
+          .sort((a, b) => b.faturamento - a.faturamento)
+          .map(item => ({
+            ...item,
+            faturamentoCompartilhado: Math.random() * 1000000, // Valor aleatório
+            limiteCompartilhado: Math.random() * 100 // Valor aleatório
+          }));
         
+        setOriginalData(filteredResult);
         setData(filteredResult);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
@@ -79,15 +81,18 @@ const SubLimite: React.FC = () => {
     const tableData = data.map((item) => {
       const porcentagem = (item.faturamento / 3600000) * 100;
       const porcentagemFinal = Math.round(porcentagem);
+      const limiteCompartilhado = (item.faturamentoCompartilhado / 3600000) * 100;
 
       return [
         item.nome,
         formatarParaBRL(parseValue(item.faturamento)),
         `${porcentagemFinal} %`,
+        formatarParaBRL(parseValue(item.faturamentoCompartilhado)),
+        `${Math.round(limiteCompartilhado)} %`,
       ];
     });
 
-    const tableHeaders = ['Nome', 'Faturamento', 'Limite'];
+    const tableHeaders = ['Nome', 'Faturamento', 'Limite', 'Faturamento Compartilhado', 'Limite Compartilhado'];
 
     autoTable(doc, {
       head: [tableHeaders],
@@ -95,7 +100,7 @@ const SubLimite: React.FC = () => {
       styles: {
         fillColor: [255, 255, 255],
         textColor: [0, 0, 0],
-        fontSize: 10,
+        fontSize: 8,
       },
     });
 
@@ -106,16 +111,19 @@ const SubLimite: React.FC = () => {
     const filteredData = data.map((item) => {
       const porcentagem = (item.faturamento / 3600000) * 100;
       const porcentagemFinal = Math.round(porcentagem);
+      const limiteCompartilhado = (item.faturamentoCompartilhado / 3600000) * 100;
 
       return {
         Nome: item.nome,
         Faturamento: formatarParaBRL(parseValue(item.faturamento)),
         Limite: `${porcentagemFinal} %`,
+        'Faturamento Compartilhado': formatarParaBRL(parseValue(item.faturamentoCompartilhado)),
+        'Limite Compartilhado': `${Math.round(limiteCompartilhado)} %`,
       };
     });
 
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
-    const colunmWidths = [{ wch: 30 }, { wch: 20 }, { wch: 15 }];
+    const colunmWidths = [{ wch: 30 }, { wch: 20 }, { wch: 15 }, { wch: 20 }, { wch: 15 }];
     worksheet['!cols'] = colunmWidths;
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
@@ -166,25 +174,31 @@ const SubLimite: React.FC = () => {
       sortedData = [...data].sort((a, b) => {
         let valueA, valueB;
 
-        if (field === 'nome') {
-          valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
-          valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
-          return newSortDirection === 'ASC'
-            ? valueA.localeCompare(valueB)
-            : valueB.localeCompare(valueA);
-        } else if (field === 'faturamento') {
-          valueA = parseValue(a[field]);
-          valueB = parseValue(b[field]);
-        } else if (field === 'limite') {
-          valueA = parseValue((a.faturamento / 3600000) * 100);
-          valueB = parseValue((b.faturamento / 3600000) * 100);
+        switch (field) {
+          case 'nome':
+            valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
+            valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
+            return newSortDirection === 'ASC'
+              ? valueA.localeCompare(valueB)
+              : valueB.localeCompare(valueA);
+          case 'faturamento':
+          case 'faturamentoCompartilhado':
+            valueA = parseValue(a[field]);
+            valueB = parseValue(b[field]);
+            break;
+          case 'limite':
+            valueA = parseValue((a.faturamento / 3600000) * 100);
+            valueB = parseValue((b.faturamento / 3600000) * 100);
+            break;
+          case 'limiteCompartilhado':
+            valueA = parseValue((a.faturamentoCompartilhado / 3600000) * 100);
+            valueB = parseValue((b.faturamentoCompartilhado / 3600000) * 100);
+            break;
+          default:
+            return 0;
         }
 
-        if (newSortDirection === 'ASC') {
-          return valueA - valueB;
-        } else {
-          return valueB - valueA;
-        }
+        return newSortDirection === 'ASC' ? valueA - valueB : valueB - valueA;
       });
     }
 
@@ -215,7 +229,6 @@ const SubLimite: React.FC = () => {
     if (numericValue > 100) {
       return 'bg-redempresas dark:bg-vermelhoescuro bg-opacity-20'; // Vermelho
     } else if (numericValue > 80) {
-      5;
       return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-200'; // Amarelo
     } else if (numericValue > 1) {
       return 'bg-greenempresas bg-opacity-20  dark:bg-verdeescuro '; // Verde
@@ -343,159 +356,199 @@ const SubLimite: React.FC = () => {
               Medio
             </span>
             <span
-              className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-green-900`}
-              onClick={() => handleSeverityFilter('Baixo')}
-            >
-              Baixo
-            </span>
-          </div>
-          <input
-            type="text"
-            value={search}
-            onChange={handleSearchChange}
-            placeholder="Pesquisar..."
-            className="border-gray-300 h-10 w-80 rounded border p-2 px-2 shadow-sm transition duration-300 ease-in-out focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-[#1e2a38] dark:text-white dark:placeholder-white"
-          />
-        </div>
-        <div className="overflow-x-auto">
-          <table className="dark:border-gray-700 min-w-full border bg-white text-black dark:bg-[#1e2a38] dark:text-white">
-            <thead>
-              <tr>
-                <th
-                  className="cursor-pointer border px-4 py-2 font-sans"
-                  onClick={() => handleSort('nome')}
-                >
-                  Nome
-                  {sortField === 'nome' ? (
-                    sortDirection === 'ASC' ? (
-                      <IoArrowUpOutline className="ml-2 inline-block" />
-                    ) : (
-                      <IoArrowDown className="ml-2 inline-block" />
-                    )
-                  ) : (
-                    <CgArrowsVAlt className="ml-2 inline-block" />
-                  )}
-                </th>
-                <th
-                  className="cursor-pointer border px-4 py-2 font-sans"
-                  onClick={() => handleSort('faturamento')}
-                >
-                  Faturamento
-                  {sortField === 'faturamento' ? (
-                    sortDirection === 'ASC' ? (
-                      <IoArrowUpOutline className="ml-2 inline-block" />
-                    ) : (
-                      <IoArrowDown className="ml-2 inline-block" />
-                    )
-                  ) : (
-                    <CgArrowsVAlt className="ml-2 inline-block" />
-                  )}
-                </th>
-                <th
-                  className="cursor-pointer border px-4 py-2 font-sans"
-                  onClick={() => handleSort('limite')}
-                >
-                  Limite
-                  {sortField === 'limite' ? (
-                    sortDirection === 'ASC' ? (
-                      <IoArrowUpOutline className="ml-2 inline-block" />
-                    ) : (
-                      <IoArrowDown className="ml-2 inline-block" />
-                    )
-                  ) : (
-                    <CgArrowsVAlt className="ml-2 inline-block" />
-                  )}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.length === 0 ? (
-                <tr>
-                  <td colSpan={3} className="border px-4 py-2 text-center">
-                    Nenhum dado disponível
-                  </td>
-                </tr>
-              ) : (
-                currentItems.map((client, index) => {
-                  const porcentagem = (client.faturamento / 3600000) * 100;
-                  const porcentagemFinal = Math.round(porcentagem);
-                  return (
-                    <tr
-                      key={client.id || index}
-                      className="hover:bg-gray-100 dark:hover:bg-black-700"
-                    >
-                      <td className="text-black-900 w-1/3 truncate border px-4 py-2 font-sans dark:text-white">
-                        {client.nome}
-                      </td>
-                      <td className="text-black-900 w-1/3 border px-4 py-2 font-sans dark:text-white">
-                        {formatarParaBRL(parseValue(client.faturamento))}
-                      </td>
-                      <td
-                        className={`text-black-900 w-1/3 border px-4 py-2 font-sans dark:text-white ${getBackgroundColor(porcentagemFinal)}`}
-                      >
-                        {parseValue(porcentagemFinal)} %
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div className="mt-2 flex items-center justify-between">
-          <div className="flex flex-1 justify-center space-x-2">
-            <button
-              onClick={handleFirstPage}
-              className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
-              disabled={currentPage === 1}
-            >
-              <LuArrowLeftToLine className="text-gray-700 inline-block dark:text-white" />
-            </button>
-            <button
-              onClick={handlePreviousPage}
-              className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
-              disabled={currentPage === 1}
-            >
-              <HiOutlineArrowSmallLeft className="text-gray-700 inline-block dark:text-white" />
-            </button>
-            {getPageNumbers().map((pageNumber) => (
-              <button
-                key={pageNumber}
-                onClick={() => handlePageChange(pageNumber)}
-                className={`rounded border px-4 py-2 ${currentPage === pageNumber ? 'bg-azullogo text-white dark:bg-azullogo' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
-              >
-                {pageNumber}
-              </button>
-            ))}
-            <button
-              onClick={handleNextPage}
-              className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
-              disabled={currentPage === totalPages}
-            >
-              <HiOutlineArrowSmallRight className="text-gray-700 inline-block dark:text-white" />
-            </button>
-            <button
-              onClick={handleLastPage}
-              className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
-              disabled={currentPage === totalPages}
-            >
-              <LuArrowRightToLine className="text-gray-700 inline-block dark:text-white" />
-            </button>
-          </div>
-          <select
-            id="itemsPerPage"
-            value={itemsPerPage}
-            onChange={handleItemsPerPageChange}
-            className="rounded border-borderFiltros p-1 dark:bg-corFiltros dark:text-white"
-          >
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-        </div>
-      </div>
-    </DefaultLayout>
-  );
-};
-
-export default SubLimite;
+                            className={`inline-block cursor-pointer rounded-full bg-green-600 px-3 py-1 text-sm font-semibold text-white ${filterSeverity === 'Baixo' ? 'bg-opacity-100' : 'bg-opacity-60'} font-sans hover:bg-green-900`}
+                            onClick={() => handleSeverityFilter('Baixo')}
+                          >
+                            Baixo
+                          </span>
+                        </div>
+                        <input
+                          type="text"
+                          value={search}
+                          onChange={handleSearchChange}
+                          placeholder="Pesquisar..."
+                          className="border-gray-300 h-10 w-80 rounded border p-2 px-2 shadow-sm transition duration-300 ease-in-out focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-[#1e2a38] dark:text-white dark:placeholder-white"
+                        />
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="dark:border-gray-700 min-w-full border bg-white text-black dark:bg-[#1e2a38] dark:text-white">
+                          <thead>
+                            <tr>
+                              <th
+                                className="cursor-pointer border px-4 py-2 font-sans"
+                                onClick={() => handleSort('nome')}
+                              >
+                                Nome
+                                {sortField === 'nome' ? (
+                                  sortDirection === 'ASC' ? (
+                                    <IoArrowUpOutline className="ml-2 inline-block" />
+                                  ) : (
+                                    <IoArrowDown className="ml-2 inline-block" />
+                                  )
+                                ) : (
+                                  <CgArrowsVAlt className="ml-2 inline-block" />
+                                )}
+                              </th>
+                              <th
+                                className="cursor-pointer border px-4 py-2 font-sans"
+                                onClick={() => handleSort('faturamento')}
+                              >
+                                Faturamento
+                                {sortField === 'faturamento' ? (
+                                  sortDirection === 'ASC' ? (
+                                    <IoArrowUpOutline className="ml-2 inline-block" />
+                                  ) : (
+                                    <IoArrowDown className="ml-2 inline-block" />
+                                  )
+                                ) : (
+                                  <CgArrowsVAlt className="ml-2 inline-block" />
+                                )}
+                              </th>
+                              <th
+                                className="cursor-pointer border px-4 py-2 font-sans"
+                                onClick={() => handleSort('limite')}
+                              >
+                                Limite
+                                {sortField === 'limite' ? (
+                                  sortDirection === 'ASC' ? (
+                                    <IoArrowUpOutline className="ml-2 inline-block" />
+                                  ) : (
+                                    <IoArrowDown className="ml-2 inline-block" />
+                                  )
+                                ) : (
+                                  <CgArrowsVAlt className="ml-2 inline-block" />
+                                )}
+                              </th>
+                              <th
+                                className="cursor-pointer border px-4 py-2 font-sans"
+                                onClick={() => handleSort('faturamentoCompartilhado')}
+                              >
+                                Faturamento Compartilhado
+                                {sortField === 'faturamentoCompartilhado' ? (
+                                  sortDirection === 'ASC' ? (
+                                    <IoArrowUpOutline className="ml-2 inline-block" />
+                                  ) : (
+                                    <IoArrowDown className="ml-2 inline-block" />
+                                  )
+                                ) : (
+                                  <CgArrowsVAlt className="ml-2 inline-block" />
+                                )}
+                              </th>
+                              <th
+                                className="cursor-pointer border px-4 py-2 font-sans"
+                                onClick={() => handleSort('limiteCompartilhado')}
+                              >
+                                Limite Compartilhado
+                                {sortField === 'limiteCompartilhado' ? (
+                                  sortDirection === 'ASC' ? (
+                                    <IoArrowUpOutline className="ml-2 inline-block" />
+                                  ) : (
+                                    <IoArrowDown className="ml-2 inline-block" />
+                                  )
+                                ) : (
+                                  <CgArrowsVAlt className="ml-2 inline-block" />
+                                )}
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {currentItems.length === 0 ? (
+                              <tr>
+                                <td colSpan={5} className="border px-4 py-2 text-center">
+                                  Nenhum dado disponível
+                                </td>
+                              </tr>
+                            ) : (
+                              currentItems.map((client, index) => {
+                                const porcentagem = (client.faturamento / 3600000) * 100;
+                                const porcentagemFinal = Math.round(porcentagem);
+                                const limiteCompartilhado = (client.faturamentoCompartilhado / 3600000) * 100;
+                                const limiteCompartilhadoFinal = Math.round(limiteCompartilhado);
+                                return (
+                                  <tr
+                                    key={client.id || index}
+                                    className="hover:bg-gray-100 dark:hover:bg-black-700"
+                                  >
+                                    <td className="text-black-900 w-1/5 truncate border px-4 py-2 font-sans dark:text-white">
+                                      {client.nome}
+                                    </td>
+                                    <td className="text-black-900 w-1/5 border px-4 py-2 font-sans dark:text-white">
+                                      {formatarParaBRL(parseValue(client.faturamento))}
+                                    </td>
+                                    <td
+                                      className={`text-black-900 w-1/5 border px-4 py-2 font-sans dark:text-white ${getBackgroundColor(porcentagemFinal)}`}
+                                    >
+                                      {parseValue(porcentagemFinal)} %
+                                    </td>
+                                    <td className="text-black-900 w-1/5 border px-4 py-2 font-sans dark:text-white">
+                                      {formatarParaBRL(parseValue(client.faturamentoCompartilhado))}
+                                    </td>
+                                    <td
+                                      className={`text-black-900 w-1/5 border px-4 py-2 font-sans dark:text-white ${getBackgroundColor(limiteCompartilhadoFinal)}`}
+                                    >
+                                      {parseValue(limiteCompartilhadoFinal)} %
+                                    </td>
+                                  </tr>
+                                );
+                              })
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="mt-2 flex items-center justify-between">
+                        <div className="flex flex-1 justify-center space-x-2">
+                          <button
+                            onClick={handleFirstPage}
+                            className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
+                            disabled={currentPage === 1}
+                          >
+                            <LuArrowLeftToLine className="text-gray-700 inline-block dark:text-white" />
+                          </button>
+                          <button
+                            onClick={handlePreviousPage}
+                            className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
+                            disabled={currentPage === 1}
+                          >
+                            <HiOutlineArrowSmallLeft className="text-gray-700 inline-block dark:text-white" />
+                          </button>
+                          {getPageNumbers().map((pageNumber) => (
+                            <button
+                              key={pageNumber}
+                              onClick={() => handlePageChange(pageNumber)}
+                              className={`rounded border px-4 py-2 ${currentPage === pageNumber ? 'bg-azullogo text-white dark:bg-azullogo' : 'bg-gray-200 dark:bg-gray-800 dark:border-gray-600'}`}
+                            >
+                              {pageNumber}
+                            </button>
+                          ))}
+                          <button
+                            onClick={handleNextPage}
+                            className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
+                            disabled={currentPage === totalPages}
+                          >
+                            <HiOutlineArrowSmallRight className="text-gray-700 inline-block dark:text-white" />
+                          </button>
+                          <button
+                            onClick={handleLastPage}
+                            className="bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded border px-4 py-2"
+                            disabled={currentPage === totalPages}
+                          >
+                            <LuArrowRightToLine className="text-gray-700 inline-block dark:text-white" />
+                          </button>
+                        </div>
+                        <select
+                          id="itemsPerPage"
+                          value={itemsPerPage}
+                          onChange={handleItemsPerPageChange}
+                          className="rounded border-borderFiltros p-1 dark:bg-corFiltros dark:text-white"
+                        >
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                        </select>
+                      </div>
+                    </div>
+                  </DefaultLayout>
+                );
+              };
+              
+              export default SubLimite;

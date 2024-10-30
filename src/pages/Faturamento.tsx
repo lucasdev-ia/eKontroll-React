@@ -70,13 +70,12 @@ const Faturamento: React.FC = () => {
     const doc = new jsPDF();
 
     const tableData = data.map((item) => {
-      const porcentagem = (item.faturamento / 3600000) * 100;
-      const porcentagemFinal = Math.round(porcentagem);
+      const regime = item.regime
 
       return [
         item.nome,
         formatarParaBRL(parseValue(item.faturamento)),
-        `${porcentagemFinal} %`,
+        `${regime}`,
       ];
     });
 
@@ -97,13 +96,12 @@ const Faturamento: React.FC = () => {
 
   const exportToExcel = (data: any[], fileName: string) => {
     const filteredData = data.map((item) => {
-      const porcentagem = (item.faturamento / 3600000) * 100;
-      const porcentagemFinal = Math.round(porcentagem);
+      const regime = item.regime
 
       return {
         Nome: item.nome,
         Faturamento: formatarParaBRL(parseValue(item.faturamento)),
-        Regime: `${porcentagemFinal} %`,
+        Regime: `${regime}`,
       };
     });
 

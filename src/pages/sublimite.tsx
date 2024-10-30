@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DefaultLayout from '../layout/DefautLayout';
+import { sociosAtualizados } from '../services/api';
 import {
   HiOutlineArrowSmallLeft,
   HiOutlineArrowSmallRight,
@@ -53,6 +54,19 @@ const SubLimite: React.FC = () => {
       }
     };
 
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await sociosAtualizados();
+        setData(response);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+    };
+  
     fetchData();
   }, []);
 

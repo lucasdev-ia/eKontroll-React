@@ -56,18 +56,6 @@ const Faturamento: React.FC = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await sociosAtualizados();
-        setData(response);
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-      }
-    };
-  
-    fetchData();
-  }, []);
 
   const formatarParaBRL = (valor: number): string => {
     return new Intl.NumberFormat('pt-BR', {
@@ -92,7 +80,7 @@ const Faturamento: React.FC = () => {
       ];
     });
 
-    const tableHeaders = ['Nome', 'Faturamento', 'Limite'];
+    const tableHeaders = ['Nome', 'Faturamento', 'Regime'];
 
     autoTable(doc, {
       head: [tableHeaders],
@@ -115,7 +103,7 @@ const Faturamento: React.FC = () => {
       return {
         Nome: item.nome,
         Faturamento: formatarParaBRL(parseValue(item.faturamento)),
-        Limite: `${porcentagemFinal} %`,
+        Regime: `${porcentagemFinal} %`,
       };
     });
 
@@ -146,7 +134,7 @@ const Faturamento: React.FC = () => {
 
   const handleSort = (field: string) => {
     let newSortDirection;
-
+  
     if (sortField === field) {
       if (sortDirection === 'ASC') {
         newSortDirection = 'DESC';
@@ -159,18 +147,18 @@ const Faturamento: React.FC = () => {
     } else {
       newSortDirection = 'ASC';
     }
-
+  
     setSortField(newSortDirection ? field : null);
     setSortDirection(newSortDirection);
-
+  
     let sortedData;
-
+  
     if (newSortDirection === null) {
       sortedData = [...originalData];
     } else {
       sortedData = [...data].sort((a, b) => {
         let valueA, valueB;
-
+  
         if (field === 'nome') {
           valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
           valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
@@ -180,19 +168,19 @@ const Faturamento: React.FC = () => {
         } else if (field === 'faturamento') {
           valueA = parseValue(a[field]);
           valueB = parseValue(b[field]);
-        } else if (field === 'limite') {
-          valueA = parseValue((a.faturamento / 3600000) * 100);
-          valueB = parseValue((b.faturamento / 3600000) * 100);
+          return newSortDirection === 'ASC' ? valueA - valueB : valueB - valueA;
+        } else if (field === 'Regime') {
+          valueA = a.regime ? a.regime.toLowerCase().trim() : '';
+          valueB = b.regime ? b.regime.toLowerCase().trim() : '';
+          return newSortDirection === 'ASC'
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA);
         }
-
-        if (newSortDirection === 'ASC') {
-          return valueA - valueB;
-        } else {
-          return valueB - valueA;
-        }
+  
+        return 0;
       });
     }
-
+  
     setData(sortedData);
   };
 
@@ -306,7 +294,7 @@ const Faturamento: React.FC = () => {
           style={{ margin: '0', padding: '0' }}
         >
           <h1 className="font-sans text-2xl font-bold text-black dark:text-white">
-            Sublimite do simples
+            SubRegime do simples
           </h1>
           <div className="flex space-x-2">
             <button
@@ -398,10 +386,10 @@ const Faturamento: React.FC = () => {
                 </th>
                 <th
                   className="cursor-pointer border px-4 py-2 font-sans"
-                  onClick={() => handleSort('limite')}
+                  onClick={() => handleSort('Regime')}
                 >
-                  Limite
-                  {sortField === 'limite' ? (
+                  Regime
+                  {sortField === 'Regime' ? (
                     sortDirection === 'ASC' ? (
                       <IoArrowUpOutline className="ml-2 inline-block" />
                     ) : (
@@ -436,9 +424,9 @@ const Faturamento: React.FC = () => {
                         {formatarParaBRL(parseValue(client.faturamento))}
                       </td>
                       <td
-                        className={`text-black-900 w-1/3 border px-4 py-2 font-sans dark:text-white ${getBackgroundColor(porcentagemFinal)}`}
+                        className={`text-black-900 w-1/3 border px-4 py-2 font-sans dark:text-white `}
                       >
-                        {parseValue(porcentagemFinal)} %
+                        {(client.regime)} 
                       </td>
                     </tr>
                   );

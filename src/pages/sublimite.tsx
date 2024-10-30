@@ -44,19 +44,25 @@ const SubLimite: React.FC = () => {
       try {
         const response = await fetch('http://192.168.25.83:3000/eventos');
         const result = await response.json();
-        result.sort((a, b) => b.faturamento - a.faturamento);
-        setData(result);
+        
+        // Mantém todos os dados originais
         setOriginalData(result);
+        
+        // Filtra e ordena apenas para data
+        const filteredResult = result
+          .filter(item => item.regime === "SIMPLES NACIONAL")
+          .sort((a, b) => b.faturamento - a.faturamento);
+        
+        setData(filteredResult);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
-
  
   const formatarParaBRL = (valor: number): string => {
     return new Intl.NumberFormat('pt-BR', {

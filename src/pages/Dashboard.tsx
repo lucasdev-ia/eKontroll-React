@@ -168,11 +168,11 @@ const Dashboard: React.FC = () => {
         );
       case 2:
         return (
-          <CakeIcon className="size-19 stroke-black text-laranjalogo dark:stroke-white dark:text-boxdark" />
+          <CakeIcon className="size-19 stroke-black text-laranjalogo dark:stroke-white dark:text-boxdark cursor-pointer" onClick={() => navigate('/Calendario')} />
         );
       case 3:
         return (
-          <UserCircleIcon className="size-19 stroke-black text-verdecalendario dark:stroke-white dark:text-boxdark" />
+          <UserCircleIcon className="size-19 stroke-black text-verdecalendario dark:stroke-white dark:text-boxdark cursor-pointer" onClick={() => navigate('/calendarioSocios')}/>
         );
       case 4:
         return (

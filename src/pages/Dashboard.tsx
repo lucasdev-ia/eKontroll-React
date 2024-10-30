@@ -117,21 +117,28 @@ const Dashboard: React.FC = () => {
     }
     return parseFloat(value);
   };
-
   useEffect(() => {
     const fetchEventos = async () => {
       try {
-        const data = await consultaEventos();
-        const organizedData = data.map((evento) => ({
-          ...evento,
-          valor380: parseValue(evento.valor380),
-        }));
-          organizedData.sort((a, b) => b.faturamento - a.faturamento);
-        setEventos(organizedData);
+        const response = await fetch('http://192.168.25.83:3000/eventos');
+        const result = await response.json();
+        
+        // Mantém todos os dados originais
+        setOriginalData(result);
+        
+        // Filtra e ordena apenas para data
+        const filteredResult = result
+          .filter(item => item.regime === "SIMPLES NACIONAL")
+          .sort((a, b) => b.faturamento - a.faturamento);
+        
+        setEventos(filteredResult);
       } catch (error) {
-        console.error('Erro ao buscar dados da API', error);
+        console.error('Erro ao buscar dados:', error);
+      } finally {
+        setLoading(false);
       }
     };
+  
     fetchEventos();
   }, []);
 

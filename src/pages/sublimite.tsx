@@ -57,19 +57,7 @@ const SubLimite: React.FC = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await sociosAtualizados();
-        setData(response);
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-      }
-    };
-  
-    fetchData();
-  }, []);
-
+ 
   const formatarParaBRL = (valor: number): string => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -295,6 +283,7 @@ const SubLimite: React.FC = () => {
 
     return pageNumbers;
   };
+  
   return (
     <DefaultLayout>
       <div

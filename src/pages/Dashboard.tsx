@@ -21,7 +21,7 @@ import {
 } from '@heroicons/react/24/solid';
 import LucroChart from '../components/LucroChart.tsx';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-
+import Modal from '../components/ModalDiv.tsx';
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [birthdayData, setBirthdayData] = useState<any[]>([]);
@@ -33,7 +33,9 @@ const Dashboard: React.FC = () => {
   const [contador, setContador] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   useEffect(() => {
     if (location.state && location.state.clientId) {
       const clientId = location.state.clientId;
@@ -79,7 +81,7 @@ const Dashboard: React.FC = () => {
     return month === currentMonth && year === currentYear;
   });
   const lastClients = filteredData.map((client) => client.razao_social);
-
+  const formattedText = lastClients.join('\n');
   useEffect(() => {
     const fetchBirthdayData = async () => {
       try {
@@ -103,7 +105,6 @@ const Dashboard: React.FC = () => {
     };
     fetchSocioAniversario();
   }, []);
-  
 
   const parseValue = (value: any) => {
     if (
@@ -113,7 +114,7 @@ const Dashboard: React.FC = () => {
       value === -Infinity ||
       Number.isNaN(parseFloat(value))
     ) {
-      return 0; 
+      return 0;
     }
     return parseFloat(value);
   };
@@ -122,15 +123,15 @@ const Dashboard: React.FC = () => {
       try {
         const response = await fetch('http://192.168.25.83:3000/eventos');
         const result = await response.json();
-        
+
         // Mantém todos os dados originais
         setOriginalData(result);
-        
+
         // Filtra e ordena apenas para data
         const filteredResult = result
-          .filter(item => item.regime === "SIMPLES NACIONAL")
+          .filter((item) => item.regime === 'SIMPLES NACIONAL')
           .sort((a, b) => b.faturamento - a.faturamento);
-        
+
         setEventos(filteredResult);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
@@ -138,7 +139,7 @@ const Dashboard: React.FC = () => {
         setLoading(false);
       }
     };
-  
+
     fetchEventos();
   }, []);
 
@@ -168,16 +169,32 @@ const Dashboard: React.FC = () => {
         );
       case 2:
         return (
-          <CakeIcon className="size-19 stroke-black text-laranjalogo dark:stroke-white dark:text-boxdark cursor-pointer" onClick={() => navigate('/Calendario')} />
+          <CakeIcon
+            className="size-19 cursor-pointer stroke-black text-laranjalogo dark:stroke-white dark:text-boxdark"
+            onClick={() => navigate('/Calendario')}
+          />
         );
       case 3:
         return (
-          <UserCircleIcon className="size-19 stroke-black text-verdecalendario dark:stroke-white dark:text-boxdark cursor-pointer" onClick={() => navigate('/calendarioSocios')}/>
+          <UserCircleIcon
+            className="size-19 cursor-pointer stroke-black text-verdecalendario dark:stroke-white dark:text-boxdark"
+            onClick={() => navigate('/calendarioSocios')}
+          />
         );
       case 4:
         return (
-          <UserPlusIcon className="text- size-19 stroke-black dark:stroke-white dark:text-boxdark" />
+          <div>
+            <UserPlusIcon
+              className="text- size-19 stroke-black dark:stroke-white dark:text-boxdark"
+              onClick={openModal}
+            />
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+              <h2>Novos Clientes</h2>
+              <p style={{ whiteSpace: 'pre-line' }}>{formattedText}</p>
+            </Modal>
+          </div>
         );
+
       default:
         return null;
     }
@@ -217,14 +234,13 @@ const Dashboard: React.FC = () => {
   );
 
   function limitarPalavras(texto: string, numPalavras: number): string {
-    const palavras = texto.split(' '); 
+    const palavras = texto.split(' ');
     if (palavras.length <= numPalavras) {
-        return texto; 
+      return texto;
     } else {
-        return palavras.slice(0, numPalavras).join(' '); 
+      return palavras.slice(0, numPalavras).join(' ');
     }
-}
-
+  }
 
   return (
     <DefaultLayout>
@@ -298,14 +314,14 @@ const Dashboard: React.FC = () => {
               </Link>
             </div>
           </div>
-          <div className="mt-12 flex items-center justify-center font-sans font-bold">
-          </div>
+          <div className="mt-12 flex items-center justify-center font-sans font-bold"></div>
           <div className="grid grid-cols-3 place-items-end font-sans text-black-2 dark:text-white">
             {eventos.slice(contador, contador + 3).map((evento, index) => (
               <ChartFaturamento
                 key={index}
                 faturamento={evento.faturamento}
-                empresa={limitarPalavras(evento.nome, 4)}              />
+                empresa={limitarPalavras(evento.nome, 4)}
+              />
             ))}
           </div>
         </div>

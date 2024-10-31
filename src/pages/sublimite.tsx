@@ -58,7 +58,7 @@ const SubLimite: React.FC = () => {
         const ListaDeSocios = await sociosAtualizados();
 
         function juntarListas(lista1, lista2) {
-          const resultado = [];
+          const resultado:any = [];
           //percorre a lista principal
           for (const objeto1 of lista1) {
             //percorre a lista de socios
@@ -78,16 +78,13 @@ const SubLimite: React.FC = () => {
         }
         
       
-        
-
         const EmpresasCompletas:any[] = juntarListas(result, ListaDeSocios);
         const filteredResult = EmpresasCompletas
           .filter((item) => item.regime === 'SIMPLES NACIONAL')
           .sort((a, b) => b.faturamento - a.faturamento)
           .map((item) => ({
             ...item,
-            faturamentoCompartilhado: Math.random() * 1000000, // Valor aleatório
-            limiteCompartilhado: Math.random() * 100, // Valor aleatório
+            faturamentoCompartilhado: 3600000, // Valor aleatório
           }));
         setOriginalData(filteredResult);
         setData(filteredResult);

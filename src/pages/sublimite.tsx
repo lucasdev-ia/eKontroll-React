@@ -145,7 +145,7 @@ const SubLimite: React.FC = () => {
       const porcentagem = (item.faturamento / 3600000) * 100;
       const porcentagemFinal = Math.round(porcentagem);
       const limiteCompartilhado =
-        (item.faturamentoCompartilhado / 3600000) * 100;
+        (item.faturamentoCompartilhado / 4800000) * 100;
 
       return [
         item.nome,
@@ -182,7 +182,7 @@ const SubLimite: React.FC = () => {
       const porcentagem = (item.faturamento / 3600000) * 100;
       const porcentagemFinal = Math.round(porcentagem);
       const limiteCompartilhado =
-        (item.faturamentoCompartilhado / 3600000) * 100;
+        (item.faturamentoCompartilhado / 4800000) * 100;
 
       return {
         Nome: item.nome,
@@ -270,8 +270,8 @@ const SubLimite: React.FC = () => {
             valueB = parseValue((b.faturamento / 3600000) * 100);
             break;
           case 'limiteCompartilhado':
-            valueA = parseValue((a.faturamentoCompartilhado / 3600000) * 100);
-            valueB = parseValue((b.faturamentoCompartilhado / 3600000) * 100);
+            valueA = parseValue((a.faturamentoCompartilhado / 4800000) * 100);
+            valueB = parseValue((b.faturamentoCompartilhado / 4800000) * 100);
             break;
           default:
             return 0;
@@ -542,7 +542,7 @@ const SubLimite: React.FC = () => {
                   const porcentagem = (client.faturamento / 3600000) * 100;
                   const porcentagemFinal = Math.round(porcentagem);
                   const limiteCompartilhado =
-                    (client.faturamentoCompartilhado / 3600000) * 100;
+                    (client.faturamentoCompartilhado / 4800000) * 100;
                   const limiteCompartilhadoFinal =
                     Math.round(limiteCompartilhado);
                   return (

@@ -49,7 +49,6 @@ const SubLimite: React.FC = () => {
     idade: number;
   }
   interface PessoaCompleta extends Pessoa, Idade {}
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,16 +79,43 @@ const SubLimite: React.FC = () => {
         }
 
         const EmpresasCompletas: any[] = juntarListas(result, ListaDeSocios);
+        const resultadoParcial = EmpresasCompletas;
 
-        const filteredResult = EmpresasCompletas.filter(
-          (item) => item.regime === 'SIMPLES NACIONAL',
-        )
-          .sort((a, b) => b.faturamento - a.faturamento)
-          .map((item) => ({
-            ...item,
-            faturamentoCompartilhado: 2307889, // Valor aleatório
-            // Valor aleatório
-          }));
+        for (let item of resultadoParcial) {
+          item.socios = Object.keys(item)
+            .filter((key) => key.startsWith('socio_') && item[key])
+            .map((key) => item[key])
+            .filter((socio) => socio.trim() !== '');
+            item.faturamentoCompartilhado = parseFloat(item.faturamento)
+
+        }
+        for (let item1 of resultadoParcial) {
+          for (let item2 of resultadoParcial) {
+            if (item2.cnpj != item1.cnpj) {
+              function comparaListas(lista1, lista2) {
+                return lista1.some((item) => lista2.includes(item));
+              }
+
+              let comp = comparaListas(item1.socios, item2.socios);
+              if (comp == true) {
+
+                item1.faturamentoCompartilhado =
+                  item1.faturamentoCompartilhado + parseFloat(item2.faturamento);
+                  console.log(
+                    `A empresa ${item1.nome} tem os sócios ${item1.socios}com o faturamento de ${item1.faturamento} | a empresea ${item2.nome} tem os sócios ${item2.socios} e o faturamento de ${item2.faturamento} entao o faturamento total é: ${item1.faturamentoCompartilhado}`,
+                  )
+              }
+              else {item1.faturamentoCompartilhado = item1.faturamentoCompartilhado + 0 }
+            } else {
+            }
+          }
+        }
+
+        const filteredResult = resultadoParcial
+
+          .filter((item) => item.regime === 'SIMPLES NACIONAL')
+          .sort((a, b) => b.faturamento - a.faturamento);
+
         setOriginalData(filteredResult);
         setData(filteredResult);
         console.log(filteredResult);
@@ -119,7 +145,7 @@ const SubLimite: React.FC = () => {
       const porcentagem = (item.faturamento / 3600000) * 100;
       const porcentagemFinal = Math.round(porcentagem);
       const limiteCompartilhado =
-        (item.faturamentoCompartilhado / 3600000) * 100;
+        (item.faturamentoCompartilhado / 4800000) * 100;
 
       return [
         item.nome,
@@ -156,7 +182,7 @@ const SubLimite: React.FC = () => {
       const porcentagem = (item.faturamento / 3600000) * 100;
       const porcentagemFinal = Math.round(porcentagem);
       const limiteCompartilhado =
-        (item.faturamentoCompartilhado / 3600000) * 100;
+        (item.faturamentoCompartilhado / 4800000) * 100;
 
       return {
         Nome: item.nome,
@@ -244,8 +270,8 @@ const SubLimite: React.FC = () => {
             valueB = parseValue((b.faturamento / 3600000) * 100);
             break;
           case 'limiteCompartilhado':
-            valueA = parseValue((a.faturamentoCompartilhado / 3600000) * 100);
-            valueB = parseValue((b.faturamentoCompartilhado / 3600000) * 100);
+            valueA = parseValue((a.faturamentoCompartilhado / 4800000) * 100);
+            valueB = parseValue((b.faturamentoCompartilhado / 4800000) * 100);
             break;
           default:
             return 0;
@@ -516,7 +542,7 @@ const SubLimite: React.FC = () => {
                   const porcentagem = (client.faturamento / 3600000) * 100;
                   const porcentagemFinal = Math.round(porcentagem);
                   const limiteCompartilhado =
-                    (client.faturamentoCompartilhado / 3600000) * 100;
+                    (client.faturamentoCompartilhado / 4800000) * 100;
                   const limiteCompartilhadoFinal =
                     Math.round(limiteCompartilhado);
                   return (

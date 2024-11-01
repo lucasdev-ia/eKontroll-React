@@ -43,12 +43,13 @@ const SubLimite: React.FC = () => {
     id: number;
     nome: string;
   }
-  
+
   interface Idade {
     id: number;
     idade: number;
   }
   interface PessoaCompleta extends Pessoa, Idade {}
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,41 +59,40 @@ const SubLimite: React.FC = () => {
         const ListaDeSocios = await sociosAtualizados();
 
         function juntarListas(lista1, lista2) {
-          const resultado = [];
+          const resultado: any = [];
           //percorre a lista principal
           for (const objeto1 of lista1) {
             //percorre a lista de socios
             for (const objeto2 of lista2) {
               // Comparação dos valores da propriedade 'cnpj'
-              if (objeto1.cnpj == objeto2.cnpj){
+              if (objeto1.cnpj == objeto2.cnpj) {
                 // Criando um novo objeto combinando as informações
                 const EmpresaCompleta = {
                   ...objeto1,
-                  ...objeto2
+                  ...objeto2,
                 };
                 resultado.push(EmpresaCompleta);
                 break;
+              }
             }
-          }}
+          }
           return resultado;
         }
-        
-      
-        
 
-        const EmpresasCompletas:any[] = juntarListas(result, ListaDeSocios);
-        const filteredResult = EmpresasCompletas
-          .filter((item) => item.regime === 'SIMPLES NACIONAL')
+        const EmpresasCompletas: any[] = juntarListas(result, ListaDeSocios);
+
+        const filteredResult = EmpresasCompletas.filter(
+          (item) => item.regime === 'SIMPLES NACIONAL',
+        )
           .sort((a, b) => b.faturamento - a.faturamento)
           .map((item) => ({
             ...item,
-            faturamentoCompartilhado: Math.random() * 1000000, // Valor aleatório
-            limiteCompartilhado: Math.random() * 100, // Valor aleatório
+            faturamentoCompartilhado: 2307889, // Valor aleatório
+            // Valor aleatório
           }));
         setOriginalData(filteredResult);
         setData(filteredResult);
-          console.log(filteredResult)
-        
+        console.log(filteredResult);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
       } finally {

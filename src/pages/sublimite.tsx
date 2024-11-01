@@ -43,7 +43,7 @@ const SubLimite: React.FC = () => {
     id: number;
     nome: string;
   }
-  
+
   interface Idade {
     id: number;
     idade: number;
@@ -58,38 +58,67 @@ const SubLimite: React.FC = () => {
         const ListaDeSocios = await sociosAtualizados();
 
         function juntarListas(lista1, lista2) {
-          const resultado:any = [];
+          const resultado: any = [];
           //percorre a lista principal
           for (const objeto1 of lista1) {
             //percorre a lista de socios
             for (const objeto2 of lista2) {
               // Comparação dos valores da propriedade 'cnpj'
-              if (objeto1.cnpj == objeto2.cnpj){
+              if (objeto1.cnpj == objeto2.cnpj) {
                 // Criando um novo objeto combinando as informações
                 const EmpresaCompleta = {
                   ...objeto1,
-                  ...objeto2
+                  ...objeto2,
                 };
                 resultado.push(EmpresaCompleta);
                 break;
+              }
             }
-          }}
+          }
           return resultado;
         }
-        
-      
-        const EmpresasCompletas:any[] = juntarListas(result, ListaDeSocios);
-        const filteredResult = EmpresasCompletas
+
+        const EmpresasCompletas: any[] = juntarListas(result, ListaDeSocios);
+        const resultadoParcial = EmpresasCompletas;
+
+        for (let item of resultadoParcial) {
+          item.socios = Object.keys(item)
+            .filter((key) => key.startsWith('socio_') && item[key])
+            .map((key) => item[key])
+            .filter((socio) => socio.trim() !== '');
+            item.faturamentoCompartilhado = parseFloat(item.faturamento)
+
+        }
+        for (let item1 of resultadoParcial) {
+          for (let item2 of resultadoParcial) {
+            if (item2.cnpj != item1.cnpj) {
+              function comparaListas(lista1, lista2) {
+                return lista1.some((item) => lista2.includes(item));
+              }
+
+              let comp = comparaListas(item1.socios, item2.socios);
+              if (comp == true) {
+
+                item1.faturamentoCompartilhado =
+                  item1.faturamentoCompartilhado + parseFloat(item2.faturamento);
+                  console.log(
+                    `A empresa ${item1.nome} tem os sócios ${item1.socios}com o faturamento de ${item1.faturamento} | a empresea ${item2.nome} tem os sócios ${item2.socios} e o faturamento de ${item2.faturamento} entao o faturamento total é: ${item1.faturamentoCompartilhado}`,
+                  )
+              }
+              else {item1.faturamentoCompartilhado = item1.faturamentoCompartilhado + 0 }
+            } else {
+            }
+          }
+        }
+
+        const filteredResult = resultadoParcial
+
           .filter((item) => item.regime === 'SIMPLES NACIONAL')
-          .sort((a, b) => b.faturamento - a.faturamento)
-          .map((item) => ({
-            ...item,
-            faturamentoCompartilhado: 3600000, // Valor aleatório
-          }));
+          .sort((a, b) => b.faturamento - a.faturamento);
+
         setOriginalData(filteredResult);
         setData(filteredResult);
-          console.log(filteredResult)
-        
+        console.log(filteredResult);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
       } finally {

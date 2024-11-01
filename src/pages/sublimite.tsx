@@ -49,7 +49,6 @@ const SubLimite: React.FC = () => {
     idade: number;
   }
   interface PessoaCompleta extends Pessoa, Idade {}
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,7 +79,6 @@ const SubLimite: React.FC = () => {
         }
 
         const EmpresasCompletas: any[] = juntarListas(result, ListaDeSocios);
-
         const resultadoParcial = EmpresasCompletas;
 
         for (let item of resultadoParcial) {
@@ -117,14 +115,6 @@ const SubLimite: React.FC = () => {
 
           .filter((item) => item.regime === 'SIMPLES NACIONAL')
           .sort((a, b) => b.faturamento - a.faturamento);
-
-
-
-        const filteredResult = EmpresasCompletas.filter(
-          (item) => item.regime === 'SIMPLES NACIONAL',
-        )
-          .sort((a, b) => b.faturamento - a.faturamento)
-          
 
         setOriginalData(filteredResult);
         setData(filteredResult);

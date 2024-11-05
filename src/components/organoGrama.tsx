@@ -21,7 +21,7 @@ const edges = [
   { id: 'e2-7', source: '2', target: '7', animated: true },
 ];
 
-const OrgChart: React.FC = () => {  return (
+const LucroChart: React.FC = () => {  return (
     <div style={{ width: '100%', height: '500px' }}>
       <ReactFlow nodes={nodes} edges={edges}>
         <Background color="#aaa" gap={16} />

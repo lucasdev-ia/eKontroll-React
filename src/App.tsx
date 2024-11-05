@@ -19,7 +19,7 @@ import BoxPage from "./pages/PaginaSocios";
         <Route path='/calendarioSocios' element={< Calendar2 />} />
         <Route path='/faturamento' element={<Faturamento /> } />
         <Route path='/sublimite' element={<SubLimite/> } />
-        <Route path="/box/:id" element={<BoxPage />} />
+        <Route path="/socios/:id" element={<BoxPage />} />
       </Routes> 
     </Router>
   );

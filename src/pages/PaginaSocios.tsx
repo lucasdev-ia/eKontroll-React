@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom'
 const BoxPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
 
+
   return (
     <div>
       <h1>Detalhes do Item {id}</h1>

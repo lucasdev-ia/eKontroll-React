@@ -13,6 +13,7 @@ import { RiFileExcel2Fill } from 'react-icons/ri';
 import { MdPictureAsPdf } from 'react-icons/md';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Link } from 'react-router-dom';
 
 const parseValue = (value) => {
   if (
@@ -75,6 +76,7 @@ const SubLimite: React.FC = () => {
             item.faturamentoCompartilhado = parseFloat(item.faturamento)
 
         }
+
         for (let item1 of resultadoParcial) {
           for (let item2 of resultadoParcial) {
             if (item2.cnpj != item1.cnpj) {
@@ -88,7 +90,11 @@ const SubLimite: React.FC = () => {
                 item1.faturamentoCompartilhado =
                   item1.faturamentoCompartilhado + parseFloat(item2.faturamento);
                   console.log(
+
                     `A empresa ${item1.nome} tem os sócios ${item1.socios}com o faturamento de ${item1.faturamento} | a empresea ${item2.nome} tem os sócios ${item2.socios} e o faturamento de ${item2.faturamento} entao o faturamento total é: ${item1.faturamentoCompartilhado}`,
+
+                    // `A empresa ${item1.nome} tem os sócios ${item1.socios}com o faturamento de ${item1.faturamento} | a empresea ${item2.nome} tem os sócios ${item2.socios} e o faturamento de ${item2.faturamento} entao o faturamento total é: ${item1.faturamentoCompartilhado}`,
+
                   )
               }
               else {item1.faturamentoCompartilhado = item1.faturamentoCompartilhado + 0 }
@@ -525,19 +531,24 @@ const SubLimite: React.FC = () => {
                 </tr>
               ) : (
                 currentItems.map((client, index) => {
+                  
                   const porcentagem = (client.faturamento / 3600000) * 100;
                   const porcentagemFinal = Math.round(porcentagem);
                   const limiteCompartilhado =
                     (client.faturamentoCompartilhado / 4800000) * 100;
                   const limiteCompartilhadoFinal =
                     Math.round(limiteCompartilhado);
+                    //começar a editar por aqui com o modal alexandre
                   return (
                     <tr
                       key={client.id || index}
                       className="hover:bg-gray-100 dark:hover:bg-black-700"
                     >
+                      
                       <td className="text-black-900 w-1/5 truncate border px-4 py-2 font-sans dark:text-white">
+                      <Link key={client.id} to={`/socios/${client.id}`} state={{ client }}>
                         {client.nome}
+                        </Link>
                       </td>
                       <td className="text-black-900 w-1/5 border px-4 py-2 font-sans dark:text-white">
                         {formatarParaBRL(parseValue(client.faturamento))}

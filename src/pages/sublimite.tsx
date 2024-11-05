@@ -541,6 +541,7 @@ const SubLimite: React.FC = () => {
                 </tr>
               ) : (
                 currentItems.map((client, index) => {
+                  
                   const porcentagem = (client.faturamento / 3600000) * 100;
                   const porcentagemFinal = Math.round(porcentagem);
                   const limiteCompartilhado =
@@ -553,9 +554,12 @@ const SubLimite: React.FC = () => {
                       key={client.id || index}
                       className="hover:bg-gray-100 dark:hover:bg-black-700"
                     >
-                      <Link key={client.id} to={`/socios/${client.id}`}><td className="text-black-900 w-1/5 truncate border px-4 py-2 font-sans dark:text-white">
+                      
+                      <td className="text-black-900 w-1/5 truncate border px-4 py-2 font-sans dark:text-white">
+                      <Link key={client.id} to={`/socios/${client.id}`} state={{ client }}>
                         {client.nome}
-                      </td></Link>
+                        </Link>
+                      </td>
                       <td className="text-black-900 w-1/5 border px-4 py-2 font-sans dark:text-white">
                         {formatarParaBRL(parseValue(client.faturamento))}
                       </td>

@@ -6,6 +6,8 @@ import Calendar from './pages/Calendar';
 import Calendar2 from './pages/Calendar2';
 import Faturamento from './pages/Faturamento';
 import SubLimite from "./pages/sublimite";
+import IconPage from "./pages/PaginaSocios";
+import BoxPage from "./pages/PaginaSocios";
   function App() {
   return (
     <Router>
@@ -17,6 +19,7 @@ import SubLimite from "./pages/sublimite";
         <Route path='/calendarioSocios' element={< Calendar2 />} />
         <Route path='/faturamento' element={<Faturamento /> } />
         <Route path='/sublimite' element={<SubLimite/> } />
+        <Route path="/box/:id" element={<BoxPage />} />
       </Routes> 
     </Router>
   );

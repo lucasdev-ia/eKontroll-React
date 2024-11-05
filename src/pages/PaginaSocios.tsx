@@ -45,7 +45,7 @@ const criarOrgChartData = (
 ): OrgChartNode => {
   const orgChartData: OrgChartNode = {
     id: '1',
-    name: cliente.nome,
+    name: cliente.nome +" Com faturamento de:"+ cliente.faturamento,
     title: 'Empresa',
     children: [],
   };

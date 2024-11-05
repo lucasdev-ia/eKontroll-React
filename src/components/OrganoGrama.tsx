@@ -14,6 +14,7 @@ interface OrgChartProps {
 }
 
 const StyledNode = styled.div`
+  background-color: orange;
   padding: 5px;
   border-radius: 8px;
   display: inline-block;
@@ -21,12 +22,14 @@ const StyledNode = styled.div`
 `;
 
 const StyledTitle = styled.div`
+  font-size: 1.2em;
   font-weight: bold;
+  color: black;
 `;
 
 const StyledName = styled.div`
-  font-size: 0.9em;
-  color: #666;
+  font-size: 1.1em;
+  color: black;
 `;
 
 const renderTreeNodes = (node: OrgChartNode) => (

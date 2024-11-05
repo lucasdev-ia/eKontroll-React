@@ -39,18 +39,8 @@ const SubLimite: React.FC = () => {
   const [filterActive, setFilterActive] = useState(false);
   const [search, setSearch] = useState<string>('');
 
-  interface Pessoa {
-    id: number;
-    nome: string;
-  }
-
-  interface Idade {
-    id: number;
-    idade: number;
-  }
-  interface PessoaCompleta extends Pessoa, Idade {}
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async () => { 
       try {
         const response = await fetch('http://192.168.25.83:3000/eventos');
         const result = await response.json();
@@ -59,13 +49,9 @@ const SubLimite: React.FC = () => {
 
         function juntarListas(lista1, lista2) {
           const resultado: any = [];
-          //percorre a lista principal
           for (const objeto1 of lista1) {
-            //percorre a lista de socios
             for (const objeto2 of lista2) {
-              // Comparação dos valores da propriedade 'cnpj'
               if (objeto1.cnpj == objeto2.cnpj) {
-                // Criando um novo objeto combinando as informações
                 const EmpresaCompleta = {
                   ...objeto1,
                   ...objeto2,

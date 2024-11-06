@@ -4,6 +4,9 @@ import OrgChartComponent from '../components/OrganoGrama';
 import { consultaEventos, sociosAtualizados } from '../services/api';
 import { BoldIcon } from '@heroicons/react/24/solid';
 
+function formatarParaBRL(valor) {
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
 interface Cliente {
   id: string;
   nome: string;
@@ -43,9 +46,10 @@ const criarOrgChartData = (
   listaDeSocios: ObjetoComSocios[],
   listaDeEmpresas: ObjetoComSocios[]
 ): OrgChartNode => {
+  let valorFormatado = formatarParaBRL(parseFloat(cliente.faturamento))
   const orgChartData: OrgChartNode = {
     id: '1',
-    name: cliente.nome +" Com faturamento de:"+ cliente.faturamento,
+    name: cliente.nome +" Com faturamento de:"+ valorFormatado,
     title: 'Empresa',
     children: [],
   };
@@ -65,9 +69,9 @@ const criarOrgChartData = (
 
       listaDeSocios.forEach((socioCompleto) => {
         if (socioCompleto.listacomsocios?.includes(socio) && socioCompleto.cnpj !== cliente.cnpj) {
-          const faturamentos = listaDeEmpresas.filter(empresa => empresa.cnpj === socioCompleto.cnpj);
-          const faturamento = faturamentos.length > 0 ? faturamentos[0].faturamento : 'N/A';
-          const nomeDaEmpresa = `${socioCompleto.nome} com faturamento de : R$${faturamento},00`;
+          const faturamentos : any = listaDeEmpresas.filter(empresa => empresa.cnpj === socioCompleto.cnpj);
+          const faturamento = faturamentos.length > 0 ? formatarParaBRL(parseFloat(faturamentos[0].faturamento)) : 'N/A';
+          const nomeDaEmpresa = `${socioCompleto.nome} com faturamento de : ${faturamento}`;
           
           if (!empresasAdicionadas.has(nomeDaEmpresa)) {
             const EmpresaDoSocio: OrgChartNode = {

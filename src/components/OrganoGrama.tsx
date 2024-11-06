@@ -15,10 +15,11 @@ interface OrgChartProps {
 
 const StyledNode = styled.div`
   background-color: orange;
-  padding: 5px;
+  padding: 30px;
   border-radius: 8px;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 3px solid #ccc;
+
 `;
 
 const StyledTitle = styled.div`
@@ -28,6 +29,7 @@ const StyledTitle = styled.div`
 `;
 
 const StyledName = styled.div`
+  font-family: sans-serif;
   font-size: 1.1em;
   color: black;
 `;

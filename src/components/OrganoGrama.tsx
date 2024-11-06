@@ -23,7 +23,7 @@ const StyledNode = styled.div`
 `;
 
 const StyledTitle = styled.div`
-  font-size: 1.2em;
+  font-size: 1.5em;
   font-weight: bold;
   color: black;
 `;
@@ -51,9 +51,9 @@ const renderTreeNodes = (node: OrgChartNode) => (
 const OrgChartComponent: React.FC<OrgChartProps> = ({ data }) => {
   return (
     <Tree
-      lineWidth={'2px'}
-      lineColor={'#ccc'}
-      lineBorderRadius={'10px'}
+      lineWidth={'4px'}
+      lineColor={'#808080'}
+      lineBorderRadius={'100px'}
       label={
         <StyledNode>
           <StyledTitle>{data.title}</StyledTitle>

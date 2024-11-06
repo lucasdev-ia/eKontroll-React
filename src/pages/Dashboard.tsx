@@ -5,6 +5,7 @@ import {
   consultaAniversario,
   consultaEventos,
   consultaAniversarioSocio,
+  empresasSublimiteDash,
 } from '../services/api.tsx';
 import Card from '../components/Card.tsx';
 import Card2 from '../components/Card2.tsx';
@@ -106,6 +107,18 @@ const Dashboard: React.FC = () => {
     fetchSocioAniversario();
   }, []);
 
+  useEffect(() => {
+    const sublimite = async () => {
+      try {
+        const data:any = await empresasSublimiteDash();
+        setEventos(data);
+      } catch (error) {
+        console.error('Erro ao buscar dados da API', error);
+      }
+    };
+    sublimite();
+  }, []);
+
   const parseValue = (value: any) => {
     if (
       value === 'sem informações' ||
@@ -118,30 +131,7 @@ const Dashboard: React.FC = () => {
     }
     return parseFloat(value);
   };
-  useEffect(() => {
-    const fetchEventos = async () => {
-      try {
-        const response = await fetch('http://192.168.25.83:3000/eventos');
-        const result = await response.json();
 
-        // Mantém todos os dados originais
-        setOriginalData(result);
-
-        // Filtra e ordena apenas para data
-        const filteredResult = result
-          .filter((item) => item.regime === 'SIMPLES NACIONAL')
-          .sort((a, b) => b.faturamento - a.faturamento);
-
-        setEventos(filteredResult);
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEventos();
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -314,13 +304,14 @@ const Dashboard: React.FC = () => {
               </Link>
             </div>
           </div>
-          <div className="mt-12 flex items-center justify-center font-sans font-bold"></div>
+          <div className="mt-12  items-center justify-center font-sans font-bold"></div>
           <div className="grid grid-cols-3 place-items-end font-sans text-black-2 dark:text-white">
             {eventos.slice(contador, contador + 3).map((evento, index) => (
               <ChartFaturamento
                 key={index}
                 faturamento={evento.faturamento}
-                empresa={limitarPalavras(evento.nome, 4)}
+                faturamentoCompartilhado={evento.faturamentoCompartilhado}
+                empresa={limitarPalavras(evento.nome, 3)}
               />
             ))}
           </div>

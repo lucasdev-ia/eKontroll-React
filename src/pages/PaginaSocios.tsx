@@ -3,6 +3,7 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 import OrgChartComponent from '../components/OrganoGrama';
 import { consultaEventos, sociosAtualizados } from '../services/api';
 import { BoldIcon } from '@heroicons/react/24/solid';
+import DefaultLayout from '../layout/DefautLayout';
 
 function formatarParaBRL(valor) {
     return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -122,12 +123,14 @@ const BoxPage: React.FC = () => {
   }
 
   return (
+    <DefaultLayout>
     <div>
       <h1>Detalhes do Sócio: {client.nome}</h1>
       <p>ID: {id}</p>
       <Link to="/Sublimite">Voltar para a lista</Link>
       {orgChartData && <OrgChartComponent data={orgChartData} />}
     </div>
+    </DefaultLayout>
   );
 };
 

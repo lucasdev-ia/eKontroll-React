@@ -93,7 +93,7 @@ const Faturamento: React.FC = () => {
 
     doc.save(`${fileName}.pdf`);
   };
-
+  
   const exportToExcel = (data: any[], fileName: string) => {
     const filteredData = data.map((item) => {
       const regime = item.regime

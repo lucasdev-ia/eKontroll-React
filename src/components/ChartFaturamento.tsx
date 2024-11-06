@@ -37,7 +37,6 @@ const SimpleChartComponent: React.FC<ChartProps> = ({
 }) => {
   const percentage = calculatePercentage(faturamento);
   const percentageShare = calculatePercentage2(faturamentoCompartilhado)
-  console.log("oiiiiiiii", faturamentoCompartilhado)
 
 
   const options: ApexOptions = {

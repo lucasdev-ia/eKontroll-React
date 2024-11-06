@@ -20,6 +20,7 @@
     "@mui/material": "^5.16.0",
     "@types/axios": "^0.14.0",
     "apexcharts": "^3.49.2",
+    "api_ekontoll_2.0": "file:",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "flowbite": "^2.4.1",

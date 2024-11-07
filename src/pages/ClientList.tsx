@@ -97,22 +97,22 @@ const ClientList: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const valor = event.target.value;
-    setSearch(valor);
+const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const valor = event.target.value.toLowerCase();
+  setSearch(valor);
 
-    if (valor === '') {
-      setData(originalData);
-    } else {
-      setData(
-        originalData.filter(
-          (cliente) =>
-            cliente.nome.toLowerCase().includes(valor.toLowerCase()) ||
-            cliente.cnpj.toLowerCase().includes(valor.toLowerCase()),
-        ),
-      );
-    }
-  };
+  if (valor === '') {
+    setData(originalData);
+  } else {
+    setData(
+      originalData.filter(
+        (cliente) =>
+          (cliente.nome && cliente.nome.toLowerCase().includes(valor)) ||
+          (cliente.cnpj && cliente.cnpj.toLowerCase().includes(valor))
+      ),
+    );
+  }
+};
 
   const handleSortNumber = (field: string) => {
     let newSortDirection: string | null = 'DESC';

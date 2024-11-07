@@ -93,7 +93,7 @@ const Faturamento: React.FC = () => {
 
     doc.save(`${fileName}.pdf`);
   };
-
+  
   const exportToExcel = (data: any[], fileName: string) => {
     const filteredData = data.map((item) => {
       const regime = item.regime
@@ -114,17 +114,17 @@ const Faturamento: React.FC = () => {
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const valor = event.target.value;
+    const valor = event.target.value.toLowerCase();
     setSearch(valor);
-
+  
     if (valor === '') {
       setData(originalData);
     } else {
       setData(
         originalData.filter(
           (cliente) =>
-            cliente.nome.toLowerCase().includes(valor.toLowerCase()) ||
-            cliente.cnpj.toLowerCase().includes(valor.toLowerCase()),
+            (cliente.nome && cliente.nome.toLowerCase().includes(valor)) ||
+            (cliente.cnpj && cliente.cnpj.toLowerCase().includes(valor))
         ),
       );
     }

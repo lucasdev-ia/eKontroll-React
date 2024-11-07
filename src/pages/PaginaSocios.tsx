@@ -132,7 +132,7 @@ const BoxPage: React.FC = () => {
 
   return (
     <DefaultLayout>
-      <div className="border border-black-2 rounded-lg  px-100 py-25 dark:border-white">
+      <div className="rounded-lg border border-black-2 px-100 py-25 dark:border-white">
         <div className="flex items-center justify-center">
           {orgChartData && <OrgChartComponent data={orgChartData} />}
         </div>

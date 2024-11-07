@@ -13,6 +13,7 @@ import { RiFileExcel2Fill } from 'react-icons/ri';
 import { MdPictureAsPdf } from 'react-icons/md';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Link } from 'react-router-dom';
 
 const parseValue = (value) => {
   if (
@@ -26,7 +27,8 @@ const parseValue = (value) => {
   }
   return parseFloat(value);
 };
-const Faturamento: React.FC = () => {
+
+const SubLimite: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [originalData, setOriginalData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,14 +40,87 @@ const Faturamento: React.FC = () => {
   const [filterActive, setFilterActive] = useState(false);
   const [search, setSearch] = useState<string>('');
 
+  interface Pessoa {
+    id: number;
+    nome: string;
+  }
+
+  interface Idade {
+    id: number;
+    idade: number;
+  }
+  interface PessoaCompleta extends Pessoa, Idade {}
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('http://192.168.25.83:3000/eventos');
         const result = await response.json();
-        result.sort((a, b) => b.faturamento - a.faturamento);
-        setData(result);
-        setOriginalData(result);
+
+        const ListaDeSocios = await sociosAtualizados();
+
+        function juntarListas(lista1, lista2) {
+          const resultado: any = [];
+          //percorre a lista principal
+          for (const objeto1 of lista1) {
+            //percorre a lista de socios
+            for (const objeto2 of lista2) {
+              // Comparação dos valores da propriedade 'cnpj'
+              if (objeto1.cnpj == objeto2.cnpj) {
+                // Criando um novo objeto combinando as informações
+                const EmpresaCompleta = {
+                  ...objeto1,
+                  ...objeto2,
+                };
+                resultado.push(EmpresaCompleta);
+                break;
+              }
+            }
+          }
+          return resultado;
+        }
+
+        const EmpresasCompletas: any[] = juntarListas(result, ListaDeSocios);
+        const resultadoParcial = EmpresasCompletas;
+
+        for (let item of resultadoParcial) {
+          item.socios = Object.keys(item)
+            .filter((key) => key.startsWith('socio_') && item[key])
+            .map((key) => item[key])
+            .filter((socio) => socio.trim() !== '');
+            item.faturamentoCompartilhado = parseFloat(item.faturamento)
+
+        }
+        
+        for (let item1 of resultadoParcial) {
+          for (let item2 of resultadoParcial) {
+            if (item2.cnpj != item1.cnpj) {
+              function comparaListas(lista1, lista2) {
+                return lista1.some((item) => lista2.includes(item));
+              }
+
+              let comp = comparaListas(item1.socios, item2.socios);
+              if (comp == true) {
+
+                item1.faturamentoCompartilhado =
+                  item1.faturamentoCompartilhado + parseFloat(item2.faturamento);
+                  console.log(
+                    // `A empresa ${item1.nome} tem os sócios ${item1.socios}com o faturamento de ${item1.faturamento} | a empresea ${item2.nome} tem os sócios ${item2.socios} e o faturamento de ${item2.faturamento} entao o faturamento total é: ${item1.faturamentoCompartilhado}`,
+                  )
+              }
+              else {item1.faturamentoCompartilhado = item1.faturamentoCompartilhado + 0 }
+            } else {
+            }
+          }
+        }
+
+        const filteredResult = resultadoParcial
+
+          .filter((item) => item.regime === 'SIMPLES NACIONAL')
+          .sort((a, b) => b.faturamento - a.faturamento);
+
+        setOriginalData(filteredResult);
+        setData(filteredResult);
+        console.log(filteredResult);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
       } finally {
@@ -55,7 +130,6 @@ const Faturamento: React.FC = () => {
 
     fetchData();
   }, []);
-
 
   const formatarParaBRL = (valor: number): string => {
     return new Intl.NumberFormat('pt-BR', {
@@ -70,16 +144,27 @@ const Faturamento: React.FC = () => {
     const doc = new jsPDF();
 
     const tableData = data.map((item) => {
-      const regime = item.regime
+      const porcentagem = (item.faturamento / 3600000) * 100;
+      const porcentagemFinal = Math.round(porcentagem);
+      const limiteCompartilhado =
+        (item.faturamentoCompartilhado / 4800000) * 100;
 
       return [
         item.nome,
         formatarParaBRL(parseValue(item.faturamento)),
-        `${regime}`,
+        `${porcentagemFinal} %`,
+        formatarParaBRL(parseValue(item.faturamentoCompartilhado)),
+        `${Math.round(limiteCompartilhado)} %`,
       ];
     });
 
-    const tableHeaders = ['Nome', 'Faturamento', 'Regime'];
+    const tableHeaders = [
+      'Nome',
+      'Faturamento',
+      'Limite',
+      'Faturamento Compartilhado',
+      'Limite Compartilhado',
+    ];
 
     autoTable(doc, {
       head: [tableHeaders],
@@ -87,7 +172,7 @@ const Faturamento: React.FC = () => {
       styles: {
         fillColor: [255, 255, 255],
         textColor: [0, 0, 0],
-        fontSize: 10,
+        fontSize: 8,
       },
     });
 
@@ -96,17 +181,30 @@ const Faturamento: React.FC = () => {
 
   const exportToExcel = (data: any[], fileName: string) => {
     const filteredData = data.map((item) => {
-      const regime = item.regime
+      const porcentagem = (item.faturamento / 3600000) * 100;
+      const porcentagemFinal = Math.round(porcentagem);
+      const limiteCompartilhado =
+        (item.faturamentoCompartilhado / 4800000) * 100;
 
       return {
         Nome: item.nome,
         Faturamento: formatarParaBRL(parseValue(item.faturamento)),
-        Regime: `${regime}`,
+        Limite: `${porcentagemFinal} %`,
+        'Faturamento Compartilhado': formatarParaBRL(
+          parseValue(item.faturamentoCompartilhado),
+        ),
+        'Limite Compartilhado': `${Math.round(limiteCompartilhado)} %`,
       };
     });
 
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
-    const colunmWidths = [{ wch: 30 }, { wch: 20 }, { wch: 15 }];
+    const colunmWidths = [
+      { wch: 30 },
+      { wch: 20 },
+      { wch: 15 },
+      { wch: 20 },
+      { wch: 15 },
+    ];
     worksheet['!cols'] = colunmWidths;
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
@@ -132,7 +230,7 @@ const Faturamento: React.FC = () => {
 
   const handleSort = (field: string) => {
     let newSortDirection;
-  
+
     if (sortField === field) {
       if (sortDirection === 'ASC') {
         newSortDirection = 'DESC';
@@ -145,40 +243,46 @@ const Faturamento: React.FC = () => {
     } else {
       newSortDirection = 'ASC';
     }
-  
+
     setSortField(newSortDirection ? field : null);
     setSortDirection(newSortDirection);
-  
+
     let sortedData;
-  
+
     if (newSortDirection === null) {
       sortedData = [...originalData];
     } else {
       sortedData = [...data].sort((a, b) => {
         let valueA, valueB;
-  
-        if (field === 'nome') {
-          valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
-          valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
-          return newSortDirection === 'ASC'
-            ? valueA.localeCompare(valueB)
-            : valueB.localeCompare(valueA);
-        } else if (field === 'faturamento') {
-          valueA = parseValue(a[field]);
-          valueB = parseValue(b[field]);
-          return newSortDirection === 'ASC' ? valueA - valueB : valueB - valueA;
-        } else if (field === 'Regime') {
-          valueA = a.regime ? a.regime.toLowerCase().trim() : '';
-          valueB = b.regime ? b.regime.toLowerCase().trim() : '';
-          return newSortDirection === 'ASC'
-            ? valueA.localeCompare(valueB)
-            : valueB.localeCompare(valueA);
+
+        switch (field) {
+          case 'nome':
+            valueA = a[field] ? a[field].toString().toLowerCase().trim() : '';
+            valueB = b[field] ? b[field].toString().toLowerCase().trim() : '';
+            return newSortDirection === 'ASC'
+              ? valueA.localeCompare(valueB)
+              : valueB.localeCompare(valueA);
+          case 'faturamento':
+          case 'faturamentoCompartilhado':
+            valueA = parseValue(a[field]);
+            valueB = parseValue(b[field]);
+            break;
+          case 'limite':
+            valueA = parseValue((a.faturamento / 3600000) * 100);
+            valueB = parseValue((b.faturamento / 3600000) * 100);
+            break;
+          case 'limiteCompartilhado':
+            valueA = parseValue((a.faturamentoCompartilhado / 4800000) * 100);
+            valueB = parseValue((b.faturamentoCompartilhado / 4800000) * 100);
+            break;
+          default:
+            return 0;
         }
-  
-        return 0;
+
+        return newSortDirection === 'ASC' ? valueA - valueB : valueB - valueA;
       });
     }
-  
+
     setData(sortedData);
   };
 
@@ -206,7 +310,6 @@ const Faturamento: React.FC = () => {
     if (numericValue > 100) {
       return 'bg-redempresas dark:bg-vermelhoescuro bg-opacity-20'; // Vermelho
     } else if (numericValue > 80) {
-      5;
       return 'bg-yellowempresas dark:bg-amareloescuro bg-opacity-200'; // Amarelo
     } else if (numericValue > 1) {
       return 'bg-greenempresas bg-opacity-20  dark:bg-verdeescuro '; // Verde
@@ -280,7 +383,7 @@ const Faturamento: React.FC = () => {
 
     return pageNumbers;
   };
-  
+
   return (
     <DefaultLayout>
       <div
@@ -292,7 +395,7 @@ const Faturamento: React.FC = () => {
           style={{ margin: '0', padding: '0' }}
         >
           <h1 className="font-sans text-2xl font-bold text-black dark:text-white">
-            SubRegime do simples
+            Sublimite do simples
           </h1>
           <div className="flex space-x-2">
             <button
@@ -384,10 +487,40 @@ const Faturamento: React.FC = () => {
                 </th>
                 <th
                   className="cursor-pointer border px-4 py-2 font-sans"
-                  onClick={() => handleSort('Regime')}
+                  onClick={() => handleSort('limite')}
                 >
-                  Regime
-                  {sortField === 'Regime' ? (
+                  Limite
+                  {sortField === 'limite' ? (
+                    sortDirection === 'ASC' ? (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    ) : (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    )
+                  ) : (
+                    <CgArrowsVAlt className="ml-2 inline-block" />
+                  )}
+                </th>
+                <th
+                  className="cursor-pointer border px-4 py-2 font-sans"
+                  onClick={() => handleSort('faturamentoCompartilhado')}
+                >
+                  Faturamento Compartilhado
+                  {sortField === 'faturamentoCompartilhado' ? (
+                    sortDirection === 'ASC' ? (
+                      <IoArrowUpOutline className="ml-2 inline-block" />
+                    ) : (
+                      <IoArrowDown className="ml-2 inline-block" />
+                    )
+                  ) : (
+                    <CgArrowsVAlt className="ml-2 inline-block" />
+                  )}
+                </th>
+                <th
+                  className="cursor-pointer border px-4 py-2 font-sans"
+                  onClick={() => handleSort('limiteCompartilhado')}
+                >
+                  Limite Compartilhado
+                  {sortField === 'limiteCompartilhado' ? (
                     sortDirection === 'ASC' ? (
                       <IoArrowUpOutline className="ml-2 inline-block" />
                     ) : (
@@ -402,29 +535,48 @@ const Faturamento: React.FC = () => {
             <tbody>
               {currentItems.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="border px-4 py-2 text-center">
+                  <td colSpan={5} className="border px-4 py-2 text-center">
                     Nenhum dado disponível
                   </td>
                 </tr>
               ) : (
                 currentItems.map((client, index) => {
+                  
                   const porcentagem = (client.faturamento / 3600000) * 100;
                   const porcentagemFinal = Math.round(porcentagem);
+                  const limiteCompartilhado =
+                    (client.faturamentoCompartilhado / 4800000) * 100;
+                  const limiteCompartilhadoFinal =
+                    Math.round(limiteCompartilhado);
+                    //começar a editar por aqui com o modal alexandre
                   return (
                     <tr
                       key={client.id || index}
                       className="hover:bg-gray-100 dark:hover:bg-black-700"
                     >
-                      <td className="text-black-900 w-1/3 truncate border px-4 py-2 font-sans dark:text-white">
+                      
+                      <td className="text-black-900 w-1/5 truncate border px-4 py-2 font-sans dark:text-white">
+                      <Link key={client.id} to={`/socios/${client.id}`} state={{ client }}>
                         {client.nome}
+                        </Link>
                       </td>
-                      <td className="text-black-900 w-1/3 border px-4 py-2 font-sans dark:text-white">
+                      <td className="text-black-900 w-1/5 border px-4 py-2 font-sans dark:text-white">
                         {formatarParaBRL(parseValue(client.faturamento))}
                       </td>
                       <td
-                        className={`text-black-900 w-1/3 border px-4 py-2 font-sans dark:text-white `}
+                        className={`text-black-900 w-1/5 border px-4 py-2 font-sans dark:text-white ${getBackgroundColor(porcentagemFinal)}`}
                       >
-                        {(client.regime)} 
+                        {parseValue(porcentagemFinal)} %
+                      </td>
+                      <td className="text-black-900 w-1/5 border px-4 py-2 font-sans dark:text-white">
+                        {formatarParaBRL(
+                          parseValue(client.faturamentoCompartilhado),
+                        )}
+                      </td>
+                      <td
+                        className={`text-black-900 w-1/5 border px-4 py-2 font-sans dark:text-white ${getBackgroundColor(limiteCompartilhadoFinal)}`}
+                      >
+                        {parseValue(limiteCompartilhadoFinal)} %
                       </td>
                     </tr>
                   );
@@ -489,4 +641,4 @@ const Faturamento: React.FC = () => {
   );
 };
 
-export default Faturamento;
+export default SubLimite;

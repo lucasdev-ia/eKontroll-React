@@ -81,7 +81,7 @@ const Header = () => {
           </button>
           <button
             className="ml-6 mt-3 cursor-pointer font-sans text-lg font-semibold text-black hover:underline dark:text-white"
-            onClick={() => navigate("/sublimiteSimples")}
+            onClick={() => navigate("/SubLimite")}
           >
             Sublimite Simples
           </button>

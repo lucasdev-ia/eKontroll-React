@@ -20,7 +20,7 @@ const Card: React.FC<CardDataStatsProps> = ({
 
   return (
     <div
-      className="h-cardnew w-310px rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark cursor-pointer" // Adicionar cursor-pointer para indicar que é clicável
+      className="h-cardnew w-310px rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark" // Adicionar cursor-pointer para indicar que é clicável
     >
       <div className="flex items-end justify-between">
         <div>{Cardimg}</div>

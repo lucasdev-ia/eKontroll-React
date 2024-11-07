@@ -4,10 +4,11 @@ import Dashboard from "./pages/Dashboard";
 import ClientList from './pages/ClientList'; 
 import Calendar from './pages/Calendar'; 
 import Calendar2 from './pages/Calendar2';
-import EmpresaList from './pages/EmpresaList';
-
 import Faturamento from './pages/Faturamento';
-function App() {
+import SubLimite from "./pages/sublimite";
+import IconPage from "./pages/PaginaSocios";
+import BoxPage from "./pages/PaginaSocios";
+  function App() {
   return (
     <Router>
       <Routes>
@@ -15,9 +16,10 @@ function App() {
         <Route path='/calendario' element={<Calendar />} />
         <Route path='/clientes' element={<ClientList />} />
         <Route path='/calendarioSocios' element={<Calendar2 />} />
-        <Route path='/ListaEmpresas' element={<EmpresaList />} />
         <Route path='/calendarioSocios' element={< Calendar2 />} />
         <Route path='/faturamento' element={<Faturamento /> } />
+        <Route path='/sublimite' element={<SubLimite/> } />
+        <Route path="/socios/:id" element={<BoxPage />} />
       </Routes> 
     </Router>
   );

@@ -40,18 +40,8 @@ const SubLimite: React.FC = () => {
   const [filterActive, setFilterActive] = useState(false);
   const [search, setSearch] = useState<string>('');
 
-  interface Pessoa {
-    id: number;
-    nome: string;
-  }
-
-  interface Idade {
-    id: number;
-    idade: number;
-  }
-  interface PessoaCompleta extends Pessoa, Idade {}
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async () => { 
       try {
         const response = await fetch('http://192.168.25.83:3000/eventos');
         const result = await response.json();
@@ -60,13 +50,9 @@ const SubLimite: React.FC = () => {
 
         function juntarListas(lista1, lista2) {
           const resultado: any = [];
-          //percorre a lista principal
           for (const objeto1 of lista1) {
-            //percorre a lista de socios
             for (const objeto2 of lista2) {
-              // Comparação dos valores da propriedade 'cnpj'
               if (objeto1.cnpj == objeto2.cnpj) {
-                // Criando um novo objeto combinando as informações
                 const EmpresaCompleta = {
                   ...objeto1,
                   ...objeto2,
@@ -90,7 +76,7 @@ const SubLimite: React.FC = () => {
             item.faturamentoCompartilhado = parseFloat(item.faturamento)
 
         }
-        
+
         for (let item1 of resultadoParcial) {
           for (let item2 of resultadoParcial) {
             if (item2.cnpj != item1.cnpj) {
@@ -104,7 +90,11 @@ const SubLimite: React.FC = () => {
                 item1.faturamentoCompartilhado =
                   item1.faturamentoCompartilhado + parseFloat(item2.faturamento);
                   console.log(
+
                     // `A empresa ${item1.nome} tem os sócios ${item1.socios}com o faturamento de ${item1.faturamento} | a empresea ${item2.nome} tem os sócios ${item2.socios} e o faturamento de ${item2.faturamento} entao o faturamento total é: ${item1.faturamentoCompartilhado}`,
+
+                    // `A empresa ${item1.nome} tem os sócios ${item1.socios}com o faturamento de ${item1.faturamento} | a empresea ${item2.nome} tem os sócios ${item2.socios} e o faturamento de ${item2.faturamento} entao o faturamento total é: ${item1.faturamentoCompartilhado}`,
+
                   )
               }
               else {item1.faturamentoCompartilhado = item1.faturamentoCompartilhado + 0 }

@@ -5,6 +5,7 @@ import { ApexOptions } from 'apexcharts';
 interface ChartProps {
   faturamento: number;
   empresa: string;
+  faturamentoCompartilhado: any;
 }
 
 function parseValue(value: number): number {
@@ -14,6 +15,11 @@ function parseValue(value: number): number {
 function calculatePercentage(faturamento: number): number {
   return parseValue((faturamento / 3600000) * 100);
 }
+
+function calculatePercentage2(faturamentoCompartilhado: number): number {
+  return parseValue((faturamentoCompartilhado / 4800000) * 100);
+}
+
 
 const formatarParaBRL = (valor: number): string => {
   return new Intl.NumberFormat('pt-BR', {
@@ -26,13 +32,15 @@ const formatarParaBRL = (valor: number): string => {
 
 const SimpleChartComponent: React.FC<ChartProps> = ({
   faturamento,
+  faturamentoCompartilhado,
   empresa,
 }) => {
   const percentage = calculatePercentage(faturamento);
+  const percentageShare = calculatePercentage2(faturamentoCompartilhado)
 
 
   const options: ApexOptions = {
-    series: [percentage],
+    series: [percentage, percentageShare],
     chart: {
       height: 350,
       type: 'radialBar',
@@ -62,7 +70,7 @@ const SimpleChartComponent: React.FC<ChartProps> = ({
         },
       },
     },
-    labels: ['Sublimite'],
+    labels: ['Sublimite', 'Sublimite 2'],
     colors: ['#271b79'],
   };
 
@@ -78,6 +86,9 @@ const SimpleChartComponent: React.FC<ChartProps> = ({
       <h3 className='flex items-center justify-center font-sans'></h3>
       <span className='mr-2 font-sans'>Faturamento:</span>
       <span>{formatarParaBRL(faturamento)}</span>
+      <h3 className='flex items-center justify-center font-sans'></h3>
+      <span className='mr-2 font-sans'>Faturamento 2:</span>
+      <span>{formatarParaBRL(faturamentoCompartilhado)}</span>
       </div>
   );
 };
